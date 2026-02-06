@@ -2,10 +2,10 @@
 <html lang="bg">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>UZIMUZIK • Official</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
 :root{
@@ -42,7 +42,7 @@ header p{
   color:var(--muted);
 }
 main{
-  max-width:1200px;
+  max-width:1100px;
   margin:auto;
   padding:40px 20px;
 }
@@ -61,9 +61,9 @@ h2{
 }
 iframe{
   width:100%;
-  height:380px;
-  border-radius:18px;
+  height:420px;
   border:none;
+  border-radius:18px;
   box-shadow:0 18px 32px rgba(0,0,0,.12);
 }
 .playlist{
@@ -76,35 +76,18 @@ iframe{
   margin-bottom:10px;
   cursor:pointer;
   font-weight:500;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+  transition:.2s;
+}
+.track:hover{
+  border-color:var(--gold);
 }
 .track.active{
   border-color:var(--gold);
   background:#fff8e6;
 }
-.controls{
-  display:flex;
-  gap:10px;
-  margin:16px 0;
-}
-.controls button{
-  padding:10px 16px;
-  border-radius:12px;
-  border:1px solid var(--border);
-  background:#fff;
-  cursor:pointer;
-  font-weight:500;
-}
-.controls button.active{
-  border-color:var(--gold);
-  color:var(--gold);
-}
 .small{
-  font-size:14px;
   color:var(--muted);
-  line-height:1.6;
+  font-size:14px;
 }
 footer{
   text-align:center;
@@ -113,15 +96,6 @@ footer{
   font-size:13px;
 }
 </style>
-
-<!-- YouTube API -->
-<script src="https://www.youtube.com/iframe_api"></script>
-
-<!-- Facebook SDK -->
-<div id="fb-root"></div>
-<script async defer crossorigin="anonymous"
-  src="https://connect.facebook.net/bg_BG/sdk.js#xfbml=1&version=v21.0">
-</script>
 </head>
 
 <body>
@@ -133,31 +107,25 @@ footer{
 
 <main>
 
+<!-- PLAYER -->
 <div class="card">
   <h2>Official Videos</h2>
 
-  <div class="controls">
-    <button id="shuffleBtn">🔀 Shuffle</button>
-    <button id="repeatBtn">🔁 Repeat</button>
-  </div>
+  <iframe id="player" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
-  <div id="player"></div>
   <div class="playlist" id="playlist"></div>
 
-  <p class="small">▶ Видеата се възпроизвеждат автоматично едно след друго.</p>
+  <p class="small">▶ Кликни върху песен, за да започне възпроизвеждане.</p>
 </div>
 
+<!-- ABOUT -->
 <div class="card">
   <h2>About the Artist</h2>
   <p class="small">
-    UZIMUZIK е артистичен проект, вдъхновен от реалността, уличната култура
-    и личните преживявания. Всяка песен е история, всеки клип – визуален подпис.
+    UZIMUZIK е независим артистичен проект.
+    Музиката е лична, сурова и истинска.
+    Всеки клип е продължение на историята.
   </p>
-</div>
-
-<div class="card">
-  <h2>Facebook коментари</h2>
-  <div class="fb-comments" data-href="" data-width="100%" data-numposts="5"></div>
 </div>
 
 </main>
@@ -167,7 +135,7 @@ footer{
 </footer>
 
 <script>
-// ✅ ТУК СА ЦЕЛИТЕ ЛИНКОВЕ – САМО ТЯХ ПИПАШ
+// 🎯 ТУК СА САМО ЦЕЛИТЕ ЛИНКОВЕ
 const videos = [
   { title: "Песен 1", url: "https://www.youtube.com/watch?v=DBNw6gG-uJ8" },
   { title: "Песен 2", url: "https://www.youtube.com/watch?v=GWU-07ulYXU" },
@@ -179,81 +147,36 @@ const videos = [
   { title: "Песен 8", url: "https://www.youtube.com/watch?v=cOvl14lvBBg" }
 ];
 
-let player;
-let current = 0;
-let shuffle = false;
-let repeat = false;
+const player = document.getElementById("player");
+const list = document.getElementById("playlist");
 
-// 🔑 извличане на ID от пълен линк
-function getVideoId(url){
-  const u = new URL(url);
-  return u.searchParams.get("v");
+// 🔑 извличане на video ID (стабилно)
+function extractId(url){
+  const match = url.match(/v=([^&]+)/);
+  return match ? match[1] : null;
 }
 
-function onYouTubeIframeAPIReady(){
-  player = new YT.Player('player', {
-    videoId: getVideoId(videos[0].url),
-    playerVars: { rel: 0 },
-    events: { onStateChange }
-  });
-  renderPlaylist();
-}
-
-function onStateChange(e){
-  if(e.data === YT.PlayerState.ENDED){
-    if(repeat){
-      player.playVideo();
-    } else {
-      nextVideo();
-    }
-  }
-}
-
-function nextVideo(){
-  if(shuffle){
-    current = Math.floor(Math.random() * videos.length);
-  } else {
-    current = (current + 1) % videos.length;
-  }
-  loadVideo(current);
-}
-
-function loadVideo(i){
-  current = i;
-  player.loadVideoById(getVideoId(videos[i].url));
-  highlight();
-}
-
-function renderPlaylist(){
-  const box = document.getElementById("playlist");
-  box.innerHTML = "";
-  videos.forEach((v,i)=>{
-    const d = document.createElement("div");
-    d.className = "track" + (i===0?" active":"");
-    d.innerHTML = `<span>${v.title}</span><span>▶</span>`;
-    d.onclick = ()=>loadVideo(i);
-    box.appendChild(d);
-  });
-}
-
-function highlight(){
+// ▶ зареждане на видео
+function playVideo(index){
+  const id = extractId(videos[index].url);
+  if(!id) return;
+  player.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
   document.querySelectorAll(".track").forEach((el,i)=>{
-    el.classList.toggle("active", i===current);
+    el.classList.toggle("active", i === index);
   });
 }
 
-document.getElementById("shuffleBtn").onclick = function(){
-  shuffle = !shuffle;
-  this.classList.toggle("active", shuffle);
-};
+// 📜 рендер на плейлист
+videos.forEach((v,i)=>{
+  const div = document.createElement("div");
+  div.className = "track";
+  div.textContent = v.title;
+  div.onclick = () => playVideo(i);
+  list.appendChild(div);
+});
 
-document.getElementById("repeatBtn").onclick = function(){
-  repeat = !repeat;
-  this.classList.toggle("active", repeat);
-};
-
-// Facebook
-document.querySelector(".fb-comments").setAttribute("data-href", location.href);
+// ▶ старт с първото видео
+playVideo(0);
 </script>
 
 </body>
