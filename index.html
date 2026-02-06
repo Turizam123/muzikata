@@ -21,13 +21,12 @@ body{
   margin:0;
   font-family:Inter,system-ui;
   background:
-    radial-gradient(900px 600px at 20% 0%,rgba(201,162,77,.08),transparent 60%),
+    radial-gradient(900px 600px at 20% 0%,rgba(201,162,77,.10),transparent 60%),
     var(--bg);
   color:var(--text);
 }
-
 header{
-  padding:32px 20px;
+  padding:34px 20px;
   text-align:center;
   border-bottom:1px solid var(--border);
 }
@@ -35,16 +34,13 @@ header h1{
   margin:0;
   font-family:"Playfair Display",serif;
   font-size:36px;
-  font-weight:700;
-  letter-spacing:.08em;
+  letter-spacing:.1em;
 }
 header span{color:var(--gold)}
 header p{
   margin-top:8px;
   color:var(--muted);
-  font-size:14px;
 }
-
 main{
   max-width:1200px;
   margin:auto;
@@ -56,7 +52,6 @@ main{
 @media(max-width:900px){
   main{grid-template-columns:1fr}
 }
-
 .card{
   background:var(--card);
   border:1px solid var(--border);
@@ -64,32 +59,37 @@ main{
   padding:22px;
   box-shadow:0 20px 40px rgba(31,36,48,.06);
 }
-
 h2{
   font-family:"Playfair Display",serif;
-  font-size:18px;
-  margin:0 0 14px;
-  letter-spacing:.06em;
+  margin:0 0 16px;
 }
-
-.small{
-  color:var(--muted);
-  font-size:13px;
-}
-
 iframe{
   width:100%;
+  height:360px;
   border-radius:18px;
   border:none;
-  box-shadow:0 16px 30px rgba(0,0,0,.12);
+  box-shadow:0 18px 32px rgba(0,0,0,.12);
 }
-
-a{
-  color:var(--text);
-  text-decoration:none;
+.playlist{
+  margin-top:20px;
 }
-a:hover{color:var(--gold)}
-
+.track{
+  padding:14px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  margin-bottom:10px;
+  cursor:pointer;
+  font-weight:500;
+  background:linear-gradient(180deg,#fff,#fafafb);
+}
+.track.active{
+  border-color:var(--gold);
+  background:#fff8e6;
+}
+.small{
+  font-size:13px;
+  color:var(--muted);
+}
 .social a{
   display:block;
   padding:14px;
@@ -98,19 +98,20 @@ a:hover{color:var(--gold)}
   margin-bottom:10px;
   text-align:center;
   font-weight:500;
-  background:linear-gradient(180deg,#fff,#f8f8fc);
 }
 .social a:hover{
   border-color:var(--gold);
 }
-
 footer{
   text-align:center;
-  padding:30px 20px;
+  padding:30px;
   color:var(--muted);
   font-size:13px;
 }
 </style>
+
+<!-- YouTube API -->
+<script src="https://www.youtube.com/iframe_api"></script>
 
 <!-- Facebook SDK -->
 <div id="fb-root"></div>
@@ -123,59 +124,45 @@ footer{
 
 <header>
   <h1>UZI<span>MUZIK</span></h1>
-  <p>Official music & visual experience</p>
+  <p>Luxury music experience</p>
 </header>
 
 <main>
 
 <!-- LEFT -->
 <section>
+  <div class="card">
+    <h2>Official Videos</h2>
 
-<div class="card">
-<h2>Official Video</h2>
+    <!-- Player -->
+    <div id="player"></div>
 
-<iframe
-  height="360"
-  src="https://www.youtube.com/embed/DBNw6gG-uJ8"
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-  allowfullscreen>
-</iframe>
+    <!-- Playlist -->
+    <div class="playlist" id="playlist"></div>
 
-<p class="small" style="margin-top:14px;">
-Висококачествен стрийминг чрез YouTube. Аудио и видео се адаптират автоматично според устройството.
-</p>
-</div>
-
+    <p class="small">
+      ▶ След края на видеото следващото се зарежда автоматично.
+    </p>
+  </div>
 </section>
 
 <!-- RIGHT -->
 <section>
 
-<div class="card">
-<h2>Facebook коментари</h2>
+  <div class="card">
+    <h2>Facebook коментари</h2>
+    <div class="fb-comments"
+      data-href=""
+      data-width="100%"
+      data-numposts="5"></div>
+  </div>
 
-<div class="fb-comments"
-  data-href=""
-  data-width="100%"
-  data-numposts="5">
-</div>
-
-<p class="small" style="margin-top:10px;">
-Истински коментари от Facebook профили.
-</p>
-</div>
-
-<div class="card" style="margin-top:24px">
-<h2>Споделяне</h2>
-
-<div class="social">
-  <a id="tiktokShare" target="_blank">Сподели в TikTok</a>
-</div>
-
-<p class="small">
-Разпространи музиката сред нова аудитория.
-</p>
-</div>
+  <div class="card" style="margin-top:24px">
+    <h2>Споделяне</h2>
+    <div class="social">
+      <a id="tiktokShare" target="_blank">Сподели в TikTok</a>
+    </div>
+  </div>
 
 </section>
 
@@ -186,13 +173,65 @@ footer{
 </footer>
 
 <script>
+/* 🎬 PLAYLIST */
+const videos = [
+  { id: "DBNw6gG-uJ8", title: "Песен 1" },
+  { id: "GWU-07ulYXU", title: "Песен 2" }
+];
+
+let player;
+let current = 0;
+
+/* YouTube API ready */
+function onYouTubeIframeAPIReady(){
+  player = new YT.Player('player', {
+    videoId: videos[0].id,
+    playerVars: { rel: 0 },
+    events: {
+      onStateChange: onPlayerStateChange
+    }
+  });
+  renderPlaylist();
+}
+
+function onPlayerStateChange(e){
+  if(e.data === YT.PlayerState.ENDED){
+    nextVideo();
+  }
+}
+
+function nextVideo(){
+  current = (current + 1) % videos.length;
+  loadVideo(current);
+}
+
+function loadVideo(index){
+  current = index;
+  player.loadVideoById(videos[index].id);
+  highlight();
+}
+
+function renderPlaylist(){
+  const box = document.getElementById("playlist");
+  box.innerHTML = "";
+  videos.forEach((v,i)=>{
+    const div = document.createElement("div");
+    div.className = "track" + (i===0?" active":"");
+    div.textContent = v.title;
+    div.onclick = ()=>loadVideo(i);
+    box.appendChild(div);
+  });
+}
+
+function highlight(){
+  document.querySelectorAll(".track").forEach((el,i)=>{
+    el.classList.toggle("active", i===current);
+  });
+}
+
+/* Social */
 const url = location.href;
-
-// Facebook comments – правилен URL
-const fb = document.querySelector(".fb-comments");
-if(fb) fb.setAttribute("data-href", url);
-
-// TikTok share
+document.querySelector(".fb-comments").setAttribute("data-href", url);
 document.getElementById("tiktokShare").href =
   "https://www.tiktok.com/share?url=" + encodeURIComponent(url);
 </script>
