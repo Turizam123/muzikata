@@ -76,10 +76,6 @@ iframe{
   margin-bottom:10px;
   cursor:pointer;
   font-weight:500;
-  transition:.2s;
-}
-.track:hover{
-  border-color:var(--gold);
 }
 .track.active{
   border-color:var(--gold);
@@ -89,6 +85,9 @@ iframe{
   color:var(--muted);
   font-size:14px;
 }
+.fb-box{
+  margin-top:20px;
+}
 footer{
   text-align:center;
   padding:30px;
@@ -96,6 +95,12 @@ footer{
   font-size:13px;
 }
 </style>
+
+<!-- Facebook SDK -->
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous"
+  src="https://connect.facebook.net/bg_BG/sdk.js#xfbml=1&version=v21.0">
+</script>
 </head>
 
 <body>
@@ -115,7 +120,15 @@ footer{
 
   <div class="playlist" id="playlist"></div>
 
-  <p class="small">▶ Кликни върху песен, за да започне възпроизвеждане.</p>
+  <!-- 🎯 FB comments per song -->
+  <div class="fb-box">
+    <h3 style="margin-bottom:10px;">Коментари за тази песен</h3>
+    <div class="fb-comments"
+         id="fb-song-comments"
+         data-href=""
+         data-width="100%"
+         data-numposts="5"></div>
+  </div>
 </div>
 
 <!-- ABOUT -->
@@ -128,14 +141,24 @@ footer{
   </p>
 </div>
 
+<!-- 🌐 FB comments for page -->
+<div class="card">
+  <h2>Коментари за страницата</h2>
+  <div class="fb-comments"
+       id="fb-page-comments"
+       data-href=""
+       data-width="100%"
+       data-numposts="5"></div>
+</div>
+
 </main>
 
 <footer>
-© 2026 UZIMUZIK • ВСИЧКИ ПРАВА СА ЗАПАЗЕНИ  
+© 2026 UZIMUZIK • ВСИЧКИ ПРАВА ЗАПАЗЕНИ 
 </footer>
 
 <script>
-// 🎯 ТУК СА САМО ЦЕЛИТЕ ЛИНКОВЕ
+// 🎯 ЦЕЛИ YOUTUBE ЛИНКОВЕ
 const videos = [
   { title: "Песен 1", url: "https://www.youtube.com/watch?v=DBNw6gG-uJ8" },
   { title: "Песен 2", url: "https://www.youtube.com/watch?v=GWU-07ulYXU" },
@@ -149,24 +172,38 @@ const videos = [
 
 const player = document.getElementById("player");
 const list = document.getElementById("playlist");
+const fbSong = document.getElementById("fb-song-comments");
+const fbPage = document.getElementById("fb-page-comments");
 
-// 🔑 извличане на video ID (стабилно)
+// стабилно извличане на ID
 function extractId(url){
-  const match = url.match(/v=([^&]+)/);
-  return match ? match[1] : null;
+  const m = url.match(/v=([^&]+)/);
+  return m ? m[1] : null;
 }
 
-// ▶ зареждане на видео
+// ▶ пускане на видео + FB comments за песен
 function playVideo(index){
   const id = extractId(videos[index].url);
   if(!id) return;
+
+  // YouTube
   player.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
+
+  // highlight
   document.querySelectorAll(".track").forEach((el,i)=>{
     el.classList.toggle("active", i === index);
   });
+
+  // FB comments per SONG (уникален URL)
+  const songUrl = location.href + "#song-" + id;
+  fbSong.setAttribute("data-href", songUrl);
+
+  if (window.FB) {
+    FB.XFBML.parse(fbSong.parentNode);
+  }
 }
 
-// 📜 рендер на плейлист
+// 📜 playlist
 videos.forEach((v,i)=>{
   const div = document.createElement("div");
   div.className = "track";
@@ -175,7 +212,10 @@ videos.forEach((v,i)=>{
   list.appendChild(div);
 });
 
-// ▶ старт с първото видео
+// FB comments for PAGE
+fbPage.setAttribute("data-href", location.href);
+
+// старт
 playVideo(0);
 </script>
 
