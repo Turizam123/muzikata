@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UZIMUZIK • ADMIN PANEL</title>
+
+<style>
+body{
+  margin:0;
+  font-family:system-ui,Inter,Arial;
+  background:#050612;
+  color:#e8ebff;
+}
+.panel{
+  max-width:520px;
+  margin:60px auto;
+  background:#0b0f22;
+  border:1px solid #2a2f55;
+  border-radius:18px;
+  padding:20px;
+}
+h1{
+  text-align:center;
+  letter-spacing:.12em;
+  font-size:16px;
+}
+input,select,button{
+  width:100%;
+  margin-top:10px;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid #2a2f55;
+  background:#050612;
+  color:#fff;
+}
+button{
+  cursor:pointer;
+  background:linear-gradient(180deg,#7c4dff,#5b3bd9);
+}
+.hidden{display:none}
+.msg{
+  margin-top:12px;
+  font-size:14px;
+}
+.ok{color:#00d68f}
+.err{color:#ff3d71}
+</style>
+</head>
+
+<body>
+
+<div class="panel" id="loginBox">
+  <h1>ADMIN LOGIN</h1>
+  <input type="password" id="adminPass" placeholder="Admin парола">
+  <button onclick="login()">Вход</button>
+  <div class="msg err" id="loginMsg"></div>
+</div>
+
+<div class="panel hidden" id="adminBox">
+  <h1>UPLOAD MUSIC / VIDEO</h1>
+
+  <input id="title" placeholder="Заглавие">
+  <select id="type">
+    <option value="audio">Audio (mp3, wav)</option>
+    <option value="video">Video (mp4)</option>
+  </select>
+  <input type="file" id="file">
+  <button onclick="upload()">Качи</button>
+
+  <div class="msg" id="status"></div>
+</div>
+
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+const SUPABASE_URL = "PASTE_SUPABASE_URL";
+const SUPABASE_ANON_KEY = "PASTE_SUPABASE_ANON_KEY";
+
+const ADMIN_PASSWORD = "UZIMUZIK-ADMIN-2026";
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+window.login = function(){
+  const p = adminPass.value;
+  if(p !== ADMIN_PASSWORD){
+    loginMsg.textContent = "Грешна парола";
+    return;
+  }
+  loginBox.classList.add("hidden");
+  adminBox.classList.remove("hidden");
+};
+
+window.upload = async function(){
+  const title = document.getElementById("title").value.trim();
+  const type = document.getElementById("type").value;
+  const file = document.getElementById("file").files[0];
+  const status = document.getElementById("status");
+
+  if(!title || !file){
+    status.textContent = "Липсва заглавие или файл";
+    status.className = "msg err";
+    return;
+  }
+
+  const ext = file.name.split(".").pop();
+  const path = `${type}/${Date.now()}-${file.name}`;
+
+  status.textContent = "Качване...";
+  status.className = "msg";
+
+  const { error: uploadError } = await supabase
+    .storage.from("media")
+    .upload(path, file, { upsert:false });
+
+  if(uploadError){
+    status.textContent = uploadError.message;
+    status.className = "msg err";
+    return;
+  }
+
+  const { data: urlData } = supabase
+    .storage.from("media")
+    .getPublicUrl(path);
+
+  const { error: dbError } = await supabase
+    .from("music_posts")
+    .insert({
+      title,
+      type,
+      media_url: urlData.publicUrl
+    });
+
+  if(dbError){
+    status.textContent = dbError.message;
+    status.className = "msg err";
+    return;
+  }
+
+  status.textContent = "УСПЕШНО КАЧЕНО ✅";
+  status.className = "msg ok";
+
+  document.getElementById("title").value = "";
+  document.getElementById("file").value = "";
+};
+</script>
+
+</body>
+</html>
