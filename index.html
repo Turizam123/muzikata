@@ -5,80 +5,110 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>UZIMUZIK • Official</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --bg:#050612;
-  --panel:#0c1026;
-  --border:#2a2f55;
-  --text:#e8ebff;
-  --muted:#9aa2d6;
-  --neon:#00e5ff;
+  --bg:#f6f7fb;
+  --card:#ffffff;
+  --border:#e5e7f0;
+  --text:#1f2430;
+  --muted:#6b7280;
+  --gold:#c9a24d;
 }
 *{box-sizing:border-box}
 body{
   margin:0;
   font-family:Inter,system-ui;
   background:
-    radial-gradient(900px 600px at 10% 10%,rgba(0,229,255,.14),transparent 60%),
-    radial-gradient(900px 600px at 90% 20%,rgba(124,77,255,.12),transparent 60%),
+    radial-gradient(900px 600px at 20% 0%,rgba(201,162,77,.08),transparent 60%),
     var(--bg);
   color:var(--text);
 }
+
 header{
-  padding:22px;
+  padding:32px 20px;
   text-align:center;
-  font-family:Orbitron;
-  letter-spacing:.18em;
   border-bottom:1px solid var(--border);
 }
-header span{color:var(--neon)}
+header h1{
+  margin:0;
+  font-family:"Playfair Display",serif;
+  font-size:36px;
+  font-weight:700;
+  letter-spacing:.08em;
+}
+header span{color:var(--gold)}
+header p{
+  margin-top:8px;
+  color:var(--muted);
+  font-size:14px;
+}
+
 main{
   max-width:1200px;
   margin:auto;
-  padding:20px;
+  padding:30px 20px;
   display:grid;
-  grid-template-columns:1.3fr .7fr;
-  gap:20px;
+  grid-template-columns:1.4fr .6fr;
+  gap:28px;
 }
-@media(max-width:900px){main{grid-template-columns:1fr}}
+@media(max-width:900px){
+  main{grid-template-columns:1fr}
+}
 
 .card{
-  background:rgba(12,16,38,.92);
+  background:var(--card);
   border:1px solid var(--border);
-  border-radius:18px;
-  padding:16px;
+  border-radius:22px;
+  padding:22px;
+  box-shadow:0 20px 40px rgba(31,36,48,.06);
 }
 
 h2{
-  font-family:Orbitron;
-  font-size:13px;
-  letter-spacing:.14em;
-  margin:0 0 12px;
+  font-family:"Playfair Display",serif;
+  font-size:18px;
+  margin:0 0 14px;
+  letter-spacing:.06em;
 }
 
-.small{color:var(--muted);font-size:12px}
+.small{
+  color:var(--muted);
+  font-size:13px;
+}
 
 iframe{
   width:100%;
-  border-radius:14px;
-  border:1px solid var(--border);
+  border-radius:18px;
+  border:none;
+  box-shadow:0 16px 30px rgba(0,0,0,.12);
 }
 
 a{
   color:var(--text);
   text-decoration:none;
 }
-a:hover{color:var(--neon)}
+a:hover{color:var(--gold)}
 
 .social a{
   display:block;
-  padding:10px;
+  padding:14px;
   border:1px solid var(--border);
-  border-radius:12px;
-  margin-bottom:8px;
+  border-radius:14px;
+  margin-bottom:10px;
   text-align:center;
+  font-weight:500;
+  background:linear-gradient(180deg,#fff,#f8f8fc);
+}
+.social a:hover{
+  border-color:var(--gold);
+}
+
+footer{
+  text-align:center;
+  padding:30px 20px;
+  color:var(--muted);
+  font-size:13px;
 }
 </style>
 
@@ -92,7 +122,8 @@ a:hover{color:var(--neon)}
 <body>
 
 <header>
-  UZI<span>MUZIK</span> • OFFICIAL
+  <h1>UZI<span>MUZIK</span></h1>
+  <p>Official music & visual experience</p>
 </header>
 
 <main>
@@ -101,9 +132,8 @@ a:hover{color:var(--neon)}
 <section>
 
 <div class="card">
-<h2>🎬 OFFICIAL VIDEO (YouTube)</h2>
+<h2>Official Video</h2>
 
-<!-- 🎥 ТВОЯТ КЛИП -->
 <iframe
   height="360"
   src="https://www.youtube.com/embed/DBNw6gG-uJ8"
@@ -111,8 +141,8 @@ a:hover{color:var(--neon)}
   allowfullscreen>
 </iframe>
 
-<p class="small">
-Видео стрийминг от :contentReference[oaicite:0]{index=0} – автоматично най-добро качество (HD / 4K).
+<p class="small" style="margin-top:14px;">
+Висококачествен стрийминг чрез YouTube. Аудио и видео се адаптират автоматично според устройството.
 </p>
 </div>
 
@@ -122,7 +152,7 @@ a:hover{color:var(--neon)}
 <section>
 
 <div class="card">
-<h2>💬 FACEBOOK КОМЕНТАРИ</h2>
+<h2>Facebook коментари</h2>
 
 <div class="fb-comments"
   data-href=""
@@ -130,26 +160,30 @@ a:hover{color:var(--neon)}
   data-numposts="5">
 </div>
 
-<p class="small">
-Коментари чрез :contentReference[oaicite:1]{index=1} профили.
+<p class="small" style="margin-top:10px;">
+Истински коментари от Facebook профили.
 </p>
 </div>
 
-<div class="card" style="margin-top:16px">
-<h2>📱 TIKTOK</h2>
+<div class="card" style="margin-top:24px">
+<h2>Споделяне</h2>
 
 <div class="social">
-  <a id="tiktokShare" target="_blank">🔁 Сподели страницата в TikTok</a>
+  <a id="tiktokShare" target="_blank">Сподели в TikTok</a>
 </div>
 
 <p class="small">
-Споделяне към :contentReference[oaicite:2]{index=2}.
+Разпространи музиката сред нова аудитория.
 </p>
 </div>
 
 </section>
 
 </main>
+
+<footer>
+© 2026 UZIMUZIK • All rights reserved
+</footer>
 
 <script>
 const url = location.href;
