@@ -26,69 +26,86 @@ body{
   color:var(--text);
 }
 header{
-  padding:34px 20px;
+  padding:40px 20px;
   text-align:center;
   border-bottom:1px solid var(--border);
 }
 header h1{
   margin:0;
   font-family:"Playfair Display",serif;
-  font-size:36px;
+  font-size:38px;
   letter-spacing:.1em;
 }
 header span{color:var(--gold)}
 header p{
-  margin-top:8px;
+  margin-top:10px;
   color:var(--muted);
+  font-size:15px;
 }
 main{
   max-width:1200px;
   margin:auto;
-  padding:30px 20px;
-  display:grid;
-  grid-template-columns:1.4fr .6fr;
-  gap:28px;
-}
-@media(max-width:900px){
-  main{grid-template-columns:1fr}
+  padding:40px 20px;
 }
 .card{
   background:var(--card);
   border:1px solid var(--border);
-  border-radius:22px;
-  padding:22px;
+  border-radius:24px;
+  padding:26px;
   box-shadow:0 20px 40px rgba(31,36,48,.06);
+  margin-bottom:32px;
 }
 h2{
   font-family:"Playfair Display",serif;
-  margin:0 0 16px;
+  margin:0 0 18px;
+  font-size:24px;
 }
 iframe{
   width:100%;
-  height:360px;
+  height:380px;
   border-radius:18px;
   border:none;
   box-shadow:0 18px 32px rgba(0,0,0,.12);
 }
 .playlist{
-  margin-top:20px;
+  margin-top:24px;
 }
 .track{
-  padding:14px;
+  padding:14px 16px;
   border:1px solid var(--border);
   border-radius:14px;
   margin-bottom:10px;
   cursor:pointer;
   font-weight:500;
-  background:linear-gradient(180deg,#fff,#fafafb);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 .track.active{
   border-color:var(--gold);
   background:#fff8e6;
 }
+.controls{
+  display:flex;
+  gap:10px;
+  margin:16px 0;
+}
+.controls button{
+  padding:10px 16px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:#fff;
+  cursor:pointer;
+  font-weight:500;
+}
+.controls button.active{
+  border-color:var(--gold);
+  color:var(--gold);
+}
 .small{
-  font-size:13px;
+  font-size:14px;
   color:var(--muted);
+  line-height:1.6;
 }
 footer{
   text-align:center;
@@ -112,40 +129,40 @@ footer{
 
 <header>
   <h1>UZI<span>MUZIK</span></h1>
-  <p>Luxury music experience</p>
+  <p>Luxury music & visual experience</p>
 </header>
 
 <main>
 
-<!-- LEFT -->
-<section>
-  <div class="card">
-    <h2>Official Videos</h2>
-
-    <!-- Player -->
-    <div id="player"></div>
-
-    <!-- Playlist -->
-    <div class="playlist" id="playlist"></div>
-
-    <p class="small">
-      ▶ Видеата се възпроизвеждат автоматично едно след друго.
-    </p>
-  </div>
-</section>
-
-<!-- RIGHT -->
-<section>
-
-  <div class="card">
-    <h2>Facebook коментари</h2>
-    <div class="fb-comments"
-      data-href=""
-      data-width="100%"
-      data-numposts="5"></div>
+<!-- 🎬 PLAYER -->
+<div class="card">
+  <h2>Official Videos</h2>
+  <div class="controls">
+    <button id="shuffleBtn">🔀 Shuffle</button>
+    <button id="repeatBtn">🔁 Repeat</button>
   </div>
 
-</section>
+  <div id="player"></div>
+  <div class="playlist" id="playlist"></div>
+</div>
+
+<!-- 👤 ABOUT -->
+<div class="card">
+  <h2>About the Artist</h2>
+  <p class="small">
+    UZIMUZIK е артистичен проект, вдъхновен от реалността, уличната култура
+    и личните преживявания. Музиката е отражение на пътя – суров, честен
+    и емоционален.
+    <br><br>
+    Всеки клип е визуален разказ. Всяка песен – лична история.
+  </p>
+</div>
+
+<!-- 💬 COMMENTS -->
+<div class="card">
+  <h2>Facebook коментари</h2>
+  <div class="fb-comments" data-href="" data-width="100%" data-numposts="5"></div>
+</div>
 
 </main>
 
@@ -154,47 +171,53 @@ footer{
 </footer>
 
 <script>
-/* 🎬 PLAYLIST */
 const videos = [
-  { id: "DBNw6gG-uJ8", title: "Video 1" },
-  { id: "GWU-07ulYXU", title: "Video 2" },
-  { id: "OHCxuppxNNQ", title: "Video 3" },
-  { id: "ML5CsWGzURg", title: "Video 4" },
-  { id: "WJjFkt14HlY", title: "Video 5" },
-  { id: "XcUYe-EXSEA", title: "Video 6" },
-  { id: "ra9yEDzebFE", title: "Video 7" },
-  { id: "cOvl14lvBBg", title: "Video 8" }
+  { id: "DBNw6gG-uJ8", title: "Песен 1" },
+  { id: "GWU-07ulYXU", title: "Песен 2" },
+  { id: "OHCxuppxNNQ", title: "Песен 3" },
+  { id: "ML5CsWGzURg", title: "Песен 4" },
+  { id: "WJjFkt14HlY", title: "Песен 5" },
+  { id: "XcUYe-EXSEA", title: "Песен 6" },
+  { id: "ra9yEDzebFE", title: "Песен 7" },
+  { id: "cOvl14lvBBg", title: "Песен 8" }
 ];
 
 let player;
 let current = 0;
+let shuffle = false;
+let repeat = false;
 
-/* YouTube API ready */
 function onYouTubeIframeAPIReady(){
   player = new YT.Player('player', {
     videoId: videos[0].id,
     playerVars: { rel: 0 },
-    events: {
-      onStateChange: onPlayerStateChange
-    }
+    events: { onStateChange }
   });
   renderPlaylist();
 }
 
-function onPlayerStateChange(e){
+function onStateChange(e){
   if(e.data === YT.PlayerState.ENDED){
-    nextVideo();
+    if(repeat){
+      player.playVideo();
+    } else {
+      nextVideo();
+    }
   }
 }
 
 function nextVideo(){
-  current = (current + 1) % videos.length;
+  if(shuffle){
+    current = Math.floor(Math.random() * videos.length);
+  } else {
+    current = (current + 1) % videos.length;
+  }
   loadVideo(current);
 }
 
-function loadVideo(index){
-  current = index;
-  player.loadVideoById(videos[index].id);
+function loadVideo(i){
+  current = i;
+  player.loadVideoById(videos[i].id);
   highlight();
 }
 
@@ -202,11 +225,11 @@ function renderPlaylist(){
   const box = document.getElementById("playlist");
   box.innerHTML = "";
   videos.forEach((v,i)=>{
-    const div = document.createElement("div");
-    div.className = "track" + (i===0?" active":"");
-    div.textContent = v.title;
-    div.onclick = ()=>loadVideo(i);
-    box.appendChild(div);
+    const d = document.createElement("div");
+    d.className = "track" + (i===0?" active":"");
+    d.innerHTML = `<span>${v.title}</span><span>▶</span>`;
+    d.onclick = ()=>loadVideo(i);
+    box.appendChild(d);
   });
 }
 
@@ -216,9 +239,18 @@ function highlight(){
   });
 }
 
-/* Facebook */
-const url = location.href;
-document.querySelector(".fb-comments").setAttribute("data-href", url);
+document.getElementById("shuffleBtn").onclick = function(){
+  shuffle = !shuffle;
+  this.classList.toggle("active", shuffle);
+};
+
+document.getElementById("repeatBtn").onclick = function(){
+  repeat = !repeat;
+  this.classList.toggle("active", repeat);
+};
+
+// Facebook URL
+document.querySelector(".fb-comments").setAttribute("data-href", location.href);
 </script>
 
 </body>
