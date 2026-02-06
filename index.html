@@ -3,119 +3,153 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>UZIMUZIK • OFFICIAL</title>
+<title>UZIMUZIK • Official</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
 :root{
   --bg:#f6f7fb;
-  --card:#ffffff;
-  --border:#e5e7f0;
   --text:#1f2430;
   --muted:#6b7280;
   --gold:#c9a24d;
-  --gold-soft:rgba(201,162,77,.18);
+  --gold-glow:rgba(201,162,77,.45);
+  --glass:rgba(255,255,255,.65);
+  --border:rgba(255,255,255,.45);
 }
 *{box-sizing:border-box}
+
 body{
   margin:0;
   font-family:Inter,system-ui;
   background:
-    radial-gradient(900px 600px at 20% 0%,rgba(201,162,77,.10),transparent 60%),
+    radial-gradient(800px 600px at 20% 0%,rgba(201,162,77,.12),transparent 60%),
     var(--bg);
   color:var(--text);
 }
+
+/* ===== HEADER ===== */
 header{
-  padding:40px 20px;
+  padding:42px 20px;
   text-align:center;
-  border-bottom:1px solid var(--border);
 }
 header h1{
   margin:0;
   font-family:"Playfair Display",serif;
-  font-size:38px;
-  letter-spacing:.1em;
+  font-size:40px;
+  letter-spacing:.12em;
 }
 header span{color:var(--gold)}
-header p{
-  margin-top:10px;
-  color:var(--muted);
-}
+header p{color:var(--muted);margin-top:10px}
+
+/* ===== LAYOUT ===== */
 main{
-  max-width:1200px;
+  max-width:1250px;
   margin:auto;
   padding:40px 20px;
   display:grid;
-  grid-template-columns: 1.5fr .9fr;
-  gap:30px;
+  grid-template-columns: 1.6fr 1fr;
+  gap:34px;
 }
-@media(max-width:900px){
+@media(max-width:980px){
   main{grid-template-columns:1fr}
 }
-.card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:24px;
-  padding:26px;
-  box-shadow:0 20px 40px rgba(31,36,48,.06);
-}
-h2{
-  font-family:"Playfair Display",serif;
-  margin:0 0 18px;
-  font-size:24px;
+
+/* ===== PLAYER CARD ===== */
+.player-card{
+  background:#fff;
+  border-radius:26px;
+  padding:28px;
+  box-shadow:0 20px 50px rgba(0,0,0,.08);
 }
 iframe{
   width:100%;
   height:420px;
   border:none;
-  border-radius:18px;
+  border-radius:20px;
   box-shadow:0 18px 32px rgba(0,0,0,.12);
 }
-.playlist{
-  margin-top:24px;
-}
+.playlist{margin-top:26px}
 .track{
-  padding:14px 16px;
-  border:1px solid var(--border);
+  padding:14px 18px;
   border-radius:14px;
   margin-bottom:10px;
   cursor:pointer;
+  background:#f7f8fc;
+  transition:.25s;
   font-weight:500;
+}
+.track:hover{
+  background:#fff;
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
 }
 .track.active{
-  border-color:var(--gold);
-  background:#fff8e6;
-}
-.small{
-  color:var(--muted);
-  font-size:14px;
+  background:linear-gradient(135deg,#fff,#fff8e6);
+  border-left:4px solid var(--gold);
 }
 
-/* 🔥 COMMENTS CARD */
-.comments-card{
-  border:2px solid var(--gold);
+/* ===== SPECIAL COMMENTS CARD ===== */
+.comments-wrap{
+  position:relative;
+  border-radius:28px;
+  padding:2px;
   background:
-    linear-gradient(180deg,#ffffff, #fffdf7);
-  box-shadow:
-    0 25px 50px rgba(201,162,77,.18),
-    inset 0 0 0 1px var(--gold-soft);
+    linear-gradient(135deg,
+      rgba(201,162,77,.9),
+      rgba(255,255,255,.6),
+      rgba(201,162,77,.9)
+    );
+  animation: glow 6s linear infinite;
 }
-.comments-card h2{
+@keyframes glow{
+  0%{filter:hue-rotate(0deg)}
+  100%{filter:hue-rotate(360deg)}
+}
+
+.comments-card{
+  background:var(--glass);
+  backdrop-filter: blur(18px);
+  border-radius:26px;
+  padding:28px;
+  border:1px solid var(--border);
+  box-shadow:
+    0 30px 60px rgba(201,162,77,.25),
+    inset 0 0 0 1px rgba(255,255,255,.6);
+}
+
+.comments-title{
   display:flex;
   align-items:center;
-  gap:10px;
+  justify-content:space-between;
+  margin-bottom:18px;
 }
-.comments-card h2 span{
-  font-size:14px;
-  color:var(--gold);
-  font-weight:500;
+.comments-title h2{
+  margin:0;
+  font-family:"Playfair Display",serif;
+  font-size:22px;
 }
+.comments-badge{
+  padding:6px 14px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:600;
+  background:linear-gradient(135deg,var(--gold),#f3d98b);
+  color:#000;
+  box-shadow:0 4px 14px var(--gold-glow);
+}
+
+.comments-hint{
+  font-size:13px;
+  color:var(--muted);
+  margin-bottom:12px;
+}
+
+/* ===== FOOTER ===== */
 footer{
   text-align:center;
-  padding:30px;
-  color:var(--muted);
+  padding:40px 20px;
   font-size:13px;
+  color:var(--muted);
 }
 </style>
 
@@ -135,90 +169,81 @@ footer{
 
 <main>
 
-<!-- LEFT: PLAYER -->
-<div class="card">
-  <h2>Official Videos</h2>
-
+<!-- LEFT -->
+<div class="player-card">
   <iframe id="player" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-
   <div class="playlist" id="playlist"></div>
-
-  <p class="small">▶ Избери песен от списъка.</p>
 </div>
 
-<!-- RIGHT: COMMENTS -->
-<div class="card comments-card">
-  <h2>
-    Коментари за песента
-    <span>Facebook</span>
-  </h2>
+<!-- RIGHT – SPECIAL COMMENTS -->
+<div class="comments-wrap">
+  <div class="comments-card">
+    <div class="comments-title">
+      <h2>Коментари</h2>
+      <div class="comments-badge">LIVE</div>
+    </div>
+    <div class="comments-hint">
+      Сподели мнение за текущата песен
+    </div>
 
-  <div class="fb-comments"
-       id="fb-song-comments"
-       data-href=""
-       data-width="100%"
-       data-numposts="6"></div>
+    <div class="fb-comments"
+         id="fb-comments"
+         data-href=""
+         data-width="100%"
+         data-numposts="6"></div>
+  </div>
 </div>
 
 </main>
 
 <footer>
-© 2026 UZIMUZIK • ВСИЧКИ ПРАЗА ЗАПАЗЕНИ ЗА АВТОРА
+© 2026 UZIMUZIK • All rights reserved
 </footer>
 
 <script>
-// 🎯 ЦЕЛИ YOUTUBE ЛИНКОВЕ
 const videos = [
-  { title: "Ще ме обичаш лк? / текст Ангел Узунов, вокал и музика AI", url: "https://www.youtube.com/watch?v=DBNw6gG-uJ8" },
-  { title: "Богат без пари / текст Ангел Узунов, вокал и музика AI" , url: "https://www.youtube.com/watch?v=GWU-07ulYXU" },
-  { title: "Времето минава / текст Ангел Узунов, вокал и музика AI", url: "https://www.youtube.com/watch?v=OHCxuppxNNQ" },
-  { title: "Само любов / текст Ангел Узунов, вокал и музика AI", url: "https://www.youtube.com/watch?v=ML5CsWGzURg" },
-  { title: "Дъхът на планината / текст Ангел Узунов, вокал и музика AI", url: "https://www.youtube.com/watch?v=WJjFkt14HlY" },
-  { title: "Целувам те с очи / текст Ангел Узунов, вокал и музика AI", url: "https://www.youtube.com/watch?v=XcUYe-EXSEA" },
-  { title: "Ехо от любов / текст Ангел Узунов, вокал и музика AI", url: "https://www.youtube.com/watch?v=ra9yEDzebFE" },
-  { title: "Майчина сълза / текст Ангел Узунов, вокал и музика AI", url: "https://www.youtube.com/watch?v=cOvl14lvBBg" }
+  { title:"Песен 1", url:"https://www.youtube.com/watch?v=DBNw6gG-uJ8" },
+  { title:"Песен 2", url:"https://www.youtube.com/watch?v=GWU-07ulYXU" },
+  { title:"Песен 3", url:"https://www.youtube.com/watch?v=OHCxuppxNNQ" },
+  { title:"Песен 4", url:"https://www.youtube.com/watch?v=ML5CsWGzURg" },
+  { title:"Песен 5", url:"https://www.youtube.com/watch?v=WJjFkt14HlY" },
+  { title:"Песен 6", url:"https://www.youtube.com/watch?v=XcUYe-EXSEA" },
+  { title:"Песен 7", url:"https://www.youtube.com/watch?v=ra9yEDzebFE" },
+  { title:"Песен 8", url:"https://www.youtube.com/watch?v=cOvl14lvBBg" }
 ];
 
 const player = document.getElementById("player");
 const list = document.getElementById("playlist");
-const fbBox = document.getElementById("fb-song-comments");
+const fb = document.getElementById("fb-comments");
 
-// стабилно ID
-function extractId(url){
+function getId(url){
   const m = url.match(/v=([^&]+)/);
   return m ? m[1] : null;
 }
 
-// ▶ play + FB comments
-function playVideo(index){
-  const id = extractId(videos[index].url);
+function playVideo(i){
+  const id = getId(videos[i].url);
   if(!id) return;
 
   player.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
 
-  document.querySelectorAll(".track").forEach((el,i)=>{
-    el.classList.toggle("active", i === index);
+  document.querySelectorAll(".track").forEach((el,idx)=>{
+    el.classList.toggle("active", idx===i);
   });
 
-  // уникална нишка за всяка песен
-  const songUrl = location.href.split("#")[0] + "#song-" + id;
-  fbBox.setAttribute("data-href", songUrl);
-
-  if(window.FB){
-    FB.XFBML.parse(fbBox.parentNode);
-  }
+  const hashUrl = location.href.split("#")[0] + "#song-" + id;
+  fb.setAttribute("data-href", hashUrl);
+  if(window.FB) FB.XFBML.parse(fb.parentNode);
 }
 
-// playlist
 videos.forEach((v,i)=>{
-  const div = document.createElement("div");
-  div.className = "track";
-  div.textContent = v.title;
-  div.onclick = ()=>playVideo(i);
+  const div=document.createElement("div");
+  div.className="track";
+  div.textContent=v.title;
+  div.onclick=()=>playVideo(i);
   list.appendChild(div);
 });
 
-// старт
 playVideo(0);
 </script>
 
