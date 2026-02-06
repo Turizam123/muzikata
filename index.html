@@ -90,18 +90,6 @@ iframe{
   font-size:13px;
   color:var(--muted);
 }
-.social a{
-  display:block;
-  padding:14px;
-  border:1px solid var(--border);
-  border-radius:14px;
-  margin-bottom:10px;
-  text-align:center;
-  font-weight:500;
-}
-.social a:hover{
-  border-color:var(--gold);
-}
 footer{
   text-align:center;
   padding:30px;
@@ -141,7 +129,7 @@ footer{
     <div class="playlist" id="playlist"></div>
 
     <p class="small">
-      ▶ След края на видеото следващото се зарежда автоматично.
+      ▶ Видеата се възпроизвеждат автоматично едно след друго.
     </p>
   </div>
 </section>
@@ -157,13 +145,6 @@ footer{
       data-numposts="5"></div>
   </div>
 
-  <div class="card" style="margin-top:24px">
-    <h2>Споделяне</h2>
-    <div class="social">
-      <a id="tiktokShare" target="_blank">Сподели в TikTok</a>
-    </div>
-  </div>
-
 </section>
 
 </main>
@@ -175,8 +156,14 @@ footer{
 <script>
 /* 🎬 PLAYLIST */
 const videos = [
-  { id: "DBNw6gG-uJ8", title: "Песен 1" },
-  { id: "GWU-07ulYXU", title: "Песен 2" }
+  { id: "DBNw6gG-uJ8", title: "Video 1" },
+  { id: "GWU-07ulYXU", title: "Video 2" },
+  { id: "OHCxuppxNNQ", title: "Video 3" },
+  { id: "ML5CsWGzURg", title: "Video 4" },
+  { id: "WJjFkt14HlY", title: "Video 5" },
+  { id: "XcUYe-EXSEA", title: "Video 6" },
+  { id: "ra9yEDzebFE", title: "Video 7" },
+  { id: "cOvl14lvBBg", title: "Video 8" }
 ];
 
 let player;
@@ -229,11 +216,9 @@ function highlight(){
   });
 }
 
-/* Social */
+/* Facebook */
 const url = location.href;
 document.querySelector(".fb-comments").setAttribute("data-href", url);
-document.getElementById("tiktokShare").href =
-  "https://www.tiktok.com/share?url=" + encodeURIComponent(url);
 </script>
 
 </body>
