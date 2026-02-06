@@ -18,7 +18,6 @@
   --border:rgba(255,255,255,.45);
 }
 *{box-sizing:border-box}
-
 body{
   margin:0;
   font-family:Inter,system-ui;
@@ -27,8 +26,6 @@ body{
     var(--bg);
   color:var(--text);
 }
-
-/* ===== HEADER ===== */
 header{
   padding:42px 20px;
   text-align:center;
@@ -42,7 +39,6 @@ header h1{
 header span{color:var(--gold)}
 header p{color:var(--muted);margin-top:10px}
 
-/* ===== LAYOUT ===== */
 main{
   max-width:1250px;
   margin:auto;
@@ -55,7 +51,7 @@ main{
   main{grid-template-columns:1fr}
 }
 
-/* ===== PLAYER CARD ===== */
+/* PLAYER */
 .player-card{
   background:#fff;
   border-radius:26px;
@@ -69,28 +65,47 @@ iframe{
   border-radius:20px;
   box-shadow:0 18px 32px rgba(0,0,0,.12);
 }
-.playlist{margin-top:26px}
-.track{
+
+/* PLAYLIST TOGGLE */
+.playlist-toggle{
+  margin-top:22px;
   padding:14px 18px;
   border-radius:14px;
-  margin-bottom:10px;
   cursor:pointer;
-  background:#f7f8fc;
-  transition:.25s;
-  font-weight:500;
-}
-.track:hover{
-  background:#fff;
-  box-shadow:0 8px 20px rgba(0,0,0,.08);
-}
-.track.active{
   background:linear-gradient(135deg,#fff,#fff8e6);
+  border:1px solid #eee;
+  font-weight:600;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.playlist{
+  overflow:hidden;
+  max-height:0;
+  transition:max-height .4s ease;
+}
+.playlist.open{
+  max-height:500px;
+}
+.track{
+  margin-top:10px;
+  padding:14px 18px;
+  border-radius:14px;
+  background:#f7f8fc;
+  cursor:pointer;
+}
+.track:hover{background:#fff}
+.track.active{
   border-left:4px solid var(--gold);
+  background:#fff8e6;
 }
 
-/* ===== SPECIAL COMMENTS CARD ===== */
+/* COMMENTS – STICKY */
 .comments-wrap{
-  position:relative;
+  position:sticky;
+  top:30px;
+}
+.comments-shell{
   border-radius:28px;
   padding:2px;
   background:
@@ -99,52 +114,30 @@ iframe{
       rgba(255,255,255,.6),
       rgba(201,162,77,.9)
     );
-  animation: glow 6s linear infinite;
 }
-@keyframes glow{
-  0%{filter:hue-rotate(0deg)}
-  100%{filter:hue-rotate(360deg)}
-}
-
 .comments-card{
   background:var(--glass);
   backdrop-filter: blur(18px);
   border-radius:26px;
   padding:28px;
   border:1px solid var(--border);
-  box-shadow:
-    0 30px 60px rgba(201,162,77,.25),
-    inset 0 0 0 1px rgba(255,255,255,.6);
+  box-shadow:0 30px 60px rgba(201,162,77,.25);
 }
-
 .comments-title{
   display:flex;
-  align-items:center;
   justify-content:space-between;
-  margin-bottom:18px;
-}
-.comments-title h2{
-  margin:0;
-  font-family:"Playfair Display",serif;
-  font-size:22px;
-}
-.comments-badge{
-  padding:6px 14px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:600;
-  background:linear-gradient(135deg,var(--gold),#f3d98b);
-  color:#000;
-  box-shadow:0 4px 14px var(--gold-glow);
-}
-
-.comments-hint{
-  font-size:13px;
-  color:var(--muted);
+  align-items:center;
   margin-bottom:12px;
 }
+.comments-title span{
+  font-size:12px;
+  background:linear-gradient(135deg,var(--gold),#f3d98b);
+  padding:6px 14px;
+  border-radius:999px;
+  font-weight:600;
+}
+.small{color:var(--muted);font-size:13px}
 
-/* ===== FOOTER ===== */
 footer{
   text-align:center;
   padding:40px 20px;
@@ -172,25 +165,31 @@ footer{
 <!-- LEFT -->
 <div class="player-card">
   <iframe id="player" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+  <div class="playlist-toggle" id="toggleBtn">
+    Избери песен
+    <span>▼</span>
+  </div>
+
   <div class="playlist" id="playlist"></div>
 </div>
 
-<!-- RIGHT – SPECIAL COMMENTS -->
+<!-- RIGHT -->
 <div class="comments-wrap">
-  <div class="comments-card">
-    <div class="comments-title">
-      <h2>Коментари</h2>
-      <div class="comments-badge">LIVE</div>
-    </div>
-    <div class="comments-hint">
-      Сподели мнение за текущата песен
-    </div>
+  <div class="comments-shell">
+    <div class="comments-card">
+      <div class="comments-title">
+        <strong>Коментари</strong>
+        <span>LIVE</span>
+      </div>
+      <p class="small">Мнение за текущата песен</p>
 
-    <div class="fb-comments"
-         id="fb-comments"
-         data-href=""
-         data-width="100%"
-         data-numposts="6"></div>
+      <div class="fb-comments"
+           id="fb-comments"
+           data-href=""
+           data-width="100%"
+           data-numposts="6"></div>
+    </div>
   </div>
 </div>
 
@@ -215,6 +214,7 @@ const videos = [
 const player = document.getElementById("player");
 const list = document.getElementById("playlist");
 const fb = document.getElementById("fb-comments");
+const toggle = document.getElementById("toggleBtn");
 
 function getId(url){
   const m = url.match(/v=([^&]+)/);
@@ -223,18 +223,20 @@ function getId(url){
 
 function playVideo(i){
   const id = getId(videos[i].url);
-  if(!id) return;
-
   player.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
 
   document.querySelectorAll(".track").forEach((el,idx)=>{
     el.classList.toggle("active", idx===i);
   });
 
-  const hashUrl = location.href.split("#")[0] + "#song-" + id;
-  fb.setAttribute("data-href", hashUrl);
+  const songUrl = location.href.split("#")[0] + "#song-" + id;
+  fb.setAttribute("data-href", songUrl);
   if(window.FB) FB.XFBML.parse(fb.parentNode);
+
+  list.classList.remove("open");
 }
+
+toggle.onclick = ()=>list.classList.toggle("open");
 
 videos.forEach((v,i)=>{
   const div=document.createElement("div");
