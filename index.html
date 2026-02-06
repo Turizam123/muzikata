@@ -40,7 +40,6 @@ header span{color:var(--gold)}
 header p{
   margin-top:10px;
   color:var(--muted);
-  font-size:15px;
 }
 main{
   max-width:1200px;
@@ -134,9 +133,9 @@ footer{
 
 <main>
 
-<!-- 🎬 PLAYER -->
 <div class="card">
   <h2>Official Videos</h2>
+
   <div class="controls">
     <button id="shuffleBtn">🔀 Shuffle</button>
     <button id="repeatBtn">🔁 Repeat</button>
@@ -144,21 +143,18 @@ footer{
 
   <div id="player"></div>
   <div class="playlist" id="playlist"></div>
+
+  <p class="small">▶ Видеата се възпроизвеждат автоматично едно след друго.</p>
 </div>
 
-<!-- 👤 ABOUT -->
 <div class="card">
   <h2>About the Artist</h2>
   <p class="small">
     UZIMUZIK е артистичен проект, вдъхновен от реалността, уличната култура
-    и личните преживявания. Музиката е отражение на пътя – суров, честен
-    и емоционален.
-    <br><br>
-    Всеки клип е визуален разказ. Всяка песен – лична история.
+    и личните преживявания. Всяка песен е история, всеки клип – визуален подпис.
   </p>
 </div>
 
-<!-- 💬 COMMENTS -->
 <div class="card">
   <h2>Facebook коментари</h2>
   <div class="fb-comments" data-href="" data-width="100%" data-numposts="5"></div>
@@ -171,15 +167,16 @@ footer{
 </footer>
 
 <script>
+// ✅ ТУК СА ЦЕЛИТЕ ЛИНКОВЕ – САМО ТЯХ ПИПАШ
 const videos = [
-  { id: "DBNw6gG-uJ8", title: "Песен 1" },
-  { id: "GWU-07ulYXU", title: "Песен 2" },
-  { id: "OHCxuppxNNQ", title: "Песен 3" },
-  { id: "ML5CsWGzURg", title: "Песен 4" },
-  { id: "WJjFkt14HlY", title: "Песен 5" },
-  { id: "XcUYe-EXSEA", title: "Песен 6" },
-  { id: "ra9yEDzebFE", title: "Песен 7" },
-  { id: "cOvl14lvBBg", title: "Песен 8" }
+  { title: "Песен 1", url: "https://www.youtube.com/watch?v=DBNw6gG-uJ8" },
+  { title: "Песен 2", url: "https://www.youtube.com/watch?v=GWU-07ulYXU" },
+  { title: "Песен 3", url: "https://www.youtube.com/watch?v=OHCxuppxNNQ" },
+  { title: "Песен 4", url: "https://www.youtube.com/watch?v=ML5CsWGzURg" },
+  { title: "Песен 5", url: "https://www.youtube.com/watch?v=WJjFkt14HlY" },
+  { title: "Песен 6", url: "https://www.youtube.com/watch?v=XcUYe-EXSEA" },
+  { title: "Песен 7", url: "https://www.youtube.com/watch?v=ra9yEDzebFE" },
+  { title: "Песен 8", url: "https://www.youtube.com/watch?v=cOvl14lvBBg" }
 ];
 
 let player;
@@ -187,9 +184,15 @@ let current = 0;
 let shuffle = false;
 let repeat = false;
 
+// 🔑 извличане на ID от пълен линк
+function getVideoId(url){
+  const u = new URL(url);
+  return u.searchParams.get("v");
+}
+
 function onYouTubeIframeAPIReady(){
   player = new YT.Player('player', {
-    videoId: videos[0].id,
+    videoId: getVideoId(videos[0].url),
     playerVars: { rel: 0 },
     events: { onStateChange }
   });
@@ -217,7 +220,7 @@ function nextVideo(){
 
 function loadVideo(i){
   current = i;
-  player.loadVideoById(videos[i].id);
+  player.loadVideoById(getVideoId(videos[i].url));
   highlight();
 }
 
@@ -249,7 +252,7 @@ document.getElementById("repeatBtn").onclick = function(){
   this.classList.toggle("active", repeat);
 };
 
-// Facebook URL
+// Facebook
 document.querySelector(".fb-comments").setAttribute("data-href", location.href);
 </script>
 
