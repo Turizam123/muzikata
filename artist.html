@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UZIMUZIK • За артиста</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#f6f7fb;
+  --card:#ffffff;
+  --border:#e5e7f0;
+  --text:#1f2430;
+  --muted:#6b7280;
+  --gold:#c9a24d;
+}
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Inter,system-ui;
+  background:
+    radial-gradient(900px 600px at 20% 0%,rgba(201,162,77,.12),transparent 60%),
+    var(--bg);
+  color:var(--text);
+}
+
+/* HEADER */
+header{
+  padding:60px 20px 50px;
+  text-align:center;
+}
+header h1{
+  margin:0;
+  font-family:"Playfair Display",serif;
+  font-size:42px;
+  letter-spacing:.12em;
+}
+header span{color:var(--gold)}
+header p{
+  margin-top:14px;
+  font-size:16px;
+  color:var(--muted);
+}
+
+/* LAYOUT */
+main{
+  max-width:1000px;
+  margin:auto;
+  padding:0 20px 60px;
+}
+.section{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:28px;
+  padding:36px;
+  box-shadow:0 20px 50px rgba(0,0,0,.06);
+  margin-bottom:36px;
+}
+.section h2{
+  font-family:"Playfair Display",serif;
+  font-size:26px;
+  margin-top:0;
+  margin-bottom:18px;
+}
+.section p{
+  font-size:16px;
+  line-height:1.75;
+  color:#2a2f3d;
+}
+.badge{
+  display:inline-block;
+  padding:6px 14px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:600;
+  background:linear-gradient(135deg,var(--gold),#f3d98b);
+  color:#000;
+  margin-right:8px;
+}
+
+/* LIST */
+ul{
+  padding-left:18px;
+}
+li{
+  margin-bottom:10px;
+  line-height:1.6;
+}
+
+/* QUOTE */
+.quote{
+  font-family:"Playfair Display",serif;
+  font-size:22px;
+  font-style:italic;
+  text-align:center;
+  color:#3b3f4a;
+}
+
+/* FOOTER */
+footer{
+  text-align:center;
+  padding:40px 20px;
+  font-size:13px;
+  color:var(--muted);
+}
+a{
+  color:var(--text);
+  text-decoration:none;
+}
+a:hover{color:var(--gold)}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>UZI<span>MUZIK</span></h1>
+  <p>Автор • Концепция • Текстове</p>
+</header>
+
+<main>
+
+<!-- WHO -->
+<section class="section">
+  <h2>Кой стои зад проекта</h2>
+
+  <p>
+    <span class="badge">Автор</span>
+    <span class="badge">Текстописец</span>
+    <span class="badge">Концептуален артист</span>
+  </p>
+
+  <p>
+    Аз съм създателят зад проекта <strong>UZIMUZIK</strong>.
+    Всички текстове са написани от мен – базирани на лични преживявания,
+    наблюдения и реални емоции.
+  </p>
+
+  <p>
+    Проектът е експеримент между човешка идея и изкуствен интелект,
+    в който <strong>човекът води, а технологията изпълнява</strong>.
+  </p>
+</section>
+
+<!-- AI -->
+<section class="section">
+  <h2>Изкуствен интелект и музика</h2>
+
+  <p>
+    Вокалите и музикалните аранжименти са създадени с помощта на
+    изкуствен интелект.
+  </p>
+
+  <ul>
+    <li>🎼 Музиката е генерирана по зададена от мен концепция</li>
+    <li>🎤 Вокалите са синтезирани, но режисирани художествено</li>
+    <li>✍️ Текстовете са 100% авторски</li>
+    <li>🎧 Крайната форма е под мой контрол</li>
+  </ul>
+
+  <p>
+    Това не е автоматично производство, а <strong>съзнателен творчески процес</strong>,
+    в който технологията е инструмент, а не автор.
+  </p>
+</section>
+
+<!-- PHILOSOPHY -->
+<section class="section">
+  <h2>Артистична философия</h2>
+
+  <p class="quote">
+    „Идеята е човешка. Гласът може да е изкуствен.
+    Но посланието винаги е истинско.“
+  </p>
+
+  <p>
+    Музиката не е въпрос на произход, а на смисъл.
+    В свят, в който технологиите се развиват,
+    артистът остава този, който носи посланието.
+  </p>
+</section>
+
+<!-- LINKS -->
+<section class="section">
+  <h2>Проектът</h2>
+
+  <p>
+    Всички песни, клипове и коментари са част от
+    цялостния проект <strong>UZIMUZIK</strong>.
+  </p>
+
+  <p>
+    👉 <a href="index.html">Към музиката и клиповете</a>
+  </p>
+</section>
+
+</main>
+
+<footer>
+© 2026 UZIMUZIK • Авторско съдържание
+</footer>
+
+</body>
+</html>
