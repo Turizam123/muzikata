@@ -7,6 +7,7 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="icon" href="/favicons.ico" type="image/x-icon">
+
 <style>
 :root{
   --bg:#f6f7fb;
@@ -18,6 +19,7 @@
   --border:rgba(255,255,255,.45);
 }
 *{box-sizing:border-box}
+
 body{
   margin:0;
   font-family:Inter,system-ui;
@@ -26,6 +28,7 @@ body{
     var(--bg);
   color:var(--text);
 }
+
 header{
   padding:42px 20px;
   text-align:center;
@@ -79,22 +82,57 @@ iframe{
   justify-content:space-between;
   align-items:center;
 }
+
+/* PLAYLIST (UPGRADED) */
 .playlist{
   overflow:hidden;
   max-height:0;
   transition:max-height .4s ease;
 }
+
 .playlist.open{
-  max-height:500px;
+  max-height:420px;          /* ⬅️ по-голяма височина */
+  overflow-y:auto;           /* ⬅️ вътрешен скрол */
+  padding-right:6px;
+  position:relative;
 }
+
+/* Modern scrollbar */
+.playlist.open::-webkit-scrollbar{
+  width:6px;
+}
+.playlist.open::-webkit-scrollbar-thumb{
+  background:linear-gradient(180deg,#d4b46a,#c9a24d);
+  border-radius:10px;
+}
+.playlist.open::-webkit-scrollbar-track{
+  background:transparent;
+}
+
+/* Fade indicator */
+.playlist.open::after{
+  content:"";
+  position:sticky;
+  bottom:0;
+  left:0;
+  right:0;
+  height:28px;
+  background:linear-gradient(transparent, var(--bg));
+  pointer-events:none;
+}
+
 .track{
   margin-top:10px;
   padding:14px 18px;
   border-radius:14px;
   background:#f7f8fc;
   cursor:pointer;
+  transition:.2s;
 }
-.track:hover{background:#fff}
+.track:hover{
+  background:#fff;
+  box-shadow:0 6px 16px rgba(0,0,0,.06);
+}
 .track.active{
   border-left:4px solid var(--gold);
   background:#fff8e6;
@@ -210,7 +248,7 @@ const videos = [
   { title:"Дъхът на планината", url:"https://www.youtube.com/watch?v=WJjFkt14HlY" },
   { title:"Целувам те с очи", url:"https://www.youtube.com/watch?v=XcUYe-EXSEA" },
   { title:"Ехо от любов", url:"https://www.youtube.com/watch?v=ra9yEDzebFE" },
-  { title:"Ехо от любов", url:"https://www.youtube.com/watch?v=AGG90CQSDBI" },
+  { title:"Живот", url:"https://www.youtube.com/watch?v=AGG90CQSDBI" },
   { title:"Майчина сълза", url:"https://www.youtube.com/watch?v=cOvl14lvBBg" }
 ];
 
