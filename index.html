@@ -141,6 +141,9 @@ iframe{
   font-size:18px;
   cursor:pointer;
 }
+.emoji-bar span{
+  transition:.2s;
+}
 .emoji-bar span:hover{
   transform:scale(1.3);
 }
@@ -162,42 +165,20 @@ iframe{
   box-shadow:0 10px 25px rgba(201,162,77,.3);
 }
 
-/* COMMENT CARD */
 .comment{
   background:#fff;
   padding:16px;
   border-radius:18px;
   margin-top:14px;
   box-shadow:0 8px 20px rgba(0,0,0,.05);
-  opacity:1;
-  transform:translateY(0);
-  transition:transform .3s ease, box-shadow .3s ease;
+  transition:.2s;
 }
 .comment:hover{
-  transform:translateY(-3px);
+  transform:translateY(-2px);
 }
-
-/* FLOAT IN ANIMATION */
-.comment.float-in{
-  animation:floatIn .6s cubic-bezier(.22,1,.36,1);
-  border:1px solid var(--gold);
+.comment strong{
+  font-size:15px;
 }
-
-@keyframes floatIn{
-  0%{
-    opacity:0;
-    transform:translateY(40px) scale(.95);
-  }
-  60%{
-    opacity:1;
-    transform:translateY(-6px) scale(1.02);
-  }
-  100%{
-    transform:translateY(0) scale(1);
-  }
-}
-
-.comment strong{font-size:15px;}
 .comment .date{
   font-size:11px;
   color:var(--muted);
@@ -215,6 +196,17 @@ footer{
   color:var(--muted);
 }
 </style>
+
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+const supabase = createClient(
+  "https://dnuyohomlkcqqvtaaque.supabase.co",
+  "sb_publishable_eCnJeGpRZAtMARFxpPK7nQ_y-jYUeyq"
+);
+
+window.supabaseClient = supabase;
+</script>
 </head>
 
 <body>
@@ -239,7 +231,7 @@ footer{
 <div class="comments-wrap">
   <div class="comments-card">
     <h3>Коментари</h3>
-    <div id="songTitle"></div>
+    <div class="small" id="songTitle"></div>
 
     <div class="comment-form">
       <input class="input" id="cName" placeholder="Твоето име">
@@ -265,41 +257,42 @@ footer{
 </footer>
 
 <script type="module">
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-
-const supabase = createClient(
-  "https://dnuyohomlkcqqvtaaque.supabase.co",
-  "sb_publishable_eCnJeGpRZAtMARFxpPK7nQ_y-jYUeyq"
-);
+const supabase = window.supabaseClient;
 
 const videos = [
   { title:"Изповед", url:"https://www.youtube.com/watch?v=e2ULPL_ozfE" },
-  { title:"Ще ме обичаш ли?", url:"https://www.youtube.com/watch?v=DBNw6gG-uJ8" }
+  { title:"Ще ме обичаш ли?", url:"https://www.youtube.com/watch?v=DBNw6gG-uJ8" },
+  { title:"Богат без пари", url:"https://www.youtube.com/watch?v=GWU-07ulYXU" },
+  { title:"Светлина в мрака", url:"https://www.youtube.com/watch?v=8VpKhRg4i3s" },
+  { title:"Времето минава", url:"https://www.youtube.com/watch?v=OHCxuppxNNQ" },
+  { title:"Само любов", url:"https://www.youtube.com/watch?v=ML5CsWGzURg" },
+  { title:"Наследство", url:"https://www.youtube.com/watch?v=h9GldG7skOQ" },
+  { title:"Дъхът на планината", url:"https://www.youtube.com/watch?v=WJjFkt14HlY" },
+  { title:"Целувам те с очи", url:"https://www.youtube.com/watch?v=XcUYe-EXSEA" },
+  { title:"Ехо от любов", url:"https://www.youtube.com/watch?v=ra9yEDzebFE" },
+  { title:"Живот", url:"https://www.youtube.com/watch?v=AGG90CQSDBI" },
+  { title:"Майчина сълза", url:"https://www.youtube.com/watch?v=cOvl14lvBBg" }
 ];
 
 const player=document.getElementById("player");
 const list=document.getElementById("playlist");
+const toggle=document.getElementById("toggleBtn");
 const commentList=document.getElementById("commentList");
 const songTitle=document.getElementById("songTitle");
 
 let currentVideoId=null;
+let lastSend=0;
+
+// client id
+let clientId=localStorage.getItem("uzi_client_id");
+if(!clientId){
+  clientId=crypto.randomUUID();
+  localStorage.setItem("uzi_client_id",clientId);
+}
 
 function getId(url){
   const m=url.match(/v=([^&]+)/);
   return m?m[1]:null;
-}
-
-function createCommentElement(c, isNew=false){
-  const div=document.createElement("div");
-  div.className="comment";
-  if(isNew) div.classList.add("float-in");
-
-  div.innerHTML=`
-    <strong>${c.display_name}</strong>
-    <div class="date">${new Date(c.created_at).toLocaleString()}</div>
-    <div class="text">${c.message}</div>
-  `;
-  return div;
 }
 
 async function loadComments(videoId){
@@ -311,7 +304,14 @@ async function loadComments(videoId){
 
   commentList.innerHTML="";
   data?.forEach(c=>{
-    commentList.appendChild(createCommentElement(c,false));
+    const div=document.createElement("div");
+    div.className="comment";
+    div.innerHTML=`
+      <strong>${c.display_name}</strong>
+      <div class="date">${new Date(c.created_at).toLocaleString()}</div>
+      <div class="text">${c.message}</div>
+    `;
+    commentList.appendChild(div);
   });
 }
 
@@ -332,31 +332,42 @@ videos.forEach((v,i)=>{
   list.appendChild(div);
 });
 
+toggle.onclick=()=>list.classList.toggle("open");
+
+document.querySelectorAll(".emoji-bar span").forEach(e=>{
+  e.onclick=()=>{
+    const t=document.getElementById("cMsg");
+    t.value+=e.textContent;
+    t.focus();
+  }
+});
+
 document.getElementById("sendBtn").onclick=async()=>{
+  if(Date.now()-lastSend<10000){
+    alert("Изчакай 10 секунди.");
+    return;
+  }
+
   const name=document.getElementById("cName").value||"Анонимен";
   const msg=document.getElementById("cMsg").value.trim();
   if(!msg) return;
 
-  await supabase.from("uzimusic_comments").insert({
+  const {error}=await supabase.from("uzimusic_comments").insert({
     video_id:currentVideoId,
     display_name:name,
-    message:msg
+    message:msg,
+    client_id:clientId
   });
 
-  document.getElementById("cMsg").value="";
-};
+  if(error){
+    alert("Грешка при запис!");
+    return;
+  }
 
-supabase
-  .channel("live-comments")
-  .on("postgres_changes",
-    { event:"INSERT", schema:"public", table:"uzimusic_comments" },
-    payload=>{
-      if(payload.new.video_id===currentVideoId){
-        const el=createCommentElement(payload.new,true);
-        commentList.prepend(el);
-      }
-    })
-  .subscribe();
+  document.getElementById("cMsg").value="";
+  lastSend=Date.now();
+  loadComments(currentVideoId);
+};
 
 playVideo(0);
 </script>
