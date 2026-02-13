@@ -19,7 +19,6 @@
   --border:rgba(255,255,255,.45);
 }
 *{box-sizing:border-box}
-
 body{
   margin:0;
   font-family:Inter,system-ui;
@@ -28,7 +27,6 @@ body{
     var(--bg);
   color:var(--text);
 }
-
 header{
   padding:42px 20px;
   text-align:center;
@@ -83,33 +81,23 @@ iframe{
   align-items:center;
 }
 
-/* PLAYLIST (UPGRADED) */
 .playlist{
   overflow:hidden;
   max-height:0;
   transition:max-height .4s ease;
 }
-
 .playlist.open{
-  max-height:420px;          /* ⬅️ по-голяма височина */
-  overflow-y:auto;           /* ⬅️ вътрешен скрол */
+  max-height:420px;
+  overflow-y:auto;
   padding-right:6px;
   position:relative;
 }
-
-/* Modern scrollbar */
-.playlist.open::-webkit-scrollbar{
-  width:6px;
-}
+.playlist.open::-webkit-scrollbar{ width:6px; }
 .playlist.open::-webkit-scrollbar-thumb{
   background:linear-gradient(180deg,#d4b46a,#c9a24d);
   border-radius:10px;
 }
-.playlist.open::-webkit-scrollbar-track{
-  background:transparent;
-}
-
-/* Fade indicator */
+.playlist.open::-webkit-scrollbar-track{ background:transparent; }
 .playlist.open::after{
   content:"";
   position:sticky;
@@ -138,7 +126,7 @@ iframe{
   background:#fff8e6;
 }
 
-/* COMMENTS – STICKY */
+/* COMMENTS – STICKY + MODERN */
 .comments-wrap{
   position:sticky;
   top:30px;
@@ -152,20 +140,20 @@ iframe{
       rgba(255,255,255,.6),
       rgba(201,162,77,.9)
     );
+  box-shadow:0 20px 60px rgba(201,162,77,.22);
 }
 .comments-card{
   background:var(--glass);
   backdrop-filter: blur(18px);
   border-radius:26px;
-  padding:28px;
+  padding:22px;
   border:1px solid var(--border);
-  box-shadow:0 30px 60px rgba(201,162,77,.25);
 }
 .comments-title{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-bottom:12px;
+  margin-bottom:10px;
 }
 .comments-title span{
   font-size:12px;
@@ -175,6 +163,74 @@ iframe{
   font-weight:600;
 }
 .small{color:var(--muted);font-size:13px}
+.now-title{
+  font-weight:600;
+  margin:8px 0 14px;
+}
+
+/* Comment form */
+.form-row{ display:flex; gap:10px; }
+@media(max-width:980px){ .form-row{ flex-direction:column; } }
+
+.input, .textarea{
+  width:100%;
+  border:1px solid rgba(0,0,0,.08);
+  background:rgba(255,255,255,.8);
+  border-radius:14px;
+  padding:12px 14px;
+  font:inherit;
+  outline:none;
+}
+.textarea{ min-height:90px; resize:vertical; }
+
+.btn{
+  width:100%;
+  border:none;
+  cursor:pointer;
+  border-radius:14px;
+  padding:12px 14px;
+  font-weight:700;
+  background:linear-gradient(135deg,var(--gold),#f3d98b);
+  color:#111;
+  box-shadow:0 10px 26px rgba(201,162,77,.28);
+}
+.btn:active{ transform:translateY(1px); }
+
+.status{
+  margin-top:10px;
+  font-size:12px;
+  color:var(--muted);
+}
+
+/* Comment list */
+.comment-list{
+  margin-top:14px;
+  max-height:360px;
+  overflow:auto;
+  padding-right:6px;
+}
+.comment-list::-webkit-scrollbar{ width:6px; }
+.comment-list::-webkit-scrollbar-thumb{
+  background:linear-gradient(180deg,#d4b46a,#c9a24d);
+  border-radius:10px;
+}
+.comment{
+  background:rgba(255,255,255,.85);
+  border:1px solid rgba(0,0,0,.06);
+  border-radius:16px;
+  padding:12px 12px;
+  margin-bottom:10px;
+}
+.comment .meta{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:6px;
+}
+.comment .name{ font-weight:700; color:#222; }
+.comment .msg{ white-space:pre-wrap; word-break:break-word; color:#222; }
 
 footer{
   text-align:center;
@@ -184,10 +240,10 @@ footer{
 }
 </style>
 
-<!-- Facebook SDK -->
-<div id="fb-root"></div>
-<script async defer crossorigin="anonymous"
-  src="https://connect.facebook.net/bg_BG/sdk.js#xfbml=1&version=v21.0">
+<!-- Supabase JS -->
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+  window.__createSupabaseClient = createClient;
 </script>
 </head>
 
@@ -220,13 +276,24 @@ footer{
         <strong>Коментари</strong>
         <span>LIVE</span>
       </div>
-      <p class="small">Постави коментар</p>
 
-      <div class="fb-comments"
-           id="fb-comments"
-           data-href=""
-           data-width="100%"
-           data-numposts="6"></div>
+      <div class="small">Коментарите са без логин (анонимно).</div>
+      <div class="now-title" id="nowTitle">Песен: —</div>
+
+      <div class="form-row">
+        <input class="input" id="cName" maxlength="60" placeholder="Име (по желание)" />
+      </div>
+
+      <div style="margin-top:10px">
+        <textarea class="textarea" id="cMsg" maxlength="600" placeholder="Напиши коментар..."></textarea>
+      </div>
+
+      <div style="margin-top:10px">
+        <button class="btn" id="sendBtn">Публикувай</button>
+        <div class="status" id="status">—</div>
+      </div>
+
+      <div class="comment-list" id="commentList"></div>
     </div>
   </div>
 </div>
@@ -237,45 +304,149 @@ footer{
 © 2026 UZIMUSIC • ВСИЧКИ ПРАВА ЗАПАЗЕНИ !
 </footer>
 
-<script>
+<script type="module">
+const SUPABASE_URL = "PASTE_SUPABASE_URL";
+const SUPABASE_ANON_KEY = "PASTE_SUPABASE_ANON_KEY";
+
+const supabase = window.__createSupabaseClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 const videos = [
-  { title:"Изповед", url:"https://www.youtube.com/watch?v=e2ULPL_ozfE" },
   { title:"Ще ме обичаш ли?", url:"https://www.youtube.com/watch?v=DBNw6gG-uJ8" },
   { title:"Богат без пари", url:"https://www.youtube.com/watch?v=GWU-07ulYXU" },
   { title:"Светлина в мрака", url:"https://www.youtube.com/watch?v=8VpKhRg4i3s" },
-  { title:"Живот", url:"https://www.youtube.com/watch?v=AGG90CQSDBI" },
   { title:"Времето минава", url:"https://www.youtube.com/watch?v=OHCxuppxNNQ" },
   { title:"Само любов", url:"https://www.youtube.com/watch?v=ML5CsWGzURg" },
   { title:"Наследство", url:"https://www.youtube.com/watch?v=h9GldG7skOQ" },
   { title:"Дъхът на планината", url:"https://www.youtube.com/watch?v=WJjFkt14HlY" },
   { title:"Целувам те с очи", url:"https://www.youtube.com/watch?v=XcUYe-EXSEA" },
   { title:"Ехо от любов", url:"https://www.youtube.com/watch?v=ra9yEDzebFE" },
+  { title:"Ехо от любов", url:"https://www.youtube.com/watch?v=AGG90CQSDBI" },
   { title:"Майчина сълза", url:"https://www.youtube.com/watch?v=cOvl14lvBBg" }
 ];
 
 const player = document.getElementById("player");
 const list = document.getElementById("playlist");
-const fb = document.getElementById("fb-comments");
 const toggle = document.getElementById("toggleBtn");
+
+const nowTitle = document.getElementById("nowTitle");
+const cName = document.getElementById("cName");
+const cMsg = document.getElementById("cMsg");
+const sendBtn = document.getElementById("sendBtn");
+const statusEl = document.getElementById("status");
+const commentList = document.getElementById("commentList");
+
+let currentIndex = 0;
+let currentVideoId = null;
+let channel = null;
+let lastSendAt = 0;
+
+// client id (анонимен “идентификатор” за анти-спам)
+const CLIENT_KEY = "uzimusic_client_id_v1";
+let clientId = localStorage.getItem(CLIENT_KEY);
+if(!clientId){
+  clientId = (crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2) + Date.now());
+  localStorage.setItem(CLIENT_KEY, clientId);
+}
 
 function getId(url){
   const m = url.match(/v=([^&]+)/);
   return m ? m[1] : null;
 }
 
-function playVideo(i){
-  const id = getId(videos[i].url);
+function escapeText(s){
+  return (s ?? "").toString();
+}
+
+function fmtTime(iso){
+  try{
+    return new Date(iso).toLocaleString("bg-BG");
+  }catch{
+    return iso;
+  }
+}
+
+function renderComments(rows){
+  commentList.innerHTML = "";
+  (rows || []).forEach(r=>{
+    const wrap = document.createElement("div");
+    wrap.className = "comment";
+
+    const meta = document.createElement("div");
+    meta.className = "meta";
+
+    const name = document.createElement("div");
+    name.className = "name";
+    name.textContent = r.display_name;
+
+    const time = document.createElement("div");
+    time.textContent = fmtTime(r.created_at);
+
+    meta.appendChild(name);
+    meta.appendChild(time);
+
+    const msg = document.createElement("div");
+    msg.className = "msg";
+    msg.textContent = r.message;
+
+    wrap.appendChild(meta);
+    wrap.appendChild(msg);
+    commentList.appendChild(wrap);
+  });
+}
+
+async function loadComments(videoId){
+  const { data, error } = await supabase
+    .from("uzimusic_comments")
+    .select("id, created_at, display_name, message")
+    .eq("video_id", videoId)
+    .order("created_at", { ascending: false })
+    .limit(50);
+
+  if(error){
+    statusEl.textContent = "Грешка при зареждане на коментари.";
+    return;
+  }
+  statusEl.textContent = `Коментари: ${data?.length ?? 0}`;
+  renderComments(data);
+}
+
+function subscribeRealtime(videoId){
+  if(channel){
+    supabase.removeChannel(channel);
+    channel = null;
+  }
+
+  channel = supabase
+    .channel("uzimusic_comments_" + videoId)
+    .on(
+      "postgres_changes",
+      { event: "INSERT", schema: "public", table: "uzimusic_comments", filter: `video_id=eq.${videoId}` },
+      () => loadComments(videoId)
+    )
+    .subscribe();
+}
+
+async function playVideo(i){
+  currentIndex = i;
+  const v = videos[i];
+  const id = getId(v.url);
+  if(!id) return;
+
+  currentVideoId = id;
   player.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
 
   document.querySelectorAll(".track").forEach((el,idx)=>{
     el.classList.toggle("active", idx===i);
   });
 
-  const songUrl = location.href.split("#")[0] + "#song-" + id;
-  fb.setAttribute("data-href", songUrl);
-  if(window.FB) FB.XFBML.parse(fb.parentNode);
+  nowTitle.textContent = "Песен: " + v.title;
 
+  // свива плейлиста след избор
   list.classList.remove("open");
+
+  // коментари за конкретната песен
+  await loadComments(id);
+  subscribeRealtime(id);
 }
 
 toggle.onclick = ()=>list.classList.toggle("open");
@@ -287,6 +458,49 @@ videos.forEach((v,i)=>{
   div.onclick=()=>playVideo(i);
   list.appendChild(div);
 });
+
+sendBtn.onclick = async () => {
+  if(!currentVideoId) return;
+
+  const now = Date.now();
+  if(now - lastSendAt < 15000){
+    statusEl.textContent = "Изчакай 15 секунди преди следващ коментар.";
+    return;
+  }
+
+  const name = (cName.value || "").trim() || "Анонимен";
+  const msg = (cMsg.value || "").trim();
+
+  if(msg.length < 1){
+    statusEl.textContent = "Напиши коментар.";
+    return;
+  }
+
+  sendBtn.disabled = true;
+  statusEl.textContent = "Публикуване...";
+
+  const { error } = await supabase
+    .from("uzimusic_comments")
+    .insert({
+      video_id: currentVideoId,
+      video_title: videos[currentIndex]?.title ?? null,
+      display_name: escapeText(name).slice(0,60),
+      message: escapeText(msg).slice(0,600),
+      client_id: clientId
+    });
+
+  sendBtn.disabled = false;
+
+  if(error){
+    statusEl.textContent = "Грешка: не можа да се публикува.";
+    return;
+  }
+
+  lastSendAt = Date.now();
+  cMsg.value = "";
+  statusEl.textContent = "Публикувано ✅";
+  // realtime ще презареди списъка
+};
 
 playVideo(0);
 </script>
