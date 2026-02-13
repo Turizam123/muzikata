@@ -31,7 +31,7 @@ header{
 header h1{
   margin:0;
   font-family:"Playfair Display",serif;
-  font-size:40px;
+  font-size: clamp(40px, 8vw, 100px);
 }
 header span{color:var(--gold)}
 
@@ -189,6 +189,18 @@ iframe{
   line-height:1.5;
 }
 
+/* ✅ NEW: highlight animation for new comment */
+.comment.new{
+  border:1px solid var(--gold);
+  box-shadow:0 0 25px rgba(201,162,77,.5);
+  animation:fadeGlow 2s ease;
+}
+@keyframes fadeGlow{
+  0%{box-shadow:0 0 0 rgba(201,162,77,0);}
+  50%{box-shadow:0 0 35px rgba(201,162,77,.7);}
+  100%{box-shadow:0 0 0 rgba(201,162,77,0);}
+}
+
 footer{
   text-align:center;
   padding:40px 20px;
@@ -295,7 +307,8 @@ function getId(url){
   return m?m[1]:null;
 }
 
-async function loadComments(videoId){
+/* ✅ upgraded: supports highlight of a single new comment */
+async function loadComments(videoId, highlightId=null){
   const {data}=await supabase
     .from("uzimusic_comments")
     .select("*")
@@ -303,9 +316,18 @@ async function loadComments(videoId){
     .order("created_at",{ascending:false});
 
   commentList.innerHTML="";
+  let highlightedEl=null;
+
   data?.forEach(c=>{
     const div=document.createElement("div");
     div.className="comment";
+
+    if(highlightId && c.id===highlightId){
+      div.classList.add("new");
+      highlightedEl=div;
+      setTimeout(()=>div.classList.remove("new"),2500);
+    }
+
     div.innerHTML=`
       <strong>${c.display_name}</strong>
       <div class="date">${new Date(c.created_at).toLocaleString()}</div>
@@ -313,14 +335,27 @@ async function loadComments(videoId){
     `;
     commentList.appendChild(div);
   });
+
+  // smooth scroll to highlighted comment
+  if(highlightedEl){
+    setTimeout(()=>highlightedEl.scrollIntoView({behavior:"smooth", block:"start"}),150);
+  }
 }
 
 async function playVideo(i){
   const v=videos[i];
   const id=getId(v.url);
   currentVideoId=id;
+
   player.src=`https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
   songTitle.textContent="Песен: "+v.title;
+
+  // ✅ mark active track safely
+  document.querySelectorAll(".track").forEach((t,idx)=>{
+    if(idx===i) t.classList.add("active");
+    else t.classList.remove("active");
+  });
+
   loadComments(id);
 }
 
@@ -368,6 +403,20 @@ document.getElementById("sendBtn").onclick=async()=>{
   lastSend=Date.now();
   loadComments(currentVideoId);
 };
+
+/* ✅ NEW: realtime insert listener (safe, does not break existing flow) */
+supabase
+  .channel("realtime-uzimusic-comments")
+  .on(
+    "postgres_changes",
+    { event:"INSERT", schema:"public", table:"uzimusic_comments" },
+    (payload)=>{
+      if(payload?.new?.video_id===currentVideoId){
+        loadComments(currentVideoId, payload.new.id);
+      }
+    }
+  )
+  .subscribe();
 
 playVideo(0);
 </script>
