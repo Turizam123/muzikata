@@ -42,10 +42,7 @@ header .uzi{
   -webkit-text-fill-color:transparent;
   text-shadow:0 5px 30px rgba(201,162,77,.4);
 }
-header .music{
-  font-size:40px;
-  margin-left:10px;
-}
+header .music{font-size:40px;margin-left:10px;}
 header p{color:var(--muted);}
 
 /* LAYOUT */
@@ -57,9 +54,7 @@ main{
   grid-template-columns: 1.6fr 1fr;
   gap:34px;
 }
-@media(max-width:980px){
-  main{grid-template-columns:1fr}
-}
+@media(max-width:980px){ main{grid-template-columns:1fr} }
 
 /* PLAYER */
 .player-card{
@@ -86,15 +81,8 @@ iframe{
   display:flex;
   justify-content:space-between;
 }
-.playlist{
-  overflow:hidden;
-  max-height:0;
-  transition:max-height .4s ease;
-}
-.playlist.open{
-  max-height:420px;
-  overflow-y:auto;
-}
+.playlist{overflow:hidden;max-height:0;transition:max-height .4s ease;}
+.playlist.open{max-height:420px;overflow-y:auto;}
 .track{
   margin-top:10px;
   padding:14px 18px;
@@ -108,10 +96,7 @@ iframe{
   border-left:4px solid var(--gold);
   background:#fff8e6;
 }
-.count{
-  font-size:12px;
-  color:var(--muted);
-}
+.count{font-size:12px;color:var(--muted);}
 
 /* COMMENTS */
 .comments-wrap{ position:sticky; top:30px; }
@@ -136,11 +121,7 @@ iframe{
   margin-top:10px;
 }
 .textarea{min-height:90px;resize:none;}
-.emoji-bar{
-  margin-top:8px;
-  display:flex;
-  gap:8px;
-}
+.emoji-bar{margin-top:8px;display:flex;gap:8px;}
 .emoji-bar span{cursor:pointer;transition:.2s;}
 .emoji-bar span:hover{transform:scale(1.3);}
 .btn{
@@ -161,31 +142,56 @@ iframe{
   margin-top:14px;
   box-shadow:0 8px 20px rgba(0,0,0,.05);
   animation:fadeIn .4s ease;
+  transition:.3s;
+}
+.comment.new{
+  border:1px solid var(--gold);
+  box-shadow:0 0 25px rgba(201,162,77,.4);
 }
 @keyframes fadeIn{
   from{opacity:0;transform:translateY(10px);}
   to{opacity:1;transform:translateY(0);}
 }
-.comment strong{font-size:15px;}
-.comment .date{
-  font-size:11px;
-  color:var(--muted);
-  margin:4px 0 8px 0;
+@keyframes glow{
+  0%{box-shadow:0 0 0 rgba(201,162,77,0);}
+  50%{box-shadow:0 0 35px rgba(201,162,77,.6);}
+  100%{box-shadow:0 0 0 rgba(201,162,77,0);}
 }
-.comment .text{font-size:15px;}
-.actions{
-  margin-top:8px;
-  display:flex;
-  gap:15px;
-  font-size:13px;
-  color:var(--muted);
-  cursor:pointer;
-}
-.actions span:hover{color:var(--gold);}
+.comment.highlight{animation:glow 2s ease;}
+
+.actions span:active{transform:scale(1.2);}
+
 .top-label{
   font-size:11px;
   color:var(--gold);
   font-weight:600;
+}
+
+.typing{
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:8px;
+  display:none;
+}
+
+/* TOAST */
+.toast{
+  position:fixed;
+  bottom:25px;
+  right:25px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  padding:14px 20px;
+  border-radius:50px;
+  font-weight:600;
+  box-shadow:0 10px 25px rgba(0,0,0,.2);
+  opacity:0;
+  transform:translateY(20px);
+  transition:.4s;
+  z-index:9999;
+}
+.toast.show{
+  opacity:1;
+  transform:translateY(0);
 }
 
 footer{
@@ -225,8 +231,10 @@ window.supabaseClient=supabase;
 
 <div class="comments-wrap">
   <div class="comments-card">
-    <h3>Коментари</h3>
+    <h3>Коментари (<span id="liveCount">0</span>)</h3>
     <div id="songTitle" style="font-size:13px;color:var(--muted);margin-bottom:12px;"></div>
+
+    <div class="typing" id="typingIndicator">Някой пише...</div>
 
     <div class="comment-form">
       <input class="input" id="cName" placeholder="Твоето име">
@@ -244,6 +252,8 @@ window.supabaseClient=supabase;
 </div>
 
 </main>
+
+<div class="toast" id="toast">Нов коментар ✓</div>
 
 <footer>© 2026 UZIMUSIC • ВСИЧКИ ПРАВА ЗАПАЗЕНИ !</footer>
 
@@ -268,30 +278,11 @@ const list=document.getElementById("playlist");
 const toggle=document.getElementById("toggleBtn");
 const commentList=document.getElementById("commentList");
 const songTitle=document.getElementById("songTitle");
+const toast=document.getElementById("toast");
+const liveCount=document.getElementById("liveCount");
 
 function getId(url){const m=url.match(/v=([^&]+)/);return m?m[1]:null;}
 
-/* AUTO DELETE 7 DAYS */
-async function cleanupOld(){
-  const sevenDaysAgo=new Date(Date.now()-7*24*60*60*1000).toISOString();
-  await supabase.from("uzimusic_comments")
-    .delete()
-    .lt("created_at",sevenDaysAgo);
-}
-
-/* COMMENT COUNTER */
-async function updateCounters(){
-  const {data}=await supabase.from("uzimusic_comments").select("video_id");
-  const counts={};
-  data?.forEach(d=>counts[d.video_id]=(counts[d.video_id]||0)+1);
-  document.querySelectorAll(".track").forEach(t=>{
-    const id=t.dataset.id;
-    const count=t.querySelector(".count");
-    count.textContent=(counts[id]||0)+" ком.";
-  });
-}
-
-/* LOAD COMMENTS + TOP */
 async function loadComments(videoId){
   const {data}=await supabase
     .from("uzimusic_comments")
@@ -301,6 +292,8 @@ async function loadComments(videoId){
     .order("created_at",{ascending:false});
 
   commentList.innerHTML="";
+  liveCount.textContent=data?.length||0;
+
   data?.forEach((c,i)=>{
     const div=document.createElement("div");
     div.className="comment";
@@ -316,28 +309,24 @@ async function loadComments(videoId){
     `;
     commentList.appendChild(div);
   });
-
-  updateCounters();
 }
 
-/* REALTIME */
 supabase.channel("comments")
-  .on("postgres_changes",{event:"*",schema:"public",table:"uzimusic_comments"},
+  .on("postgres_changes",{event:"INSERT",schema:"public",table:"uzimusic_comments"},
   payload=>{
-    if(payload.new?.video_id===currentVideoId ||
-       payload.old?.video_id===currentVideoId){
+    if(payload.new.video_id===currentVideoId){
       loadComments(currentVideoId);
+      toast.classList.add("show");
+      setTimeout(()=>toast.classList.remove("show"),3000);
     }
   }).subscribe();
 
-/* LIKE */
 window.likeComment=async(id,currentLikes)=>{
   await supabase.from("uzimusic_comments")
     .update({likes:currentLikes+1})
     .eq("id",id);
 };
 
-/* DELETE */
 window.deleteComment=async(id)=>{
   await supabase.from("uzimusic_comments")
     .delete()
@@ -345,7 +334,6 @@ window.deleteComment=async(id)=>{
     .eq("client_id",clientId);
 };
 
-/* PLAY */
 async function playVideo(i){
   const v=videos[i];
   const id=getId(v.url);
@@ -355,7 +343,6 @@ async function playVideo(i){
   loadComments(id);
 }
 
-/* PLAYLIST */
 videos.forEach((v,i)=>{
   const div=document.createElement("div");
   const id=getId(v.url);
@@ -368,7 +355,6 @@ videos.forEach((v,i)=>{
 
 toggle.onclick=()=>list.classList.toggle("open");
 
-/* EMOJI */
 document.querySelectorAll(".emoji-bar span").forEach(e=>{
   e.onclick=()=>{
     const t=document.getElementById("cMsg");
@@ -377,7 +363,6 @@ document.querySelectorAll(".emoji-bar span").forEach(e=>{
   };
 });
 
-/* SEND */
 document.getElementById("sendBtn").onclick=async()=>{
   const name=document.getElementById("cName").value||"Анонимен";
   const msg=document.getElementById("cMsg").value.trim();
@@ -394,7 +379,6 @@ document.getElementById("sendBtn").onclick=async()=>{
   document.getElementById("cMsg").value="";
 };
 
-cleanupOld();
 playVideo(0);
 </script>
 
