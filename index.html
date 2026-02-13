@@ -40,7 +40,6 @@ header .uzi{
   background:linear-gradient(135deg,var(--gold),var(--gold2));
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
-  text-shadow:0 5px 30px rgba(201,162,77,.4);
 }
 header .music{font-size:40px;margin-left:10px;}
 header p{color:var(--muted);}
@@ -152,14 +151,6 @@ iframe{
   from{opacity:0;transform:translateY(10px);}
   to{opacity:1;transform:translateY(0);}
 }
-@keyframes glow{
-  0%{box-shadow:0 0 0 rgba(201,162,77,0);}
-  50%{box-shadow:0 0 35px rgba(201,162,77,.6);}
-  100%{box-shadow:0 0 0 rgba(201,162,77,0);}
-}
-.comment.highlight{animation:glow 2s ease;}
-
-.actions span:active{transform:scale(1.2);}
 
 .top-label{
   font-size:11px;
@@ -193,22 +184,17 @@ iframe{
   opacity:1;
   transform:translateY(0);
 }
-
-footer{
-  text-align:center;
-  padding:40px 20px;
-  font-size:13px;
-  color:var(--muted);
-}
 </style>
 
 <script type="module">
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
 const supabase = createClient(
   "https://dnuyohomlkcqqvtaaque.supabase.co",
   "sb_publishable_eCnJeGpRZAtMARFxpPK7nQ_y-jYUeyq"
 );
-window.supabaseClient=supabase;
+
+window.supabaseClient = supabase;
 </script>
 </head>
 
@@ -233,7 +219,6 @@ window.supabaseClient=supabase;
   <div class="comments-card">
     <h3>Коментари (<span id="liveCount">0</span>)</h3>
     <div id="songTitle" style="font-size:13px;color:var(--muted);margin-bottom:12px;"></div>
-
     <div class="typing" id="typingIndicator">Някой пише...</div>
 
     <div class="comment-form">
@@ -255,12 +240,11 @@ window.supabaseClient=supabase;
 
 <div class="toast" id="toast">Нов коментар ✓</div>
 
-<footer>© 2026 UZIMUSIC • ВСИЧКИ ПРАВА ЗАПАЗЕНИ !</footer>
-
 <script type="module">
-const supabase=window.supabaseClient;
 
-const videos=[
+const supabase = window.supabaseClient;
+
+const videos = [
   {title:"Ще ме обичаш ли?",url:"https://www.youtube.com/watch?v=DBNw6gG-uJ8"},
   {title:"Богат без пари",url:"https://www.youtube.com/watch?v=GWU-07ulYXU"},
   {title:"Светлина в мрака",url:"https://www.youtube.com/watch?v=8VpKhRg4i3s"}
@@ -280,10 +264,11 @@ const commentList=document.getElementById("commentList");
 const songTitle=document.getElementById("songTitle");
 const toast=document.getElementById("toast");
 const liveCount=document.getElementById("liveCount");
+const typingIndicator=document.getElementById("typingIndicator");
 
 function getId(url){const m=url.match(/v=([^&]+)/);return m?m[1]:null;}
 
-async function loadComments(videoId){
+async function loadComments(videoId, highlightId=null){
   const {data}=await supabase
     .from("uzimusic_comments")
     .select("*")
@@ -294,17 +279,29 @@ async function loadComments(videoId){
   commentList.innerHTML="";
   liveCount.textContent=data?.length||0;
 
+  document.querySelectorAll(".track").forEach(t=>{
+    if(t.dataset.id===videoId){
+      t.querySelector(".count").textContent=(data?.length||0)+" ком.";
+      t.classList.add("active");
+    } else t.classList.remove("active");
+  });
+
   data?.forEach((c,i)=>{
     const div=document.createElement("div");
     div.className="comment";
+    if(c.id===highlightId){
+      div.classList.add("new");
+      div.scrollIntoView({behavior:"smooth"});
+      setTimeout(()=>div.classList.remove("new"),3000);
+    }
     div.innerHTML=`
       ${i===0 && c.likes>0?'<div class="top-label">👑 Топ коментар</div>':''}
       <strong>${c.display_name}</strong>
-      <div class="date">${new Date(c.created_at).toLocaleString()}</div>
-      <div class="text">${c.message}</div>
-      <div class="actions">
+      <div>${new Date(c.created_at).toLocaleString()}</div>
+      <div>${c.message}</div>
+      <div>
         <span onclick="likeComment('${c.id}',${c.likes||0})">❤️ ${c.likes||0}</span>
-        ${c.client_id===clientId?`<span onclick="deleteComment('${c.id}')">🗑 Изтрий</span>`:''}
+        ${c.client_id===clientId?`<span onclick="deleteComment('${c.id}')"> 🗑</span>`:''}
       </div>
     `;
     commentList.appendChild(div);
@@ -312,14 +309,16 @@ async function loadComments(videoId){
 }
 
 supabase.channel("comments")
-  .on("postgres_changes",{event:"INSERT",schema:"public",table:"uzimusic_comments"},
+.on("postgres_changes",
+  {event:"INSERT",schema:"public",table:"uzimusic_comments"},
   payload=>{
     if(payload.new.video_id===currentVideoId){
-      loadComments(currentVideoId);
+      loadComments(currentVideoId,payload.new.id);
       toast.classList.add("show");
       setTimeout(()=>toast.classList.remove("show"),3000);
     }
-  }).subscribe();
+  }
+).subscribe();
 
 window.likeComment=async(id,currentLikes)=>{
   await supabase.from("uzimusic_comments")
@@ -380,7 +379,7 @@ document.getElementById("sendBtn").onclick=async()=>{
 };
 
 playVideo(0);
-</script>
 
+</script>
 </body>
 </html>
