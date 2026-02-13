@@ -13,7 +13,7 @@
   --text:#1f2430;
   --muted:#6b7280;
   --gold:#c9a24d;
-  --glass:rgba(255,255,255,.75);
+  --glass:rgba(255,255,255,.85);
 }
 *{box-sizing:border-box}
 body{
@@ -47,7 +47,6 @@ main{
   main{grid-template-columns:1fr}
 }
 
-/* PLAYER */
 .player-card{
   background:#fff;
   border-radius:26px;
@@ -61,7 +60,7 @@ iframe{
   border-radius:20px;
 }
 
-/* PLAYLIST */
+/* Playlist */
 .playlist-toggle{
   margin-top:22px;
   padding:14px 18px;
@@ -93,7 +92,7 @@ iframe{
   background:#fff8e6;
 }
 
-/* COMMENTS */
+/* Comments */
 .comments-wrap{
   position:sticky;
   top:30px;
@@ -125,12 +124,13 @@ iframe{
 }
 .comment{
   background:#fff;
-  padding:10px;
+  padding:12px;
   border-radius:12px;
   margin-top:10px;
 }
 .comment strong{display:block}
 .small{font-size:12px;color:var(--muted)}
+
 footer{
   text-align:center;
   padding:40px 20px;
@@ -195,15 +195,7 @@ const supabase = window.supabaseClient;
 const videos = [
   { title:"Ще ме обичаш ли?", url:"https://www.youtube.com/watch?v=DBNw6gG-uJ8" },
   { title:"Богат без пари", url:"https://www.youtube.com/watch?v=GWU-07ulYXU" },
-  { title:"Светлина в мрака", url:"https://www.youtube.com/watch?v=8VpKhRg4i3s" },
-  { title:"Времето минава", url:"https://www.youtube.com/watch?v=OHCxuppxNNQ" },
-  { title:"Само любов", url:"https://www.youtube.com/watch?v=ML5CsWGzURg" },
-  { title:"Наследство", url:"https://www.youtube.com/watch?v=h9GldG7skOQ" },
-  { title:"Дъхът на планината", url:"https://www.youtube.com/watch?v=WJjFkt14HlY" },
-  { title:"Целувам те с очи", url:"https://www.youtube.com/watch?v=XcUYe-EXSEA" },
-  { title:"Ехо от любов", url:"https://www.youtube.com/watch?v=ra9yEDzebFE" },
-  { title:"Ехо от любов", url:"https://www.youtube.com/watch?v=AGG90CQSDBI" },
-  { title:"Майчина сълза", url:"https://www.youtube.com/watch?v=cOvl14lvBBg" }
+  { title:"Светлина в мрака", url:"https://www.youtube.com/watch?v=8VpKhRg4i3s" }
 ];
 
 const player=document.getElementById("player");
@@ -213,7 +205,6 @@ const commentList=document.getElementById("commentList");
 const songTitle=document.getElementById("songTitle");
 
 let currentVideoId=null;
-let lastSend=0;
 
 function getId(url){
   const m=url.match(/v=([^&]+)/);
@@ -221,11 +212,17 @@ function getId(url){
 }
 
 async function loadComments(videoId){
-  const {data}=await supabase
+  const {data,error}=await supabase
     .from("uzimusic_comments")
     .select("*")
     .eq("video_id",videoId)
     .order("created_at",{ascending:false});
+
+  if(error){
+    console.error("Supabase error:", error);
+    return;
+  }
+
   commentList.innerHTML="";
   data?.forEach(c=>{
     const div=document.createElement("div");
@@ -257,18 +254,23 @@ videos.forEach((v,i)=>{
 toggle.onclick=()=>list.classList.toggle("open");
 
 document.getElementById("sendBtn").onclick=async()=>{
-  const now=Date.now();
-  if(now-lastSend<15000){alert("Изчакай 15 секунди.");return;}
   const name=document.getElementById("cName").value||"Анонимен";
-  const msg=document.getElementById("cMsg").value;
-  if(!msg)return;
-  await supabase.from("uzimusic_comments").insert({
+  const msg=document.getElementById("cMsg").value.trim();
+  if(!msg) return;
+
+  const {error}=await supabase.from("uzimusic_comments").insert({
     video_id:currentVideoId,
     display_name:name,
     message:msg
   });
+
+  if(error){
+    console.error(error);
+    alert("Грешка при запис!");
+    return;
+  }
+
   document.getElementById("cMsg").value="";
-  lastSend=Date.now();
   loadComments(currentVideoId);
 };
 
