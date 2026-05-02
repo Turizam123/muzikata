@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ultimate Bass Visualizer</title>
+
+<style>
+:root{
+  --c1:#ff007f;
+  --c2:#00eaff;
+  --c3:#ffd700;
+}
+
+body{
+  margin:0;
+  overflow:hidden;
+  background:#020208;
+  font-family:Arial;
+}
+
+.scene{
+  width:100vw;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+canvas{
+  position:absolute;
+  inset:0;
+}
+
+.speaker-wrap{
+  position:relative;
+  width:clamp(240px,50vw,520px);
+  aspect-ratio:1;
+}
+
+.speaker{
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  background:radial-gradient(circle,#222,#000);
+  box-shadow:0 0 60px var(--c1);
+}
+
+/* ===== ORBIT BOLTS ===== */
+.orbit-bolts{
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+  animation:orbitSpin 6s linear infinite;
+}
+
+.orbit-bolt{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:clamp(14px,3vw,28px);
+  height:clamp(14px,3vw,28px);
+  border-radius:50%;
+  background:radial-gradient(circle,#fff,var(--c2),#000);
+  box-shadow:0 0 20px var(--c2),0 0 40px var(--c1);
+}
+
+.orbit-bolt::after{
+  content:"";
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:80px;
+  height:14px;
+  border-radius:999px;
+  background:linear-gradient(90deg,var(--c2),transparent);
+  filter:blur(8px);
+  transform:translate(-100%,-50%);
+}
+
+/* positions */
+.b1{transform:rotate(0deg) translateX(42%) translate(-50%,-50%)}
+.b2{transform:rotate(90deg) translateX(42%) translate(-50%,-50%)}
+.b3{transform:rotate(180deg) translateX(42%) translate(-50%,-50%)}
+.b4{transform:rotate(270deg) translateX(42%) translate(-50%,-50%)}
+
+@keyframes orbitSpin{
+  to{transform:rotate(360deg)}
+}
+
+/* WATER BALL */
+.heavy-ball{
+  position:absolute;
+  width:100px;
+  height:100px;
+  border-radius:50%;
+  background:radial-gradient(circle,#7effff,#003247);
+  box-shadow:0 0 40px var(--c2);
+  z-index:5;
+}
+
+/* CONTROLS */
+.controls{
+  position:fixed;
+  bottom:10px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:10px;
+}
+
+input,button{
+  padding:10px;
+  border-radius:10px;
+  border:0;
+  background:#111;
+  color:white;
+}
+</style>
+</head>
+
+<body>
+
+<div class="scene" id="scene">
+
+<canvas id="particles"></canvas>
+
+<div class="heavy-ball" id="ball"></div>
+
+<div class="speaker-wrap">
+
+  <div class="orbit-bolts" id="orbit">
+    <div class="orbit-bolt b1"></div>
+    <div class="orbit-bolt b2"></div>
+    <div class="orbit-bolt b3"></div>
+    <div class="orbit-bolt b4"></div>
+  </div>
+
+  <div class="speaker" id="speaker"></div>
+
+</div>
+
+</div>
+
+<div class="controls">
+  <input type="file" id="file">
+  <button id="play">▶</button>
+</div>
+
+<audio id="audio"></audio>
+
+<script>
+const audio=document.getElementById("audio");
+const file=document.getElementById("file");
+const play=document.getElementById("play");
+
+const canvas=document.getElementById("particles");
+const ctx=canvas.getContext("2d");
+
+const ball=document.getElementById("ball");
+const orbit=document.getElementById("orbit");
+
+let audioCtx,analyser,data;
+
+function resize(){
+  canvas.width=innerWidth;
+  canvas.height=innerHeight;
+}
+resize();
+onresize=resize;
+
+file.onchange=()=>{
+  audio.src=URL.createObjectURL(file.files[0]);
+};
+
+play.onclick=async()=>{
+  if(!audioCtx){
+    audioCtx=new AudioContext();
+    analyser=audioCtx.createAnalyser();
+    analyser.fftSize=512;
+
+    const src=audioCtx.createMediaElementSource(audio);
+    src.connect(analyser);
+    analyser.connect(audioCtx.destination);
+
+    data=new Uint8Array(analyser.frequencyBinCount);
+  }
+
+  await audioCtx.resume();
+
+  if(audio.paused){
+    audio.play();
+    animate();
+  }else{
+    audio.pause();
+  }
+};
+
+function getBass(){
+  analyser.getByteFrequencyData(data);
+  let sum=0;
+  for(let i=0;i<20;i++) sum+=data[i];
+  return sum/20;
+}
+
+let particles=[];
+
+function spawn(x,y,b){
+  for(let i=0;i<40;i++){
+    particles.push({
+      x,y,
+      vx:(Math.random()-.5)*b/5,
+      vy:(Math.random()-.5)*b/5,
+      life:1
+    });
+  }
+}
+
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  particles=particles.filter(p=>p.life>0);
+
+  particles.forEach(p=>{
+    p.x+=p.vx;
+    p.y+=p.vy;
+    p.life-=.02;
+
+    ctx.globalAlpha=p.life;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,3,0,Math.PI*2);
+    ctx.fillStyle="cyan";
+    ctx.fill();
+  });
+
+  ctx.globalAlpha=1;
+}
+
+function animate(){
+  requestAnimationFrame(animate);
+
+  const bass=getBass();
+
+  /* BALL */
+  ball.style.left="50%";
+  ball.style.top="50%";
+  ball.style.transform=`
+    translate(-50%,-50%)
+    scale(${1+bass/200})
+    translateY(${bass/5}px)
+  `;
+
+  /* COLORS */
+  const hue=(performance.now()/20 + bass*2)%360;
+  document.documentElement.style.setProperty("--c1",`hsl(${hue},100%,50%)`);
+  document.documentElement.style.setProperty("--c2",`hsl(${hue+120},100%,50%)`);
+  document.documentElement.style.setProperty("--c3",`hsl(${hue+240},100%,50%)`);
+
+  /* ORBIT SPEED */
+  orbit.style.animationDuration=(6 - bass/40)+"s";
+
+  /* PARTICLES DROP */
+  if(bass>150){
+    spawn(innerWidth/2,innerHeight/2,bass);
+  }
+
+  draw();
+}
+</script>
+
+</body>
+</html>
