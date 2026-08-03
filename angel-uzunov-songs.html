@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="description" content="Песни на Ангел Узунов – народна музика на фолклорна основа, поп-фолк, кафана, естрада и други музикални проекти.">
+  <meta name="author" content="Ангел Узунов">
+  <meta property="og:title" content="Песни | Ангел Узунов">
+  <meta property="og:description" content="Слушайте песните на Ангел Узунов по категории чрез официалните YouTube линкове.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://turizam123.github.io/muzikata/Angel_Uzunov_Deezer_1200x1200.png">
+  <meta name="theme-color" content="#09090d">
+
+  <title>Песни | Ангел Узунов</title>
+
+  <link rel="icon" type="image/png" href="AU_favicon.png">
+  <link rel="shortcut icon" type="image/png" href="AU_favicon.png">
+  <link rel="apple-touch-icon" href="AU_favicon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #08090d;
+      --bg-soft: #101219;
+      --card: rgba(255,255,255,.055);
+      --text: #f6f2e9;
+      --muted: #b9b6b0;
+      --gold: #d8b66a;
+      --gold-light: #f3d993;
+      --red: #8e2430;
+      --border: rgba(255,255,255,.12);
+      --shadow: 0 24px 70px rgba(0,0,0,.42);
+      --radius: 24px;
+      --max: 1240px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-family: "Montserrat", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% 12%, rgba(142,36,48,.2), transparent 30%),
+        radial-gradient(circle at 86% 8%, rgba(216,182,106,.14), transparent 28%),
+        linear-gradient(180deg, #07080b 0%, #0d0f15 48%, #08090d 100%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      opacity: .13;
+      background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: linear-gradient(to bottom, black, transparent 86%);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .container {
+      width: min(calc(100% - 36px), var(--max));
+      margin-inline: auto;
+    }
+
+    /* Header */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(7,8,11,.82);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(18px);
+    }
+
+    .nav {
+      min-height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      font-weight: 800;
+    }
+
+    .brand-mark {
+      width: 42px;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: #17130a;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      box-shadow: 0 0 0 6px rgba(216,182,106,.08);
+    }
+
+    .brand-name {
+      line-height: 1;
+      letter-spacing: .02em;
+    }
+
+    .brand-name small {
+      display: block;
+      margin-top: 6px;
+      color: var(--gold-light);
+      font-size: .55rem;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-link {
+      min-height: 44px;
+      padding: 0 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(255,255,255,.035);
+      font-size: .82rem;
+      font-weight: 800;
+      transition: .25s ease;
+    }
+
+    .nav-link:hover {
+      border-color: rgba(216,182,106,.5);
+      background: rgba(216,182,106,.08);
+      transform: translateY(-2px);
+    }
+
+    /* Hero */
+    .hero {
+      padding: 96px 0 66px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: clamp(34px, 6vw, 90px);
+      align-items: end;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      color: var(--gold-light);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 34px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold));
+    }
+
+    .hero h1 {
+      max-width: 940px;
+      margin-bottom: 24px;
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(4rem, 9vw, 8rem);
+      line-height: .82;
+      letter-spacing: -.055em;
+    }
+
+    .hero h1 span {
+      display: block;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(243,217,147,.76);
+    }
+
+    .hero-copy p {
+      max-width: 760px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .hero-note {
+      padding: 24px;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at 0 0, rgba(216,182,106,.12), transparent 48%),
+        rgba(255,255,255,.035);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-note strong {
+      display: block;
+      margin-bottom: 9px;
+      color: var(--gold-light);
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.7rem;
+    }
+
+    .hero-note p {
+      color: var(--muted);
+      font-size: .84rem;
+      line-height: 1.7;
+    }
+
+    /* Controls */
+    .controls-wrap {
+      position: sticky;
+      top: 82px;
+      z-index: 900;
+      padding: 14px 0;
+      border-block: 1px solid var(--border);
+      background: rgba(8,9,13,.8);
+      backdrop-filter: blur(18px);
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
+    .filter-btn {
+      min-height: 42px;
+      padding: 0 15px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: #e8e5de;
+      background: rgba(255,255,255,.035);
+      font-weight: 800;
+      font-size: .75rem;
+      cursor: pointer;
+      transition: .22s ease;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      color: #17130a;
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    }
+
+    .search-box {
+      min-width: min(100%, 300px);
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      min-height: 44px;
+      padding: 0 44px 0 16px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      outline: none;
+      color: white;
+      background: rgba(255,255,255,.04);
+    }
+
+    .search-box input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 4px rgba(216,182,106,.08);
+    }
+
+    .search-box span {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gold-light);
+      pointer-events: none;
+    }
+
+    /* Categories */
+    .catalog {
+      padding: 80px 0 110px;
+    }
+
+    .category-section {
+      margin-bottom: 92px;
+      scroll-margin-top: 170px;
+    }
+
+    .category-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .category-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 30px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .category-heading h2 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(2.4rem, 5vw, 4.6rem);
+      line-height: .9;
+    }
+
+    .category-heading p {
+      max-width: 520px;
+      color: var(--muted);
+      font-size: .82rem;
+      line-height: 1.7;
+      text-align: right;
+    }
+
+    .songs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .song-card {
+      position: relative;
+      min-height: 430px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 24px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: #11131a;
+      box-shadow: 0 16px 46px rgba(0,0,0,.28);
+      transition: .35s ease;
+    }
+
+    .song-card:hover {
+      transform: translateY(-7px);
+      border-color: rgba(216,182,106,.46);
+      box-shadow: 0 26px 65px rgba(0,0,0,.4);
+    }
+
+    .song-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background:
+        linear-gradient(to top, rgba(7,8,11,.96) 0%, rgba(7,8,11,.68) 35%, rgba(7,8,11,.16) 72%, rgba(7,8,11,.04) 100%),
+        var(--cover, linear-gradient(145deg,#51202a,#171820));
+      background-size: cover;
+      background-position: center;
+      transform: scale(1.01);
+      transition: transform .55s ease, filter .55s ease;
+    }
+
+    .song-card:hover::before {
+      transform: scale(1.055);
+      filter: brightness(1.08) saturate(1.08);
+    }
+
+    .song-card-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .song-category {
+      display: inline-flex;
+      margin-bottom: 12px;
+      color: var(--gold-light);
+      font-size: .68rem;
+      font-weight: 800;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .song-card h3 {
+      margin-bottom: 12px;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 2.35rem;
+      line-height: .92;
+    }
+
+    .song-card p {
+      min-height: 52px;
+      margin-bottom: 20px;
+      color: #c5c1ba;
+      font-size: .82rem;
+      line-height: 1.65;
+    }
+
+    .song-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .youtube-btn {
+      min-height: 46px;
+      padding: 0 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border-radius: 999px;
+      color: #17130a;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      font-size: .78rem;
+      font-weight: 900;
+      transition: .25s ease;
+    }
+
+    .youtube-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 34px rgba(216,182,106,.24);
+    }
+
+    .youtube-icon {
+      width: 25px;
+      height: 18px;
+      display: grid;
+      place-items: center;
+      border-radius: 6px;
+      color: white;
+      background: #e62117;
+      font-size: .65rem;
+    }
+
+    .placeholder-card {
+      border-style: dashed;
+    }
+
+    .placeholder-card::before {
+      background:
+        linear-gradient(145deg, rgba(142,36,48,.18), rgba(216,182,106,.09)),
+        #11131a;
+    }
+
+    .placeholder-card h3 {
+      color: var(--gold-light);
+    }
+
+    .empty-state {
+      display: none;
+      padding: 54px 24px;
+      border: 1px dashed var(--border);
+      border-radius: 22px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    /* Footer */
+    footer {
+      padding: 32px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      color: var(--muted);
+      font-size: .76rem;
+    }
+
+    .footer-row a:hover {
+      color: var(--gold-light);
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .controls {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .search-box {
+        width: 100%;
+      }
+
+      .songs-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .category-heading {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .category-heading p {
+        text-align: left;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 16px 0;
+      }
+
+      .nav-actions {
+        width: 100%;
+      }
+
+      .nav-link {
+        flex: 1;
+      }
+
+      .controls-wrap {
+        top: 116px;
+      }
+
+      .hero {
+        padding-top: 72px;
+      }
+
+      .songs-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .song-card {
+        min-height: 410px;
+      }
+
+      .footer-row {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="angel-uzunov-artist-site-v15.html" aria-label="Към основния артист сайт">
+        <span class="brand-mark">AU</span>
+        <span class="brand-name">
+          Ангел Узунов
+          <small>Официална музика</small>
+        </span>
+      </a>
+
+      <div class="nav-actions">
+        <a class="nav-link" href="angel-uzunov-artist-site-v15.html">Основен сайт</a>
+        <a class="nav-link" href="https://www.youtube.com/@angeluzunovuzi" target="_blank" rel="noopener">YouTube</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">Музикален каталог</span>
+          <h1>Всички <span>песни</span></h1>
+          <p>
+            Изберете музикално направление и слушайте песните чрез официалните
+            YouTube линкове. Каталогът е разделен по категории и може лесно да
+            бъде разширяван с всяко ново издание.
+          </p>
+        </div>
+
+        <aside class="hero-note">
+          <strong>Музиката е любов!</strong>
+          <p>
+            Народна музика на фолклорна основа, поп-фолк, кафана, естрада и
+            други авторски музикални проекти на Ангел Узунов.
+          </p>
+        </aside>
+      </div>
+    </section>
+
+    <div class="controls-wrap">
+      <div class="container controls">
+        <div class="filters" aria-label="Филтриране по категория">
+          <button class="filter-btn active" type="button" data-filter="all">Всички</button>
+          <button class="filter-btn" type="button" data-filter="folk">Народна музика</button>
+          <button class="filter-btn" type="button" data-filter="popfolk">Поп-фолк / Кафана</button>
+          <button class="filter-btn" type="button" data-filter="estrada">Естрада</button>
+          <button class="filter-btn" type="button" data-filter="other">Други</button>
+        </div>
+
+        <label class="search-box">
+          <input id="songSearch" type="search" placeholder="Търсене на песен..." aria-label="Търсене на песен">
+          <span>⌕</span>
+        </label>
+      </div>
+    </div>
+
+    <section class="catalog">
+      <div class="container">
+
+        <section class="category-section" data-category-section="folk" id="folk">
+          <div class="category-heading">
+            <h2>Народна музика на фолклорна основа</h2>
+            <p>Авторски песни, вдъхновени от българския фолклор, традициите и музикалните области на България.</p>
+          </div>
+
+          <div class="songs-grid">
+            <article class="song-card" data-category="folk" data-title="Елено, моме убаво"
+              style="--cover: url('images/eleno-mome-ubavo.png') center/cover;">
+              <div class="song-card-content">
+                <span class="song-category">Фолклор • 2026</span>
+                <h3>Елено, моме убаво</h3>
+                <p>Авторска песен, вдъхновена от красотата, мелодиката и духа на Пирин.</p>
+                <div class="song-actions">
+                  <a class="youtube-btn" href="#" target="_blank" rel="noopener">
+                    <span class="youtube-icon">▶</span>
+                    Слушай в YouTube
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <article class="song-card placeholder-card" data-category="folk" data-title="Нова народна песен">
+              <div class="song-card-content">
+                <span class="song-category">Предстоящо добавяне</span>
+                <h3>Следваща народна песен</h3>
+                <p>Тук ще добавим следващото заглавие, обложка и официален YouTube линк.</p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="category-section" data-category-section="popfolk" id="popfolk">
+          <div class="category-heading">
+            <h2>Поп-фолк / Кафана</h2>
+            <p>Емоционални балади, модерно поп-фолк звучене, кафана настроение и силни любовни истории.</p>
+          </div>
+
+          <div class="songs-grid">
+            <article class="song-card" data-category="popfolk" data-title="Не ме оставяй"
+              style="--cover: url('images/ne-me-ostavyay.png') center/cover;">
+              <div class="song-card-content">
+                <span class="song-category">Поп-фолк балада • 2026</span>
+                <h3>Не ме оставяй</h3>
+                <p>Емоционална песен за любовта, страха от раздялата и човека, който превръща света в дом.</p>
+                <div class="song-actions">
+                  <a class="youtube-btn" href="https://www.youtube.com/watch?v=lyGRz83xOSY" target="_blank" rel="noopener">
+                    <span class="youtube-icon">▶</span>
+                    Слушай в YouTube
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <article class="song-card" data-category="popfolk" data-title="Изповед"
+              style="--cover: url('images/izpoved.png') center/cover;">
+              <div class="song-card-content">
+                <span class="song-category">Поп-фолк балада • 2026</span>
+                <h3>Изповед</h3>
+                <p>Лична история за прошката, грешките и пътя обратно към сърцето.</p>
+                <div class="song-actions">
+                  <a class="youtube-btn" href="#" target="_blank" rel="noopener">
+                    <span class="youtube-icon">▶</span>
+                    Слушай в YouTube
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <article class="song-card placeholder-card" data-category="popfolk" data-title="Нова поп фолк песен">
+              <div class="song-card-content">
+                <span class="song-category">Предстоящо добавяне</span>
+                <h3>Следваща поп-фолк песен</h3>
+                <p>Тук ще добавим следващото заглавие, обложка и официален YouTube линк.</p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="category-section" data-category-section="estrada" id="estrada">
+          <div class="category-heading">
+            <h2>Естрада</h2>
+            <p>Мелодични авторски песни с емоционален текст, класическо усещане и съвременно звучене.</p>
+          </div>
+
+          <div class="songs-grid">
+            <article class="song-card placeholder-card" data-category="estrada" data-title="Нова естрадна песен">
+              <div class="song-card-content">
+                <span class="song-category">Предстоящо добавяне</span>
+                <h3>Първа песен в категорията</h3>
+                <p>Тук ще добавим заглавие, описание, обложка и официален YouTube линк.</p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="category-section" data-category-section="other" id="other">
+          <div class="category-heading">
+            <h2>Други</h2>
+            <p>Специални проекти, музикални експерименти, трибюти, патриотични песни и заглавия извън основните категории.</p>
+          </div>
+
+          <div class="songs-grid">
+            <article class="song-card placeholder-card" data-category="other" data-title="Друг музикален проект">
+              <div class="song-card-content">
+                <span class="song-category">Предстоящо добавяне</span>
+                <h3>Специален проект</h3>
+                <p>Тук ще добавим заглавие, описание, обложка и официален YouTube линк.</p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <div class="empty-state" id="emptyState">
+          Няма намерени песни по избрания филтър или въведеното заглавие.
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-row">
+      <p>© <span id="year"></span> Ангел Узунов. Всички права запазени.</p>
+      <a href="angel-uzunov-artist-site-v15.html">Обратно към основния сайт</a>
+    </div>
+  </footer>
+
+  <script>
+    const filterButtons = document.querySelectorAll(".filter-btn");
+    const songCards = document.querySelectorAll(".song-card");
+    const categorySections = document.querySelectorAll(".category-section");
+    const songSearch = document.getElementById("songSearch");
+    const emptyState = document.getElementById("emptyState");
+
+    let activeFilter = "all";
+
+    function normalizeText(value) {
+      return value.toLocaleLowerCase("bg-BG").trim();
+    }
+
+    function updateCatalog() {
+      const query = normalizeText(songSearch.value);
+      let visibleCards = 0;
+
+      songCards.forEach((card) => {
+        const category = card.dataset.category;
+        const title = normalizeText(card.dataset.title || "");
+        const matchesFilter = activeFilter === "all" || category === activeFilter;
+        const matchesSearch = !query || title.includes(query);
+        const isVisible = matchesFilter && matchesSearch;
+
+        card.style.display = isVisible ? "" : "none";
+
+        if (isVisible) {
+          visibleCards += 1;
+        }
+      });
+
+      categorySections.forEach((section) => {
+        const visibleInSection = [...section.querySelectorAll(".song-card")]
+          .some((card) => card.style.display !== "none");
+
+        section.style.display = visibleInSection ? "" : "none";
+      });
+
+      emptyState.style.display = visibleCards === 0 ? "block" : "none";
+    }
+
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        activeFilter = button.dataset.filter;
+
+        filterButtons.forEach((item) => item.classList.remove("active"));
+        button.classList.add("active");
+
+        updateCatalog();
+      });
+    });
+
+    songSearch.addEventListener("input", updateCatalog);
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
