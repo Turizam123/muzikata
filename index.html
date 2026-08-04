@@ -707,6 +707,41 @@
       color: var(--gold);
     }
 
+    .live-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-left: auto;
+      color: rgba(243,217,147,.78);
+      font-size: .58rem;
+      font-weight: 800;
+      letter-spacing: .11em;
+    }
+
+    .live-indicator-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #d8b66a;
+      box-shadow: 0 0 0 0 rgba(216,182,106,.38);
+      animation: livePulse 2.2s ease-out infinite;
+    }
+
+    @keyframes livePulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(216,182,106,.38);
+        opacity: 1;
+      }
+      70% {
+        box-shadow: 0 0 0 7px rgba(216,182,106,0);
+        opacity: .82;
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(216,182,106,0);
+        opacity: 1;
+      }
+    }
+
     .listener-comment {
       display: none;
       opacity: 0;
@@ -1380,7 +1415,13 @@
       <div class="container about-grid">
         <div class="about-visual" aria-label="Артистична снимка на Ангел Узунов">
           <div class="listener-bubble" tabindex="0" aria-live="polite">
-            <div class="listener-bubble-label">Какво казват слушателите</div>
+            <div class="listener-bubble-label">
+              <span>Какво казват слушателите</span>
+              <span class="live-indicator" aria-label="Данните са живи">
+                <span class="live-indicator-dot" aria-hidden="true"></span>
+                LIVE
+              </span>
+            </div>
             <div id="listenerComments">
               <p class="listener-loading">Зареждане на живите данни от YouTube…</p>
             </div>
