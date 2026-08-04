@@ -623,6 +623,7 @@
     .about-visual {
       position: relative;
       min-height: 640px;
+      margin-bottom: 190px;
       border-radius: 28px;
       border: 1px solid var(--border);
       background:
@@ -645,6 +646,178 @@
       font-family: "Cormorant Garamond", serif;
       font-size: 1.55rem;
       line-height: 1.15;
+    }
+
+    .listener-bubble {
+      position: absolute;
+      left: 34px;
+      right: 34px;
+      bottom: -168px;
+      z-index: 3;
+      min-height: 164px;
+      padding: 17px 19px;
+      border: 1px solid rgba(216,182,106,.22);
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at 18% 0%, rgba(216,182,106,.10), transparent 40%),
+        rgba(8,9,13,.83);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 16px 38px rgba(0,0,0,.30);
+      animation: bubbleFloat 5.8s ease-in-out infinite;
+      transition: transform .35s ease, border-color .35s ease, box-shadow .35s ease;
+    }
+
+    .listener-bubble::after {
+      content: "";
+      position: absolute;
+      left: 34px;
+      top: -13px;
+      width: 24px;
+      height: 24px;
+      background: rgba(8,9,13,.94);
+      border-left: 1px solid rgba(216,182,106,.22);
+      border-top: 1px solid rgba(216,182,106,.22);
+      transform: rotate(45deg);
+      border-radius: 5px 0 0 0;
+    }
+
+    .listener-bubble:hover,
+    .listener-bubble:focus-within {
+      transform: translateY(-4px) scale(1.012);
+      border-color: rgba(216,182,106,.42);
+      box-shadow:
+        0 22px 52px rgba(0,0,0,.40),
+        0 0 22px rgba(216,182,106,.08);
+    }
+
+    .listener-bubble-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      color: var(--gold-light);
+      font-size: .64rem;
+      font-weight: 800;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    .listener-bubble-label::before {
+      content: "✦";
+      color: var(--gold);
+    }
+
+    .listener-comment {
+      display: none;
+      opacity: 0;
+      transform: translateY(6px);
+    }
+
+    .listener-comment.active {
+      display: block;
+      animation: listenerFade .7s ease both;
+    }
+
+    .listener-song-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .listener-song {
+      color: #c79b5b;
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .05em;
+      line-height: 1.35;
+    }
+
+    .listener-youtube {
+      width: 22px;
+      height: 22px;
+      display: inline-grid;
+      place-items: center;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      color: #0b0c10;
+      background: #f1eee8;
+      transition: transform .25s ease, background .25s ease, box-shadow .25s ease;
+    }
+
+    .listener-youtube:hover,
+    .listener-youtube:focus-visible {
+      transform: scale(1.12);
+      background: var(--gold-light);
+      box-shadow: 0 0 14px rgba(216,182,106,.28);
+      outline: none;
+    }
+
+    .listener-youtube svg {
+      width: 12px;
+      height: 12px;
+      fill: currentColor;
+    }
+
+    .live-stats {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+      color: rgba(220,216,208,.82);
+      font-size: .67rem;
+    }
+
+    .live-stat {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+    }
+
+    .live-stat svg {
+      width: 13px;
+      height: 13px;
+      fill: currentColor;
+      opacity: .78;
+    }
+
+    .listener-author {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--gold-light);
+      font-size: .73rem;
+      font-weight: 700;
+    }
+
+    .listener-text {
+      color: #ddd7ce;
+      font-family: "Montserrat", sans-serif;
+      font-size: .72rem;
+      font-style: italic;
+      line-height: 1.55;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .listener-loading,
+    .listener-error {
+      color: rgba(220,216,208,.72);
+      font-size: .72rem;
+      line-height: 1.55;
+    }
+
+    @keyframes listenerFade {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes bubbleFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
     }
 
     .about-copy .section-text + .section-text {
@@ -1006,6 +1179,19 @@
 
       .about-visual {
         min-height: 520px;
+        margin-bottom: 210px;
+      }
+
+      .listener-bubble {
+        left: 18px;
+        right: 18px;
+        bottom: -188px;
+        min-height: 178px;
+        padding: 15px 16px;
+      }
+
+      .listener-text {
+        font-size: .69rem;
       }
     }
 
@@ -1192,7 +1378,14 @@
 
     <section class="section" id="about">
       <div class="container about-grid">
-        <div class="about-visual" aria-label="Артистична снимка на Ангел Узунов"></div>
+        <div class="about-visual" aria-label="Артистична снимка на Ангел Узунов">
+          <div class="listener-bubble" tabindex="0" aria-live="polite">
+            <div class="listener-bubble-label">Какво казват слушателите</div>
+            <div id="listenerComments">
+              <p class="listener-loading">Зареждане на живите данни от YouTube…</p>
+            </div>
+          </div>
+        </div>
 
         <div class="about-copy">
           <span class="eyebrow">За артиста</span>
@@ -1448,6 +1641,188 @@
     });
 
     revealTargets.forEach((element) => revealObserver.observe(element));
+
+    /* ============================================================
+       YOUTUBE LIVE DATA
+       Постави новия API ключ само между кавичките по-долу.
+       ============================================================ */
+    const YOUTUBE_API_KEY = "AIzaSyCyb421TJhQioiDcbLaoYHa6Mjy3jUQcso";
+
+    const youtubeSongs = [
+      { videoUrl: "https://www.youtube.com/watch?v=mHK8o9dvHks", videoId: "mHK8o9dvHks" },
+      { videoUrl: "https://www.youtube.com/watch?v=xvgsuSr6hB8", videoId: "xvgsuSr6hB8" },
+      { videoUrl: "https://www.youtube.com/watch?v=Y8y7K8PmVwM", videoId: "Y8y7K8PmVwM" },
+      { videoUrl: "https://www.youtube.com/watch?v=yOIzCb_R2hw", videoId: "yOIzCb_R2hw" },
+      { videoUrl: "https://www.youtube.com/watch?v=gpLYgQaU1Mk", videoId: "gpLYgQaU1Mk" },
+      { videoUrl: "https://www.youtube.com/watch?v=MLCLaXaSneI", videoId: "MLCLaXaSneI" },
+      { videoUrl: "https://www.youtube.com/watch?v=z6I9QPKcCcY", videoId: "z6I9QPKcCcY" },
+      { videoUrl: "https://www.youtube.com/watch?v=oKCgChl8jOo", videoId: "oKCgChl8jOo" }
+    ];
+
+    const listenerCommentsBox = document.getElementById("listenerComments");
+    let liveCommentIndex = 0;
+    let liveCommentTimer = null;
+    const numberFormatter = new Intl.NumberFormat("bg-BG");
+
+    function escapeHtml(value = "") {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    async function fetchYouTubeData(song) {
+      const videoUrl =
+        `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${encodeURIComponent(song.videoId)}&key=${encodeURIComponent(YOUTUBE_API_KEY)}`;
+
+      const commentsUrl =
+        `https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=${encodeURIComponent(song.videoId)}&maxResults=1&order=time&textFormat=plainText&key=${encodeURIComponent(YOUTUBE_API_KEY)}`;
+
+      const [videoResponse, commentsResponse] = await Promise.all([
+        fetch(videoUrl),
+        fetch(commentsUrl)
+      ]);
+
+      if (!videoResponse.ok) {
+        throw new Error(`YouTube video error: ${videoResponse.status}`);
+      }
+
+      const videoData = await videoResponse.json();
+      const video = videoData.items?.[0];
+
+      if (!video) {
+        throw new Error(`Видеото ${song.videoId} не беше намерено.`);
+      }
+
+      let latestComment = null;
+
+      if (commentsResponse.ok) {
+        const commentsData = await commentsResponse.json();
+        const comment =
+          commentsData.items?.[0]?.snippet?.topLevelComment?.snippet;
+
+        if (comment) {
+          latestComment = {
+            author: comment.authorDisplayName || "YouTube потребител",
+            text: comment.textDisplay || comment.textOriginal || ""
+          };
+        }
+      }
+
+      return {
+        ...song,
+        title: video.snippet?.title || "Песен",
+        statistics: {
+          views: video.statistics?.viewCount ?? "0",
+          likes: video.statistics?.likeCount ?? "0",
+          comments: video.statistics?.commentCount ?? "0"
+        },
+        latestComment
+      };
+    }
+
+    function buildCommentSlide(song, index) {
+      const author = song.latestComment?.author || "Няма наличен коментар";
+      const text =
+        song.latestComment?.text ||
+        "Към този видеоклип няма наличен публичен коментар.";
+
+      return `
+        <article class="listener-comment${index === 0 ? " active" : ""}">
+          <div class="listener-song-row">
+            <span class="listener-song">${escapeHtml(song.title)}</span>
+            <a class="listener-youtube"
+               href="${escapeHtml(song.videoUrl)}"
+               target="_blank"
+               rel="noopener"
+               aria-label="Отвори песента в YouTube"
+               title="Слушай в YouTube">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M21.6 7.2a2.8 2.8 0 0 0-2-2C17.9 4.7 12 4.7 12 4.7s-5.9 0-7.6.5a2.8 2.8 0 0 0-2 2A29 29 0 0 0 2 12a29 29 0 0 0 .4 4.8 2.8 2.8 0 0 0 2 2c1.7.5 7.6.5 7.6.5s5.9 0 7.6-.5a2.8 2.8 0 0 0 2-2A29 29 0 0 0 22 12a29 29 0 0 0-.4-4.8ZM10 15.4V8.6l6 3.4-6 3.4Z"/>
+              </svg>
+            </a>
+          </div>
+
+          <div class="live-stats" aria-label="Статистика от YouTube">
+            <span class="live-stat" title="Гледания">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 5c5.2 0 9.3 4.2 10.7 6.1a1.5 1.5 0 0 1 0 1.8C21.3 14.8 17.2 19 12 19S2.7 14.8 1.3 12.9a1.5 1.5 0 0 1 0-1.8C2.7 9.2 6.8 5 12 5Zm0 3.2A3.8 3.8 0 1 0 12 15.8 3.8 3.8 0 0 0 12 8.2Zm0 2A1.8 1.8 0 1 1 12 13.8 1.8 1.8 0 0 1 12 10.2Z"/>
+              </svg>
+              ${numberFormatter.format(Number(song.statistics.views))}
+            </span>
+
+            <span class="live-stat" title="Харесвания">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M9 21H5a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h4v11Zm2 0V10l3.4-6.2A2 2 0 0 1 18.1 5v5h1.8a2 2 0 0 1 2 2.4l-1.4 7A2 2 0 0 1 18.5 21H11Z"/>
+              </svg>
+              ${numberFormatter.format(Number(song.statistics.likes))}
+            </span>
+
+            <span class="live-stat" title="Коментари">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 4h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-5 4v-4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/>
+              </svg>
+              ${numberFormatter.format(Number(song.statistics.comments))}
+            </span>
+          </div>
+
+          <span class="listener-author">${escapeHtml(author)}</span>
+          <p class="listener-text">${escapeHtml(text)}</p>
+        </article>
+      `;
+    }
+
+    function startLiveRotation() {
+      const slides = [...document.querySelectorAll(".listener-comment")];
+      if (slides.length < 2) return;
+
+      clearInterval(liveCommentTimer);
+      liveCommentTimer = setInterval(() => {
+        slides[liveCommentIndex].classList.remove("active");
+        liveCommentIndex = (liveCommentIndex + 1) % slides.length;
+        slides[liveCommentIndex].classList.add("active");
+      }, 7000);
+    }
+
+    async function loadYouTubeLiveData() {
+      if (
+        !YOUTUBE_API_KEY ||
+        YOUTUBE_API_KEY === "ПОСТАВИ_НОВИЯ_API_КЛЮЧ_ТУК"
+      ) {
+        listenerCommentsBox.innerHTML =
+          '<p class="listener-error">Постави новия YouTube API ключ в обозначеното поле в края на HTML файла.</p>';
+        return;
+      }
+
+      try {
+        const results = await Promise.allSettled(
+          youtubeSongs.map(fetchYouTubeData)
+        );
+
+        const songs = results
+          .filter(result => result.status === "fulfilled")
+          .map(result => result.value);
+
+        if (!songs.length) {
+          throw new Error("Нито едно видео не беше заредено.");
+        }
+
+        listenerCommentsBox.innerHTML = songs
+          .map((song, index) => buildCommentSlide(song, index))
+          .join("");
+
+        liveCommentIndex = 0;
+        startLiveRotation();
+      } catch (error) {
+        console.error(error);
+        listenerCommentsBox.innerHTML =
+          '<p class="listener-error">Живите данни от YouTube не могат да бъдат заредени в момента.</p>';
+      }
+    }
+
+    loadYouTubeLiveData();
   </script>
 </body>
 </html>
