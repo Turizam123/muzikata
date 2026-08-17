@@ -11,15 +11,17 @@
   <meta name="author" content="Ангел Узунов">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <link rel="canonical" href="https://angeluzunov.site/">
-  <!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-5YBEHCK624"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-5YBEHCK624');
-</script>
+  <!-- Google Analytics / Consent Mode -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag("consent", "default", {
+      analytics_storage: "denied",
+      ad_storage: "denied",
+      ad_user_data: "denied",
+      ad_personalization: "denied"
+    });
+  </script>
 
 <!-- Schema.org JSON-LD -->
 <script type="application/ld+json">
@@ -1362,6 +1364,25 @@
         text-align: center;
       }
     }
+
+    /* Cookie consent */
+    .privacy-consent{position:fixed;left:22px;right:22px;bottom:22px;z-index:2147482500;display:none;justify-content:center;pointer-events:none}
+    .privacy-consent.show{display:flex}
+    .privacy-consent-card{width:min(100%,940px);padding:22px 24px;border:1px solid rgba(216,182,106,.32);border-radius:22px;background:radial-gradient(circle at 8% 0%,rgba(142,36,48,.20),transparent 38%),rgba(10,11,16,.97);backdrop-filter:blur(18px);box-shadow:0 28px 80px rgba(0,0,0,.56);pointer-events:auto}
+    .privacy-consent-grid{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center}
+    .privacy-consent-title{display:flex;align-items:center;gap:10px;margin-bottom:7px;color:var(--gold-light);font-family:"Cormorant Garamond",serif;font-size:1.55rem;font-weight:700}
+    .privacy-consent-title::before{content:"AU";width:35px;height:35px;flex:0 0 35px;display:grid;place-items:center;border-radius:50%;color:#17130a;background:linear-gradient(135deg,var(--gold-light),var(--gold));font-size:.9rem;font-weight:800}
+    .privacy-consent-text{max-width:680px;color:#cbc7bf;font-size:.78rem;line-height:1.65}
+    .privacy-consent-text a{color:var(--gold-light);text-decoration:underline;text-underline-offset:3px;font-weight:700}
+    .privacy-consent-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:9px}
+    .privacy-btn{min-height:43px;padding:0 17px;border-radius:999px;border:1px solid rgba(216,182,106,.28);cursor:pointer;font-family:inherit;font-size:.74rem;font-weight:800;transition:.2s ease}
+    .privacy-btn:hover{transform:translateY(-2px)}
+    .privacy-btn-essential{color:#e7e2d9;background:rgba(255,255,255,.035)}
+    .privacy-btn-accept{color:#17130a;border-color:transparent;background:linear-gradient(135deg,var(--gold-light),var(--gold));box-shadow:0 10px 30px rgba(216,182,106,.18)}
+    .privacy-settings-link{border:0;padding:0;background:transparent;color:inherit;cursor:pointer;font-family:inherit;font-size:inherit}
+    .privacy-settings-link:hover{color:var(--gold-light)}
+    @media(max-width:760px){.privacy-consent{left:10px;right:10px;bottom:10px}.privacy-consent-card{padding:18px;border-radius:18px}.privacy-consent-grid{grid-template-columns:1fr;gap:17px}.privacy-consent-actions{justify-content:stretch}.privacy-btn{flex:1 1 150px}}
+
   </style>
 
   <script type="application/ld+json">
@@ -1658,6 +1679,25 @@
     </div>
   </div>
 
+
+  <div class="privacy-consent" id="privacyConsent" role="dialog" aria-modal="true" aria-labelledby="privacyConsentTitle" aria-describedby="privacyConsentText">
+    <div class="privacy-consent-card">
+      <div class="privacy-consent-grid">
+        <div>
+          <div class="privacy-consent-title" id="privacyConsentTitle">Поверителност и бисквитки</div>
+          <p class="privacy-consent-text" id="privacyConsentText">
+            Използваме необходими технологии за работата на сайта и, само с Ваше съгласие, Google Analytics за обобщена статистика и подобряване на съдържанието.
+            <a href="privacy.html">Научете повече</a>.
+          </p>
+        </div>
+        <div class="privacy-consent-actions">
+          <button class="privacy-btn privacy-btn-essential" id="privacyEssentialButton" type="button">Само необходимите</button>
+          <button class="privacy-btn privacy-btn-accept" id="privacyAcceptButton" type="button">Приемам всички</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <footer>
     <div class="container footer-row">
       <p>© <span id="year"></span> Ангел Узунов. Всички права запазени.</p>
@@ -1665,6 +1705,8 @@
         <a href="#home">Начало</a>
         <a href="#music">Музика</a>
         <a href="#contact">Контакти</a>
+        <a href="privacy.html">Поверителност</a>
+        <button class="privacy-settings-link" id="privacySettingsButton" type="button">Настройки за бисквитки</button>
       </div>
     </div>
   </footer>
@@ -1983,6 +2025,98 @@
     loadYouTubeLiveData();
   </script>
   
+
+  <script>
+    (() => {
+      const CONSENT_KEY = "angelUzunovPrivacyConsent";
+      const GA_ID = "G-5YBEHCK624";
+      const consentBox = document.getElementById("privacyConsent");
+      const acceptButton = document.getElementById("privacyAcceptButton");
+      const essentialButton = document.getElementById("privacyEssentialButton");
+      const settingsButton = document.getElementById("privacySettingsButton");
+      let analyticsLoaded = false;
+
+      function loadGoogleAnalytics() {
+        if (analyticsLoaded) return;
+        analyticsLoaded = true;
+        gtag("consent", "update", {
+          analytics_storage: "granted",
+          ad_storage: "denied",
+          ad_user_data: "denied",
+          ad_personalization: "denied"
+        });
+
+        const gaScript = document.createElement("script");
+        gaScript.async = true;
+        gaScript.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(GA_ID);
+        gaScript.onload = () => {
+          gtag("js", new Date());
+          gtag("config", GA_ID, { anonymize_ip: true });
+        };
+        document.head.appendChild(gaScript);
+      }
+
+      function disableAnalytics() {
+        gtag("consent", "update", {
+          analytics_storage: "denied",
+          ad_storage: "denied",
+          ad_user_data: "denied",
+          ad_personalization: "denied"
+        });
+      }
+
+      function saveChoice(choice) {
+        try {
+          localStorage.setItem(CONSENT_KEY, JSON.stringify({
+            choice,
+            savedAt: new Date().toISOString()
+          }));
+        } catch (e) {
+          console.warn("[Privacy] Choice could not be saved.", e);
+        }
+      }
+
+      function readChoice() {
+        try {
+          const raw = localStorage.getItem(CONSENT_KEY);
+          if (!raw) return null;
+          return JSON.parse(raw)?.choice || null;
+        } catch {
+          return null;
+        }
+      }
+
+      function applyChoice(choice) {
+        if (choice === "all") loadGoogleAnalytics();
+        else disableAnalytics();
+      }
+
+      acceptButton?.addEventListener("click", () => {
+        saveChoice("all");
+        applyChoice("all");
+        consentBox?.classList.remove("show");
+      });
+
+      essentialButton?.addEventListener("click", () => {
+        saveChoice("essential");
+        applyChoice("essential");
+        consentBox?.classList.remove("show");
+      });
+
+      settingsButton?.addEventListener("click", () => {
+        consentBox?.classList.add("show");
+      });
+
+      const savedChoice = readChoice();
+      if (savedChoice === "all" || savedChoice === "essential") {
+        applyChoice(savedChoice);
+      } else {
+        disableAnalytics();
+        setTimeout(() => consentBox?.classList.add("show"), 550);
+      }
+    })();
+  </script>
+
 <script src="angel-uzunov-ai-widget.js"></script>
  
 </body>
