@@ -71,11 +71,10 @@
       "#d8b66a"
     ).trim();
 
+
   /*
    * ============================================================
    * KNOWN SONG TITLES
-   * Използват се само за красиво заглавие над YouTube player.
-   * Самата информация на Alex продължава да идва от AI Business.
    * ============================================================
    */
 
@@ -92,6 +91,7 @@
     z6I9QPKcCcY:
       "Росна зора"
   };
+
 
   /*
    * ============================================================
@@ -209,10 +209,12 @@
       }
 
       width: 380px;
+
       max-width:
         calc(100vw - 28px);
 
       height: 590px;
+
       max-height:
         calc(100vh - 120px);
 
@@ -252,8 +254,7 @@
        ========================================== */
 
     .angel-ai-header {
-      padding:
-        16px 16px;
+      padding: 16px;
 
       display: flex;
 
@@ -380,15 +381,19 @@
 
 
     /* ==========================================
-       MESSAGES
+       MESSAGES + PROFESSIONAL SCROLLBAR
        ========================================== */
 
     .angel-ai-messages {
       flex: 1;
 
-      overflow-y: auto;
+      min-height: 0;
 
-      padding: 16px;
+      overflow-y: auto;
+      overflow-x: hidden;
+
+      padding:
+        16px 10px 16px 16px;
 
       background:
         radial-gradient(
@@ -397,8 +402,48 @@
           transparent 35%
         );
 
-      scroll-behavior:
-        smooth;
+      scroll-behavior: smooth;
+
+      scrollbar-width: thin;
+
+      scrollbar-color:
+        rgba(216,182,106,.72)
+        rgba(255,255,255,.025);
+    }
+
+
+    .angel-ai-messages::-webkit-scrollbar {
+      width: 7px;
+    }
+
+
+    .angel-ai-messages::-webkit-scrollbar-track {
+      background:
+        rgba(255,255,255,.025);
+
+      border-radius: 999px;
+    }
+
+
+    .angel-ai-messages::-webkit-scrollbar-thumb {
+      background:
+        linear-gradient(
+          180deg,
+          #f3d993,
+          #d8b66a
+        );
+
+      border-radius: 999px;
+
+      border:
+        1px solid
+        rgba(13,15,21,.4);
+    }
+
+
+    .angel-ai-messages::-webkit-scrollbar-thumb:hover {
+      background:
+        #f3d993;
     }
 
 
@@ -506,9 +551,7 @@
 
     .angel-ai-message.agent
     .angel-ai-bubble a:hover {
-
-      opacity:
-        .82;
+      opacity: .82;
     }
 
 
@@ -574,43 +617,32 @@
 
     .angel-youtube-frame {
 
-      position:
-        relative;
+      position: relative;
 
-      width:
-        100%;
+      width: 100%;
 
-      aspect-ratio:
-        16 / 9;
+      aspect-ratio: 16 / 9;
 
-      background:
-        #000;
+      background: #000;
     }
 
 
     .angel-youtube-frame iframe {
 
-      position:
-        absolute;
+      position: absolute;
 
-      inset:
-        0;
+      inset: 0;
 
-      width:
-        100%;
+      width: 100%;
+      height: 100%;
 
-      height:
-        100%;
-
-      border:
-        0;
+      border: 0;
     }
 
 
     .angel-youtube-open {
 
-      display:
-        block;
+      display: block;
 
       padding:
         8px 11px 9px;
@@ -640,8 +672,7 @@
       display:
         inline-flex;
 
-      gap:
-        4px;
+      gap: 4px;
 
       align-items:
         center;
@@ -650,11 +681,8 @@
 
     .angel-ai-typing span {
 
-      width:
-        6px;
-
-      height:
-        6px;
+      width: 6px;
+      height: 6px;
 
       border-radius:
         50%;
@@ -669,14 +697,12 @@
 
 
     .angel-ai-typing span:nth-child(2) {
-      animation-delay:
-        .15s;
+      animation-delay: .15s;
     }
 
 
     .angel-ai-typing span:nth-child(3) {
-      animation-delay:
-        .30s;
+      animation-delay: .30s;
     }
 
 
@@ -685,16 +711,14 @@
       0%,
       60%,
       100% {
-        opacity:
-          .30;
+        opacity: .30;
 
         transform:
           translateY(0);
       }
 
       30% {
-        opacity:
-          1;
+        opacity: 1;
 
         transform:
           translateY(-3px);
@@ -708,8 +732,9 @@
 
     .angel-ai-composer {
 
-      padding:
-        11px;
+      flex-shrink: 0;
+
+      padding: 11px;
 
       border-top:
         1px solid
@@ -722,17 +747,14 @@
 
     .angel-ai-input-wrap {
 
-      display:
-        flex;
+      display: flex;
 
       align-items:
         flex-end;
 
-      gap:
-        8px;
+      gap: 8px;
 
-      padding:
-        8px;
+      padding: 8px;
 
       border:
         1px solid
@@ -748,23 +770,24 @@
 
     .angel-ai-input {
 
-      flex:
-        1;
+      flex: 1;
 
-      min-height:
-        38px;
+      min-height: 38px;
 
-      max-height:
-        100px;
+      max-height: 100px;
 
-      resize:
-        none;
+      resize: none;
 
-      border:
-        0;
+      overflow-y: auto;
+      overflow-x: hidden;
 
-      outline:
-        0;
+      scrollbar-width: none;
+
+      -ms-overflow-style: none;
+
+      border: 0;
+
+      outline: 0;
 
       background:
         transparent;
@@ -783,6 +806,11 @@
     }
 
 
+    .angel-ai-input::-webkit-scrollbar {
+      display: none;
+    }
+
+
     .angel-ai-input::placeholder {
 
       color:
@@ -792,17 +820,13 @@
 
     .angel-ai-send {
 
-      width:
-        39px;
-
-      height:
-        39px;
+      width: 39px;
+      height: 39px;
 
       flex:
         0 0 39px;
 
-      border:
-        0;
+      border: 0;
 
       border-radius:
         12px;
@@ -810,8 +834,7 @@
       cursor:
         pointer;
 
-      display:
-        flex;
+      display: flex;
 
       align-items:
         center;
@@ -834,32 +857,97 @@
 
       font-weight:
         900;
+
+      transition:
+        transform .2s ease,
+        opacity .2s ease;
+    }
+
+
+    .angel-ai-send:hover:not(:disabled) {
+      transform:
+        translateY(-1px);
     }
 
 
     .angel-ai-send:disabled {
 
-      opacity:
-        .45;
+      opacity: .45;
 
-      cursor:
-        default;
+      cursor: default;
     }
 
 
+    /* ==========================================
+       BOTTOM BAR / NEW CHAT
+       ========================================== */
+
     .angel-ai-meta {
 
-      padding:
-        7px 4px 0;
+      display: flex;
 
-      text-align:
-        center;
+      align-items: center;
+
+      justify-content:
+        space-between;
+
+      gap: 12px;
+
+      padding:
+        9px 4px 1px;
 
       color:
         #8f8b84;
 
       font-size:
-        9px;
+        10px;
+    }
+
+
+    .angel-ai-new-chat {
+
+      border: 0;
+
+      padding: 3px 0;
+
+      background:
+        transparent;
+
+      color:
+        var(--aiba-primary);
+
+      font-family:
+        inherit;
+
+      font-size:
+        10px;
+
+      font-weight:
+        700;
+
+      cursor:
+        pointer;
+
+      transition:
+        color .2s ease,
+        opacity .2s ease;
+    }
+
+
+    .angel-ai-new-chat:hover {
+
+      color:
+        var(--aiba-gold-light);
+    }
+
+
+    .angel-ai-meta-brand {
+
+      color:
+        #77736c;
+
+      white-space:
+        nowrap;
     }
 
 
@@ -873,14 +961,11 @@
 
       #angel-ai-widget-root {
 
-        bottom:
-          14px;
+        bottom: 14px;
 
-        right:
-          14px;
+        right: 14px;
 
-        left:
-          14px;
+        left: 14px;
       }
 
 
@@ -893,20 +978,14 @@
 
       .angel-ai-window {
 
-        position:
-          fixed;
+        position: fixed;
 
-        left:
-          10px;
+        left: 10px;
+        right: 10px;
 
-        right:
-          10px;
+        bottom: 86px;
 
-        bottom:
-          86px;
-
-        width:
-          auto;
+        width: auto;
 
         height:
           min(
@@ -914,13 +993,25 @@
             calc(100vh - 105px)
           );
 
-        max-height:
-          none;
+        max-height: none;
+      }
+
+
+      .angel-ai-meta {
+
+        font-size: 9px;
+      }
+
+
+      .angel-ai-new-chat {
+
+        font-size: 9px;
       }
 
     }
 
   `;
+
 
   document.head.appendChild(
     style
@@ -1156,6 +1247,12 @@
   );
 
 
+  /*
+   * ============================================================
+   * BOTTOM META BAR
+   * ============================================================
+   */
+
   const meta =
     document.createElement(
       "div"
@@ -1164,8 +1261,38 @@
   meta.className =
     "angel-ai-meta";
 
-  meta.textContent =
+
+  const newChatButton =
+    document.createElement(
+      "button"
+    );
+
+  newChatButton.type =
+    "button";
+
+  newChatButton.className =
+    "angel-ai-new-chat";
+
+  newChatButton.textContent =
+    "↻ Нов разговор";
+
+
+  const metaBrand =
+    document.createElement(
+      "span"
+    );
+
+  metaBrand.className =
+    "angel-ai-meta-brand";
+
+  metaBrand.textContent =
     "Alex • Angel Uzunov";
+
+
+  meta.append(
+    newChatButton,
+    metaBrand
+  );
 
 
   composer.append(
@@ -1282,6 +1409,7 @@
       return "";
 
     }
+
 
     return "";
   }
@@ -1432,17 +1560,6 @@
       );
 
 
-    /*
-     * Разпознава:
-     *
-     * [Песен](https://...)
-     *
-     * както и:
-     *
-     * https://www.youtube.com/watch?v=...
-     */
-
-
     const tokenPattern =
       /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)|(https?:\/\/[^\s<>"']+)/g;
 
@@ -1510,11 +1627,6 @@
         );
 
 
-      /*
-       * Ако е YouTube:
-       * показваме player.
-       */
-
       if (videoId) {
 
         bubble.appendChild(
@@ -1526,11 +1638,6 @@
         );
 
       } else {
-
-        /*
-         * Всички останали URL:
-         * нормален безопасен линк.
-         */
 
         bubble.appendChild(
           createSafeExternalLink(
@@ -1720,6 +1827,24 @@
     "angel_uzunov_ai_session";
 
 
+  function createSessionId() {
+
+    return (
+      window.crypto &&
+      crypto.randomUUID
+    )
+      ? crypto.randomUUID()
+      : (
+          Date.now() +
+          "-" +
+          Math.random()
+            .toString(36)
+            .slice(2)
+        );
+
+  }
+
+
   let sessionId =
     sessionStorage.getItem(
       sessionStorageKey
@@ -1729,18 +1854,7 @@
   if (!sessionId) {
 
     sessionId =
-      (
-        window.crypto &&
-        crypto.randomUUID
-      )
-        ? crypto.randomUUID()
-        : (
-            Date.now() +
-            "-" +
-            Math.random()
-              .toString(36)
-              .slice(2)
-          );
+      createSessionId();
 
 
     sessionStorage.setItem(
@@ -1760,16 +1874,6 @@
   async function sendToAlex(
     message
   ) {
-
-    /*
-     * AI Business backend.
-     *
-     * widgetKey идентифицира
-     * конкретния Angel Uzunov agent,
-     * за да може backend-ът да използва
-     * неговата Knowledge Base.
-     */
-
 
     const endpoints = [
 
@@ -2064,6 +2168,77 @@
         sendMessage();
 
       }
+
+    }
+  );
+
+
+  /*
+   * ============================================================
+   * NEW CONVERSATION
+   * ============================================================
+   */
+
+  newChatButton.addEventListener(
+    "click",
+    function () {
+
+      /*
+       * Не позволяваме рестарт,
+       * докато чакаме отговор.
+       */
+
+      if (sending) {
+        return;
+      }
+
+
+      /*
+       * Създаваме напълно нова
+       * session ID за AI Business.
+       */
+
+      sessionId =
+        createSessionId();
+
+
+      sessionStorage.setItem(
+        sessionStorageKey,
+        sessionId
+      );
+
+
+      /*
+       * Изчистваме визуално
+       * предишния разговор.
+       */
+
+      messages.innerHTML =
+        "";
+
+
+      textarea.value =
+        "";
+
+
+      /*
+       * Показваме отново
+       * началното съобщение.
+       */
+
+      if (
+        welcomeMessage
+      ) {
+
+        addMessage(
+          "agent",
+          welcomeMessage
+        );
+
+      }
+
+
+      textarea.focus();
 
     }
   );
