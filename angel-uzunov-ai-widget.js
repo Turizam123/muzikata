@@ -1819,50 +1819,61 @@
 
   /*
    * ============================================================
-   * SESSION
+   * VISITOR + CONVERSATION
    * ============================================================
    */
 
-  const sessionStorageKey =
-    "angel_uzunov_ai_session";
+  const visitorStorageKey =
+    "angel_uzunov_ai_visitor_id";
+
+  const conversationStorageKey =
+    "angel_uzunov_ai_conversation_id";
 
 
-  function createSessionId() {
+  function createVisitorId() {
 
-    return (
-      window.crypto &&
-      crypto.randomUUID
-    )
-      ? crypto.randomUUID()
-      : (
-          Date.now() +
-          "-" +
-          Math.random()
-            .toString(36)
-            .slice(2)
-        );
+    const rawId =
+      (
+        window.crypto &&
+        crypto.randomUUID
+      )
+        ? crypto.randomUUID()
+        : (
+            Date.now() +
+            "-" +
+            Math.random()
+              .toString(36)
+              .slice(2)
+          );
+
+    return "widget:" + rawId;
+  }
+
+
+  let visitorId =
+    localStorage.getItem(
+      visitorStorageKey
+    );
+
+
+  if (!visitorId) {
+
+    visitorId =
+      createVisitorId();
+
+
+    localStorage.setItem(
+      visitorStorageKey,
+      visitorId
+    );
 
   }
 
 
-  let sessionId =
+  let conversationId =
     sessionStorage.getItem(
-      sessionStorageKey
-    );
-
-
-  if (!sessionId) {
-
-    sessionId =
-      createSessionId();
-
-
-    sessionStorage.setItem(
-      sessionStorageKey,
-      sessionId
-    );
-
-  }
+      conversationStorageKey
+    ) || "";
 
 
   /*
@@ -1927,11 +1938,11 @@
                   message:
                     message,
 
-                  sessionId:
-                    sessionId,
+                  conversation_id:
+                    conversationId || null,
 
-                  session_id:
-                    sessionId
+                  visitor_id:
+                    visitorId
 
                 })
 
@@ -1955,6 +1966,53 @@
 
         const data =
           await response.json();
+
+
+        /*
+         * При първото съобщение backend-ът
+         * създава conversation_id.
+         * Запазваме го за следващите съобщения.
+         */
+
+        if (
+          data.conversation_id
+        ) {
+
+          conversationId =
+            String(
+              data.conversation_id
+            );
+
+
+          sessionStorage.setItem(
+            conversationStorageKey,
+            conversationId
+          );
+
+        }
+
+
+        /*
+         * Visitor ID идентифицира посетителя
+         * и остава постоянен.
+         */
+
+        if (
+          data.visitor_id
+        ) {
+
+          visitorId =
+            String(
+              data.visitor_id
+            );
+
+
+          localStorage.setItem(
+            visitorStorageKey,
+            visitorId
+          );
+
+        }
 
 
         const answer =
@@ -2184,7 +2242,7 @@
     function () {
 
       /*
-       * Не позволяваме рестарт,
+       * Не позволяваме нов разговор,
        * докато чакаме отговор.
        */
 
@@ -2194,17 +2252,21 @@
 
 
       /*
-       * Създаваме напълно нова
-       * session ID за AI Business.
+       * Нов разговор:
+       *
+       * visitorId НЕ се променя,
+       * защото посетителят е същият.
+       *
+       * Изчистваме единствено
+       * conversationId.
        */
 
-      sessionId =
-        createSessionId();
+      conversationId =
+        "";
 
 
-      sessionStorage.setItem(
-        sessionStorageKey,
-        sessionId
+      sessionStorage.removeItem(
+        conversationStorageKey
       );
 
 
@@ -2222,8 +2284,7 @@
 
 
       /*
-       * Показваме отново
-       * началното съобщение.
+       * Връщаме приветствието.
        */
 
       if (
