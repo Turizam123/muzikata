@@ -569,6 +569,123 @@
       box-shadow: 0 12px 34px rgba(216,182,106,.24);
     }
 
+    /* ===== Харесвания ===== */
+    .like-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 46px;
+      padding: 0 4px 0 2px;
+    }
+
+    .like-heart {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 42px;
+      border: 1px solid rgba(216,182,106,.34);
+      border-radius: 50%;
+      color: var(--gold-light);
+      background:
+        radial-gradient(circle at 34% 28%, rgba(243,217,147,.14), transparent 42%),
+        rgba(255,255,255,.035);
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.025),
+        0 8px 24px rgba(0,0,0,.22);
+      cursor: pointer;
+      transition:
+        transform .22s ease,
+        border-color .22s ease,
+        background .22s ease,
+        box-shadow .22s ease;
+      animation: heartIdlePulse 3.4s ease-in-out infinite;
+    }
+
+    .like-heart svg {
+      width: 22px;
+      height: 22px;
+      overflow: visible;
+      stroke: currentColor;
+      fill: rgba(216,182,106,.03);
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 0 7px rgba(216,182,106,.16));
+      transition: fill .22s ease, transform .22s ease, filter .22s ease;
+    }
+
+    .like-heart:hover,
+    .like-heart:focus-visible {
+      transform: translateY(-2px) scale(1.04);
+      border-color: rgba(243,217,147,.68);
+      background:
+        radial-gradient(circle at 34% 28%, rgba(243,217,147,.22), transparent 46%),
+        rgba(216,182,106,.07);
+      box-shadow:
+        0 10px 28px rgba(0,0,0,.28),
+        0 0 22px rgba(216,182,106,.12);
+      outline: none;
+    }
+
+    .like-heart.liked {
+      animation: none;
+      color: var(--gold-light);
+      border-color: rgba(243,217,147,.68);
+      background:
+        radial-gradient(circle at 34% 28%, rgba(255,247,218,.24), transparent 44%),
+        linear-gradient(145deg, rgba(216,182,106,.18), rgba(142,36,48,.08));
+      box-shadow:
+        0 10px 30px rgba(0,0,0,.28),
+        0 0 24px rgba(216,182,106,.14);
+    }
+
+    .like-heart.liked svg {
+      fill: url(#heartGoldFallback);
+      fill: var(--gold);
+      transform: scale(1.04);
+      filter: drop-shadow(0 0 9px rgba(216,182,106,.34));
+    }
+
+    .like-heart.just-liked {
+      animation: heartBeat .58s cubic-bezier(.2,.8,.2,1);
+    }
+
+    .like-heart:disabled {
+      cursor: default;
+      opacity: .76;
+    }
+
+    .like-count {
+      min-width: 1.4ch;
+      color: var(--gold-light);
+      font-size: .8rem;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: .01em;
+      text-shadow: 0 0 12px rgba(216,182,106,.12);
+    }
+
+    @keyframes heartIdlePulse {
+      0%, 100% { transform: scale(1); opacity: .94; }
+      50% { transform: scale(1.045); opacity: 1; }
+    }
+
+    @keyframes heartBeat {
+      0% { transform: scale(1); }
+      34% { transform: scale(1.18); }
+      58% { transform: scale(.97); }
+      78% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .like-heart,
+      .like-heart.just-liked {
+        animation: none !important;
+      }
+    }
+
     .video-preview-button {
       position: absolute;
       inset: 0;
@@ -874,7 +991,21 @@
                     <span class="youtube-icon">▶</span>
                     Слушай в YouTube
                   </a>
-                </div>
+                
+                  <span class="like-wrap" data-like-song="FmUQEAQ6bFs">
+                    <button
+                      class="like-heart"
+                      type="button"
+                      aria-label="Харесай песента"
+                      aria-pressed="false"
+                      data-song-id="FmUQEAQ6bFs"
+                    >
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 20.2 4.55 13.3C2.4 11.3 2 8.25 3.72 6.18c1.72-2.07 4.92-2.24 6.86-.38L12 7.16l1.42-1.36c1.94-1.86 5.14-1.69 6.86.38 1.72 2.07 1.32 5.12-.83 7.12L12 20.2Z"></path>
+                    </svg>
+                    </button>
+                    <span class="like-count" aria-live="polite">0</span>
+                  </span></div>
               </div>
             </article>
 
@@ -904,7 +1035,21 @@
                     <span class="youtube-icon">▶</span>
                     Слушай в YouTube
                   </a>
-                </div>
+                
+                  <span class="like-wrap" data-like-song="z6I9QPKcCcY">
+                    <button
+                      class="like-heart"
+                      type="button"
+                      aria-label="Харесай песента"
+                      aria-pressed="false"
+                      data-song-id="z6I9QPKcCcY"
+                    >
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 20.2 4.55 13.3C2.4 11.3 2 8.25 3.72 6.18c1.72-2.07 4.92-2.24 6.86-.38L12 7.16l1.42-1.36c1.94-1.86 5.14-1.69 6.86.38 1.72 2.07 1.32 5.12-.83 7.12L12 20.2Z"></path>
+                    </svg>
+                    </button>
+                    <span class="like-count" aria-live="polite">0</span>
+                  </span></div>
               </div>
             </article>
 
@@ -934,7 +1079,21 @@
                     <span class="youtube-icon">▶</span>
                     Слушай в YouTube
                   </a>
-                </div>
+                
+                  <span class="like-wrap" data-like-song="o_coeUCQS3A">
+                    <button
+                      class="like-heart"
+                      type="button"
+                      aria-label="Харесай песента"
+                      aria-pressed="false"
+                      data-song-id="o_coeUCQS3A"
+                    >
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 20.2 4.55 13.3C2.4 11.3 2 8.25 3.72 6.18c1.72-2.07 4.92-2.24 6.86-.38L12 7.16l1.42-1.36c1.94-1.86 5.14-1.69 6.86.38 1.72 2.07 1.32 5.12-.83 7.12L12 20.2Z"></path>
+                    </svg>
+                    </button>
+                    <span class="like-count" aria-live="polite">0</span>
+                  </span></div>
               </div>
             </article>
 
@@ -964,23 +1123,79 @@
                     <span class="youtube-icon">▶</span>
                     Слушай в YouTube
                   </a>
-                </div>
+                
+                  <span class="like-wrap" data-like-song="ykNUxumIQRo">
+                    <button
+                      class="like-heart"
+                      type="button"
+                      aria-label="Харесай песента"
+                      aria-pressed="false"
+                      data-song-id="ykNUxumIQRo"
+                    >
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 20.2 4.55 13.3C2.4 11.3 2 8.25 3.72 6.18c1.72-2.07 4.92-2.24 6.86-.38L12 7.16l1.42-1.36c1.94-1.86 5.14-1.69 6.86.38 1.72 2.07 1.32 5.12-.83 7.12L12 20.2Z"></path>
+                    </svg>
+                    </button>
+                    <span class="like-count" aria-live="polite">0</span>
+                  </span></div>
               </div>
             </article>
 
             <article class="song-card youtube-inline" data-category="folk" data-title="Искат ме мамо" data-video-id="xq3fuN5D9D4" data-video-title="Искат ме мамо – Ангел Узунов" style="--cover: url('https://i.ytimg.com/vi/xq3fuN5D9D4/maxresdefault.jpg') center/cover;">
               <button class="video-preview-button" type="button" aria-label="Пусни видеото Искат ме мамо"><span class="video-play" aria-hidden="true">▶</span></button>
-              <div class="song-card-content"><span class="song-category">Фолклор • 2026</span><h3>Искат ме мамо</h3><p>Авторска песен на фолклорна основа, вдъхновена от българската традиция и народната мелодика.</p><div class="song-actions"><a class="youtube-btn" href="https://www.youtube.com/watch?v=xq3fuN5D9D4" target="_blank" rel="noopener" aria-label="Отвори песента Искат ме мамо в YouTube"><span class="youtube-icon">▶</span>Слушай в YouTube</a></div></div>
+              <div class="song-card-content"><span class="song-category">Фолклор • 2026</span><h3>Искат ме мамо</h3><p>Авторска песен на фолклорна основа, вдъхновена от българската традиция и народната мелодика.</p><div class="song-actions"><a class="youtube-btn" href="https://www.youtube.com/watch?v=xq3fuN5D9D4" target="_blank" rel="noopener" aria-label="Отвори песента Искат ме мамо в YouTube"><span class="youtube-icon">▶</span>Слушай в YouTube</a>
+                  <span class="like-wrap" data-like-song="xq3fuN5D9D4">
+                    <button
+                      class="like-heart"
+                      type="button"
+                      aria-label="Харесай песента"
+                      aria-pressed="false"
+                      data-song-id="xq3fuN5D9D4"
+                    >
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 20.2 4.55 13.3C2.4 11.3 2 8.25 3.72 6.18c1.72-2.07 4.92-2.24 6.86-.38L12 7.16l1.42-1.36c1.94-1.86 5.14-1.69 6.86.38 1.72 2.07 1.32 5.12-.83 7.12L12 20.2Z"></path>
+                    </svg>
+                    </button>
+                    <span class="like-count" aria-live="polite">0</span>
+                  </span></div></div>
             </article>
 
             <article class="song-card youtube-inline" data-category="folk" data-title="При тебе, мале" data-video-id="oKCgChl8jOo" data-video-title="При тебе, мале – Ангел Узунов" style="--cover: url('https://i.ytimg.com/vi/oKCgChl8jOo/maxresdefault.jpg') center/cover;">
               <button class="video-preview-button" type="button" aria-label="Пусни видеото При тебе, мале"><span class="video-play" aria-hidden="true">▶</span></button>
-              <div class="song-card-content"><span class="song-category">Фолклор • 2026</span><h3>При тебе, мале</h3><p>Емоционална народна песен с български фолклорен дух и силно послание към майката и родния дом.</p><div class="song-actions"><a class="youtube-btn" href="https://www.youtube.com/watch?v=oKCgChl8jOo" target="_blank" rel="noopener" aria-label="Отвори песента При тебе, мале в YouTube"><span class="youtube-icon">▶</span>Слушай в YouTube</a></div></div>
+              <div class="song-card-content"><span class="song-category">Фолклор • 2026</span><h3>При тебе, мале</h3><p>Емоционална народна песен с български фолклорен дух и силно послание към майката и родния дом.</p><div class="song-actions"><a class="youtube-btn" href="https://www.youtube.com/watch?v=oKCgChl8jOo" target="_blank" rel="noopener" aria-label="Отвори песента При тебе, мале в YouTube"><span class="youtube-icon">▶</span>Слушай в YouTube</a>
+                  <span class="like-wrap" data-like-song="oKCgChl8jOo">
+                    <button
+                      class="like-heart"
+                      type="button"
+                      aria-label="Харесай песента"
+                      aria-pressed="false"
+                      data-song-id="oKCgChl8jOo"
+                    >
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 20.2 4.55 13.3C2.4 11.3 2 8.25 3.72 6.18c1.72-2.07 4.92-2.24 6.86-.38L12 7.16l1.42-1.36c1.94-1.86 5.14-1.69 6.86.38 1.72 2.07 1.32 5.12-.83 7.12L12 20.2Z"></path>
+                    </svg>
+                    </button>
+                    <span class="like-count" aria-live="polite">0</span>
+                  </span></div></div>
             </article>
 
             <article class="song-card youtube-inline" data-category="folk" data-title="Богат със сърце" data-video-id="Z2IDYGvE_1U" data-video-title="Богат със сърце – Ангел Узунов" style="--cover: url('https://i.ytimg.com/vi/Z2IDYGvE_1U/maxresdefault.jpg') center/cover;">
               <button class="video-preview-button" type="button" aria-label="Пусни видеото Богат със сърце"><span class="video-play" aria-hidden="true">▶</span></button>
-              <div class="song-card-content"><span class="song-category">Фолклор • 2026</span><h3>Богат със сърце</h3><p>Авторска песен на фолклорна основа за истинското богатство, човечността и доброто сърце.</p><div class="song-actions"><a class="youtube-btn" href="https://www.youtube.com/watch?v=Z2IDYGvE_1U" target="_blank" rel="noopener" aria-label="Отвори песента Богат със сърце в YouTube"><span class="youtube-icon">▶</span>Слушай в YouTube</a></div></div>
+              <div class="song-card-content"><span class="song-category">Фолклор • 2026</span><h3>Богат със сърце</h3><p>Авторска песен на фолклорна основа за истинското богатство, човечността и доброто сърце.</p><div class="song-actions"><a class="youtube-btn" href="https://www.youtube.com/watch?v=Z2IDYGvE_1U" target="_blank" rel="noopener" aria-label="Отвори песента Богат със сърце в YouTube"><span class="youtube-icon">▶</span>Слушай в YouTube</a>
+                  <span class="like-wrap" data-like-song="Z2IDYGvE_1U">
+                    <button
+                      class="like-heart"
+                      type="button"
+                      aria-label="Харесай песента"
+                      aria-pressed="false"
+                      data-song-id="Z2IDYGvE_1U"
+                    >
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 20.2 4.55 13.3C2.4 11.3 2 8.25 3.72 6.18c1.72-2.07 4.92-2.24 6.86-.38L12 7.16l1.42-1.36c1.94-1.86 5.14-1.69 6.86.38 1.72 2.07 1.32 5.12-.83 7.12L12 20.2Z"></path>
+                    </svg>
+                    </button>
+                    <span class="like-count" aria-live="polite">0</span>
+                  </span></div></div>
             </article>
           </div>
         </section>
@@ -1018,7 +1233,21 @@
                     <span class="youtube-icon">▶</span>
                     Слушай в YouTube
                   </a>
-                </div>
+                
+                  <span class="like-wrap" data-like-song="lyGRz83xOSY">
+                    <button
+                      class="like-heart"
+                      type="button"
+                      aria-label="Харесай песента"
+                      aria-pressed="false"
+                      data-song-id="lyGRz83xOSY"
+                    >
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 20.2 4.55 13.3C2.4 11.3 2 8.25 3.72 6.18c1.72-2.07 4.92-2.24 6.86-.38L12 7.16l1.42-1.36c1.94-1.86 5.14-1.69 6.86.38 1.72 2.07 1.32 5.12-.83 7.12L12 20.2Z"></path>
+                    </svg>
+                    </button>
+                    <span class="like-count" aria-live="polite">0</span>
+                  </span></div>
               </div>
             </article>
 
@@ -1048,7 +1277,21 @@
                     <span class="youtube-icon">▶</span>
                     Слушай в YouTube
                   </a>
-                </div>
+                
+                  <span class="like-wrap" data-like-song="mHK8o9dvHks">
+                    <button
+                      class="like-heart"
+                      type="button"
+                      aria-label="Харесай песента"
+                      aria-pressed="false"
+                      data-song-id="mHK8o9dvHks"
+                    >
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 20.2 4.55 13.3C2.4 11.3 2 8.25 3.72 6.18c1.72-2.07 4.92-2.24 6.86-.38L12 7.16l1.42-1.36c1.94-1.86 5.14-1.69 6.86.38 1.72 2.07 1.32 5.12-.83 7.12L12 20.2Z"></path>
+                    </svg>
+                    </button>
+                    <span class="like-count" aria-live="polite">0</span>
+                  </span></div>
               </div>
             </article>
 
@@ -1078,7 +1321,21 @@
                     <span class="youtube-icon">▶</span>
                     Слушай в YouTube
                   </a>
-                </div>
+                
+                  <span class="like-wrap" data-like-song="yOIzCb_R2hw">
+                    <button
+                      class="like-heart"
+                      type="button"
+                      aria-label="Харесай песента"
+                      aria-pressed="false"
+                      data-song-id="yOIzCb_R2hw"
+                    >
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 20.2 4.55 13.3C2.4 11.3 2 8.25 3.72 6.18c1.72-2.07 4.92-2.24 6.86-.38L12 7.16l1.42-1.36c1.94-1.86 5.14-1.69 6.86.38 1.72 2.07 1.32 5.12-.83 7.12L12 20.2Z"></path>
+                    </svg>
+                    </button>
+                    <span class="like-count" aria-live="polite">0</span>
+                  </span></div>
               </div>
             </article>
 
@@ -1108,7 +1365,21 @@
                     <span class="youtube-icon">▶</span>
                     Слушай в YouTube
                   </a>
-                </div>
+                
+                  <span class="like-wrap" data-like-song="Y8y7K8PmVwM">
+                    <button
+                      class="like-heart"
+                      type="button"
+                      aria-label="Харесай песента"
+                      aria-pressed="false"
+                      data-song-id="Y8y7K8PmVwM"
+                    >
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 20.2 4.55 13.3C2.4 11.3 2 8.25 3.72 6.18c1.72-2.07 4.92-2.24 6.86-.38L12 7.16l1.42-1.36c1.94-1.86 5.14-1.69 6.86.38 1.72 2.07 1.32 5.12-.83 7.12L12 20.2Z"></path>
+                    </svg>
+                    </button>
+                    <span class="like-count" aria-live="polite">0</span>
+                  </span></div>
               </div>
             </article>
 
@@ -1138,7 +1409,21 @@
                     <span class="youtube-icon">▶</span>
                     Слушай в YouTube
                   </a>
-                </div>
+                
+                  <span class="like-wrap" data-like-song="MLCLaXaSneI">
+                    <button
+                      class="like-heart"
+                      type="button"
+                      aria-label="Харесай песента"
+                      aria-pressed="false"
+                      data-song-id="MLCLaXaSneI"
+                    >
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 20.2 4.55 13.3C2.4 11.3 2 8.25 3.72 6.18c1.72-2.07 4.92-2.24 6.86-.38L12 7.16l1.42-1.36c1.94-1.86 5.14-1.69 6.86.38 1.72 2.07 1.32 5.12-.83 7.12L12 20.2Z"></path>
+                    </svg>
+                    </button>
+                    <span class="like-count" aria-live="polite">0</span>
+                  </span></div>
               </div>
             </article>
 
@@ -1168,18 +1453,60 @@
                     <span class="youtube-icon">▶</span>
                     Слушай в YouTube
                   </a>
-                </div>
+                
+                  <span class="like-wrap" data-like-song="TAdokYOzz38">
+                    <button
+                      class="like-heart"
+                      type="button"
+                      aria-label="Харесай песента"
+                      aria-pressed="false"
+                      data-song-id="TAdokYOzz38"
+                    >
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 20.2 4.55 13.3C2.4 11.3 2 8.25 3.72 6.18c1.72-2.07 4.92-2.24 6.86-.38L12 7.16l1.42-1.36c1.94-1.86 5.14-1.69 6.86.38 1.72 2.07 1.32 5.12-.83 7.12L12 20.2Z"></path>
+                    </svg>
+                    </button>
+                    <span class="like-count" aria-live="polite">0</span>
+                  </span></div>
               </div>
             </article>
 
             <article class="song-card youtube-inline" data-category="popfolk" data-title="Как да те забравя" data-video-id="IQeLGxa-s8o" data-video-title="Как да те забравя – Ангел Узунов" style="--cover: url('https://i.ytimg.com/vi/IQeLGxa-s8o/maxresdefault.jpg') center/cover;">
               <button class="video-preview-button" type="button" aria-label="Пусни видеото Как да те забравя"><span class="video-play" aria-hidden="true">▶</span></button>
-              <div class="song-card-content"><span class="song-category">Поп-фолк • 2026</span><h3>Как да те забравя</h3><p>Емоционална поп-фолк песен за любовта, спомените и трудния път след раздялата.</p><div class="song-actions"><a class="youtube-btn" href="https://www.youtube.com/watch?v=IQeLGxa-s8o" target="_blank" rel="noopener" aria-label="Отвори песента Как да те забравя в YouTube"><span class="youtube-icon">▶</span>Слушай в YouTube</a></div></div>
+              <div class="song-card-content"><span class="song-category">Поп-фолк • 2026</span><h3>Как да те забравя</h3><p>Емоционална поп-фолк песен за любовта, спомените и трудния път след раздялата.</p><div class="song-actions"><a class="youtube-btn" href="https://www.youtube.com/watch?v=IQeLGxa-s8o" target="_blank" rel="noopener" aria-label="Отвори песента Как да те забравя в YouTube"><span class="youtube-icon">▶</span>Слушай в YouTube</a>
+                  <span class="like-wrap" data-like-song="IQeLGxa-s8o">
+                    <button
+                      class="like-heart"
+                      type="button"
+                      aria-label="Харесай песента"
+                      aria-pressed="false"
+                      data-song-id="IQeLGxa-s8o"
+                    >
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 20.2 4.55 13.3C2.4 11.3 2 8.25 3.72 6.18c1.72-2.07 4.92-2.24 6.86-.38L12 7.16l1.42-1.36c1.94-1.86 5.14-1.69 6.86.38 1.72 2.07 1.32 5.12-.83 7.12L12 20.2Z"></path>
+                    </svg>
+                    </button>
+                    <span class="like-count" aria-live="polite">0</span>
+                  </span></div></div>
             </article>
 
             <article class="song-card youtube-inline" data-category="popfolk" data-title="Остани" data-video-id="BhDohIEGJjk" data-video-title="Остани – Ангел Узунов" style="--cover: url('https://i.ytimg.com/vi/BhDohIEGJjk/maxresdefault.jpg') center/cover;">
               <button class="video-preview-button" type="button" aria-label="Пусни видеото Остани"><span class="video-play" aria-hidden="true">▶</span></button>
-              <div class="song-card-content"><span class="song-category">Поп-фолк • 2026</span><h3>Остани</h3><p>Любовна поп-фолк песен за онзи миг, в който една дума може да спаси чувствата и да промени раздялата.</p><div class="song-actions"><a class="youtube-btn" href="https://www.youtube.com/watch?v=BhDohIEGJjk" target="_blank" rel="noopener" aria-label="Отвори песента Остани в YouTube"><span class="youtube-icon">▶</span>Слушай в YouTube</a></div></div>
+              <div class="song-card-content"><span class="song-category">Поп-фолк • 2026</span><h3>Остани</h3><p>Любовна поп-фолк песен за онзи миг, в който една дума може да спаси чувствата и да промени раздялата.</p><div class="song-actions"><a class="youtube-btn" href="https://www.youtube.com/watch?v=BhDohIEGJjk" target="_blank" rel="noopener" aria-label="Отвори песента Остани в YouTube"><span class="youtube-icon">▶</span>Слушай в YouTube</a>
+                  <span class="like-wrap" data-like-song="BhDohIEGJjk">
+                    <button
+                      class="like-heart"
+                      type="button"
+                      aria-label="Харесай песента"
+                      aria-pressed="false"
+                      data-song-id="BhDohIEGJjk"
+                    >
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 20.2 4.55 13.3C2.4 11.3 2 8.25 3.72 6.18c1.72-2.07 4.92-2.24 6.86-.38L12 7.16l1.42-1.36c1.94-1.86 5.14-1.69 6.86.38 1.72 2.07 1.32 5.12-.83 7.12L12 20.2Z"></path>
+                    </svg>
+                    </button>
+                    <span class="like-count" aria-live="polite">0</span>
+                  </span></div></div>
             </article>
           </div>
         </section>
@@ -1217,7 +1544,21 @@
                     <span class="youtube-icon">▶</span>
                     Слушай в YouTube
                   </a>
-                </div>
+                
+                  <span class="like-wrap" data-like-song="gpLYgQaU1Mk">
+                    <button
+                      class="like-heart"
+                      type="button"
+                      aria-label="Харесай песента"
+                      aria-pressed="false"
+                      data-song-id="gpLYgQaU1Mk"
+                    >
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 20.2 4.55 13.3C2.4 11.3 2 8.25 3.72 6.18c1.72-2.07 4.92-2.24 6.86-.38L12 7.16l1.42-1.36c1.94-1.86 5.14-1.69 6.86.38 1.72 2.07 1.32 5.12-.83 7.12L12 20.2Z"></path>
+                    </svg>
+                    </button>
+                    <span class="like-count" aria-live="polite">0</span>
+                  </span></div>
               </div>
             </article>
 
@@ -1247,7 +1588,21 @@
                     <span class="youtube-icon">▶</span>
                     Слушай в YouTube
                   </a>
-                </div>
+                
+                  <span class="like-wrap" data-like-song="0065BaHiJgY">
+                    <button
+                      class="like-heart"
+                      type="button"
+                      aria-label="Харесай песента"
+                      aria-pressed="false"
+                      data-song-id="0065BaHiJgY"
+                    >
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 20.2 4.55 13.3C2.4 11.3 2 8.25 3.72 6.18c1.72-2.07 4.92-2.24 6.86-.38L12 7.16l1.42-1.36c1.94-1.86 5.14-1.69 6.86.38 1.72 2.07 1.32 5.12-.83 7.12L12 20.2Z"></path>
+                    </svg>
+                    </button>
+                    <span class="like-count" aria-live="polite">0</span>
+                  </span></div>
               </div>
             </article>
 
@@ -1277,7 +1632,21 @@
                     <span class="youtube-icon">▶</span>
                     Слушай в YouTube
                   </a>
-                </div>
+                
+                  <span class="like-wrap" data-like-song="03xM_dLyOwI">
+                    <button
+                      class="like-heart"
+                      type="button"
+                      aria-label="Харесай песента"
+                      aria-pressed="false"
+                      data-song-id="03xM_dLyOwI"
+                    >
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 20.2 4.55 13.3C2.4 11.3 2 8.25 3.72 6.18c1.72-2.07 4.92-2.24 6.86-.38L12 7.16l1.42-1.36c1.94-1.86 5.14-1.69 6.86.38 1.72 2.07 1.32 5.12-.83 7.12L12 20.2Z"></path>
+                    </svg>
+                    </button>
+                    <span class="like-count" aria-live="polite">0</span>
+                  </span></div>
               </div>
             </article>
           </div>
@@ -1317,7 +1686,21 @@
                     <span class="youtube-icon">▶</span>
                     Слушай в YouTube
                   </a>
-                </div>
+                
+                  <span class="like-wrap" data-like-song="zxYwyu0oaYE">
+                    <button
+                      class="like-heart"
+                      type="button"
+                      aria-label="Харесай песента"
+                      aria-pressed="false"
+                      data-song-id="zxYwyu0oaYE"
+                    >
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 20.2 4.55 13.3C2.4 11.3 2 8.25 3.72 6.18c1.72-2.07 4.92-2.24 6.86-.38L12 7.16l1.42-1.36c1.94-1.86 5.14-1.69 6.86.38 1.72 2.07 1.32 5.12-.83 7.12L12 20.2Z"></path>
+                    </svg>
+                    </button>
+                    <span class="like-count" aria-live="polite">0</span>
+                  </span></div>
               </div>
             </article>
           </div>
@@ -1370,6 +1753,148 @@
         container.appendChild(iframe);
       }, { once: true });
     });
+  </script>
+
+
+  <script>
+    /* ==========================================================
+       Харесвания на песни
+       Supabase + защитена Edge Function "song-like"
+       ========================================================== */
+    (() => {
+      const SUPABASE_URL = "https://cmiylzpmpwqbacjoqtkx.supabase.co";
+      const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNtaXlsenBtcHdxYmFjam9xdGt4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM5ODcwMDUsImV4cCI6MjA2OTU2MzAwNX0.FY2d1NSGTmw6SydxT_V0cKF7Kp2USbp91VdfO_eqZz8";
+      const LIKE_FUNCTION_URL = SUPABASE_URL + "/functions/v1/song-like";
+
+      const likeWidgets = [...document.querySelectorAll(".like-wrap[data-like-song]")];
+      if (!likeWidgets.length) return;
+
+      function getDeviceId() {
+        const key = "angeluzunov_device_id_v1";
+        let id = localStorage.getItem(key);
+        if (!id) {
+          if (window.crypto && crypto.randomUUID) {
+            id = crypto.randomUUID();
+          } else {
+            id = "dev-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2);
+          }
+          localStorage.setItem(key, id);
+        }
+        return id;
+      }
+
+      const deviceId = getDeviceId();
+
+      function localLikeKey(songId) {
+        return "angeluzunov_liked_" + songId;
+      }
+
+      function setLikedVisual(widget, liked) {
+        const btn = widget.querySelector(".like-heart");
+        if (!btn) return;
+        btn.classList.toggle("liked", liked);
+        btn.setAttribute("aria-pressed", liked ? "true" : "false");
+        btn.setAttribute("aria-label", liked ? "Песента е харесана" : "Харесай песента");
+      }
+
+      async function loadLikeCounts() {
+        try {
+          const response = await fetch(
+            SUPABASE_URL + "/rest/v1/song_likes?select=song_id,likes_count",
+            {
+              headers: {
+                apikey: SUPABASE_ANON_KEY,
+                Authorization: "Bearer " + SUPABASE_ANON_KEY
+              }
+            }
+          );
+
+          if (!response.ok) throw new Error("Like counts request failed");
+
+          const rows = await response.json();
+          const counts = new Map(rows.map(row => [String(row.song_id), Number(row.likes_count) || 0]));
+
+          likeWidgets.forEach(widget => {
+            const songId = widget.dataset.likeSong;
+            const countEl = widget.querySelector(".like-count");
+            if (countEl) countEl.textContent = String(counts.get(songId) || 0);
+
+            const locallyLiked = localStorage.getItem(localLikeKey(songId)) === "1";
+            if (locallyLiked) setLikedVisual(widget, true);
+          });
+        } catch (error) {
+          console.warn("Неуспешно зареждане на харесванията:", error);
+        }
+      }
+
+      async function submitLike(widget) {
+        const songId = widget.dataset.likeSong;
+        const button = widget.querySelector(".like-heart");
+        const countEl = widget.querySelector(".like-count");
+        if (!songId || !button || !countEl) return;
+
+        if (button.dataset.busy === "1") return;
+
+        /* Локална бърза защита; сървърът прави окончателната проверка. */
+        if (localStorage.getItem(localLikeKey(songId)) === "1") {
+          setLikedVisual(widget, true);
+          return;
+        }
+
+        button.dataset.busy = "1";
+        button.disabled = true;
+
+        try {
+          const response = await fetch(LIKE_FUNCTION_URL, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              apikey: SUPABASE_ANON_KEY,
+              Authorization: "Bearer " + SUPABASE_ANON_KEY
+            },
+            body: JSON.stringify({
+              song_id: songId,
+              device_id: deviceId
+            })
+          });
+
+          const data = await response.json().catch(() => ({}));
+
+          if (!response.ok && response.status !== 409) {
+            throw new Error(data.error || "Like request failed");
+          }
+
+          if (typeof data.likes_count === "number") {
+            countEl.textContent = String(data.likes_count);
+          }
+
+          /* При 200 или 409 устройството/IP вече е отчетено. */
+          localStorage.setItem(localLikeKey(songId), "1");
+          setLikedVisual(widget, true);
+
+          button.classList.remove("just-liked");
+          void button.offsetWidth;
+          button.classList.add("just-liked");
+        } catch (error) {
+          console.warn("Харесването не беше записано:", error);
+        } finally {
+          button.disabled = false;
+          button.dataset.busy = "0";
+        }
+      }
+
+      likeWidgets.forEach(widget => {
+        const button = widget.querySelector(".like-heart");
+        if (!button) return;
+        button.addEventListener("click", (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          submitLike(widget);
+        });
+      });
+
+      loadLikeCounts();
+    })();
   </script>
 
   <script>
