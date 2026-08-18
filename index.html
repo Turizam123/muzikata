@@ -586,8 +586,8 @@
       border-radius: 26px;
       overflow: hidden;
       background:
-        linear-gradient(145deg, rgba(142,36,48,.85), rgba(10,10,14,.35)),
-        url("images/otklyuchi-me.png") center/cover no-repeat;
+        linear-gradient(145deg, rgba(142,36,48,.58), rgba(10,10,14,.28)),
+        var(--video-thumb) center/cover no-repeat;
       box-shadow: 0 25px 70px rgba(0,0,0,.5);
     }
 
@@ -602,6 +602,100 @@
       line-height: .9;
       font-weight: 700;
       text-shadow: 0 3px 20px rgba(0,0,0,.8);
+    }
+
+    .video-preview-button {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      padding: 0;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    .video-preview-button::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at center, rgba(0,0,0,.04), rgba(0,0,0,.18) 62%, rgba(0,0,0,.32));
+      transition: background .25s ease;
+    }
+
+    .video-preview-button:hover::before,
+    .video-preview-button:focus-visible::before {
+      background:
+        radial-gradient(circle at center, rgba(0,0,0,0), rgba(0,0,0,.12) 62%, rgba(0,0,0,.28));
+    }
+
+    .video-play {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 68px;
+      height: 68px;
+      transform: translate(-50%, -50%);
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: #17130a;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      box-shadow:
+        0 16px 42px rgba(0,0,0,.38),
+        0 0 0 7px rgba(216,182,106,.12);
+      font-size: 1.65rem;
+      line-height: 1;
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .video-preview-button:hover .video-play,
+    .video-preview-button:focus-visible .video-play {
+      transform: translate(-50%, -50%) scale(1.08);
+      box-shadow:
+        0 20px 48px rgba(0,0,0,.46),
+        0 0 0 9px rgba(216,182,106,.16);
+    }
+
+    .inline-youtube-player {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      z-index: 4;
+      background: #000;
+    }
+
+    .music-card .video-preview-button {
+      z-index: 1;
+    }
+
+    .music-card .video-play {
+      top: 42%;
+      width: 58px;
+      height: 58px;
+      font-size: 1.35rem;
+    }
+
+    .music-card > small,
+    .music-card > h3,
+    .music-card > p {
+      position: relative;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .music-card.is-playing > small,
+    .music-card.is-playing > h3,
+    .music-card.is-playing > p,
+    .music-card.is-playing::before,
+    .music-card.is-playing::after {
+      opacity: 0;
+      pointer-events: none;
     }
 
     .release-meta {
@@ -712,7 +806,7 @@
       border: 1px solid var(--border);
       background:
         linear-gradient(to top, rgba(8,9,13,.9), transparent 55%),
-        url("https://turizam123.github.io/muzikata/images/angel-uzunov-about.png?v=13") center/cover no-repeat,
+        url("images/angel-uzunov-about.png?v=13") center/cover no-repeat,
         linear-gradient(145deg,#1c202a,#5b2631);
       box-shadow: var(--shadow);
     }
@@ -807,22 +901,18 @@
       height: 7px;
       border-radius: 50%;
       background: #d8b66a;
-      box-shadow: 0 0 0 0 rgba(216,182,106,.38);
       animation: livePulse 2.2s ease-out infinite;
+      will-change: transform, opacity;
     }
 
     @keyframes livePulse {
-      0% {
-        box-shadow: 0 0 0 0 rgba(216,182,106,.38);
+      0%, 100% {
+        transform: scale(1);
         opacity: 1;
       }
-      70% {
-        box-shadow: 0 0 0 7px rgba(216,182,106,0);
-        opacity: .82;
-      }
-      100% {
-        box-shadow: 0 0 0 0 rgba(216,182,106,0);
-        opacity: 1;
+      50% {
+        transform: scale(1.55);
+        opacity: .48;
       }
     }
 
@@ -1461,7 +1551,16 @@
     <section class="section" id="latest">
       <div class="container">
         <div class="release-card">
-          <div class="release-cover" aria-label="Обложка на песента Отключи ме"></div>
+          <div
+            class="release-cover youtube-inline"
+            style="--video-thumb:url('https://i.ytimg.com/vi/TAdokYOzz38/maxresdefault.jpg')"
+            data-video-id="TAdokYOzz38"
+            data-video-title="Отключи ме – Ангел Узунов"
+          >
+            <button class="video-preview-button" type="button" aria-label="Пусни видеото Отключи ме">
+              <span class="video-play" aria-hidden="true">▶</span>
+            </button>
+          </div>
 
           <div>
             <span class="eyebrow">Ново издание</span>
@@ -1497,19 +1596,46 @@
         </p>
 
         <div class="music-grid">
-          <article class="music-card" tabindex="0" style="--cover: linear-gradient(145deg, rgba(116,25,42,.92), rgba(8,9,13,.5)), url('images/ne-me-ostavyay.png') center/cover;">
+          <article
+            class="music-card youtube-inline"
+            tabindex="0"
+            data-video-id="lyGRz83xOSY"
+            data-video-title="Не ме оставяй – Ангел Узунов"
+            style="--cover: linear-gradient(145deg, rgba(116,25,42,.76), rgba(8,9,13,.48)), url('https://i.ytimg.com/vi/lyGRz83xOSY/maxresdefault.jpg') center/cover;"
+          >
+            <button class="video-preview-button" type="button" aria-label="Пусни видеото Не ме оставяй">
+              <span class="video-play" aria-hidden="true">▶</span>
+            </button>
             <small>Сингъл • 2026</small>
             <h3>Не ме оставяй</h3>
             <p>Емоционална поп-фолк балада за любовта, която е наш дом.</p>
           </article>
 
-          <article class="music-card" tabindex="0" style="--cover: linear-gradient(145deg, rgba(51,57,88,.92), rgba(8,9,13,.52)), url('images/izpoved.png') center/cover;">
+          <article
+            class="music-card youtube-inline"
+            tabindex="0"
+            data-video-id="03xM_dLyOwI"
+            data-video-title="На стария риф – Ангел Узунов"
+            style="--cover: linear-gradient(145deg, rgba(51,57,88,.76), rgba(8,9,13,.5)), url('https://i.ytimg.com/vi/03xM_dLyOwI/maxresdefault.jpg') center/cover;"
+          >
+            <button class="video-preview-button" type="button" aria-label="Пусни видеото На стария риф">
+              <span class="video-play" aria-hidden="true">▶</span>
+            </button>
             <small>Сингъл • 2026</small>
-            <h3>Изповед</h3>
-            <p>Лична история за прошката, грешките и пътя обратно към сърцето.</p>
+            <h3>На стария риф</h3>
+            <p>Романтична песен за една първа любов, раздяла и обещание край морето.</p>
           </article>
 
-          <article class="music-card" tabindex="0" style="--cover: linear-gradient(145deg, rgba(30,75,52,.9), rgba(8,9,13,.56)), url('images/eleno-mome-ubavo.png') center/cover;">
+          <article
+            class="music-card youtube-inline"
+            tabindex="0"
+            data-video-id="FmUQEAQ6bFs"
+            data-video-title="Елено, моме убаво – Ангел Узунов"
+            style="--cover: linear-gradient(145deg, rgba(30,75,52,.74), rgba(8,9,13,.54)), url('https://i.ytimg.com/vi/FmUQEAQ6bFs/maxresdefault.jpg') center/cover;"
+          >
+            <button class="video-preview-button" type="button" aria-label="Пусни видеото Елено, моме убаво">
+              <span class="video-play" aria-hidden="true">▶</span>
+            </button>
             <small>Фолклор • 2026</small>
             <h3>Елено, моме убаво</h3>
             <p>Авторска песен, вдъхновена от красотата и духа на Пирин.</p>
@@ -1576,15 +1702,17 @@
           Премиери, авторски песни, фолклорни проекти и специални музикални видеа.
         </p>
 
-        <div class="video-wrap">
-          <!-- Заменете VIDEO_ID с идентификатора на желания YouTube видеоклип -->
-          <iframe
-            src="https://www.youtube-nocookie.com/embed/03xM_dLyOwI?rel=0&modestbranding=1"
-            title="Ангел Узунов в YouTube"
-            loading="lazy"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen>
-          </iframe>
+        <div
+          class="video-wrap youtube-inline"
+          data-video-id="03xM_dLyOwI"
+          data-video-title="На стария риф – Ангел Узунов"
+          style="position:relative;background:
+            linear-gradient(145deg,rgba(8,9,13,.18),rgba(8,9,13,.24)),
+            url('https://i.ytimg.com/vi/03xM_dLyOwI/maxresdefault.jpg') center/cover no-repeat;"
+        >
+          <button class="video-preview-button" type="button" aria-label="Пусни видеото На стария риф">
+            <span class="video-play" aria-hidden="true">▶</span>
+          </button>
         </div>
       </div>
     </section>
@@ -1711,7 +1839,7 @@
     </div>
   </footer>
 
-  <script src="songs.js?v=4"></script>
+  <script src="songs.js?v=4" defer></script>
 
   <script>
     const header = document.getElementById("header");
@@ -2022,9 +2150,56 @@
       }
     }
 
-    loadYouTubeLiveData();
+    const aboutSection = document.getElementById("about");
+
+    if ("IntersectionObserver" in window && aboutSection) {
+      const youtubeLiveObserver = new IntersectionObserver((entries, observer) => {
+        if (entries.some(entry => entry.isIntersecting)) {
+          loadYouTubeLiveData();
+          observer.disconnect();
+        }
+      }, {
+        rootMargin: "450px 0px",
+        threshold: 0
+      });
+
+      youtubeLiveObserver.observe(aboutSection);
+    } else {
+      window.addEventListener("load", loadYouTubeLiveData, { once: true });
+    }
   </script>
   
+
+
+  <script>
+    /* Click-to-play YouTube: iframe се създава само след натискане. */
+    document.querySelectorAll(".youtube-inline").forEach((container) => {
+      const button = container.querySelector(".video-preview-button");
+      if (!button) return;
+
+      button.addEventListener("click", () => {
+        const videoId = container.dataset.videoId;
+        const videoTitle = container.dataset.videoTitle || "YouTube видео";
+        if (!videoId) return;
+
+        const iframe = document.createElement("iframe");
+        iframe.className = "inline-youtube-player";
+        iframe.src =
+          "https://www.youtube-nocookie.com/embed/" +
+          encodeURIComponent(videoId) +
+          "?autoplay=1&rel=0&modestbranding=1&playsinline=1";
+        iframe.title = videoTitle;
+        iframe.allow =
+          "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+        iframe.allowFullscreen = true;
+        iframe.referrerPolicy = "strict-origin-when-cross-origin";
+
+        container.classList.add("is-playing");
+        button.remove();
+        container.appendChild(iframe);
+      }, { once: true });
+    });
+  </script>
 
   <script>
     (() => {
@@ -2117,7 +2292,7 @@
     })();
   </script>
 
-<script src="angel-uzunov-ai-widget.js"></script>
+<script src="angel-uzunov-ai-widget.js" defer></script>
  
 </body>
 </html>
