@@ -569,6 +569,85 @@
       box-shadow: 0 12px 34px rgba(216,182,106,.24);
     }
 
+    .video-preview-button {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      padding: 0;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .video-preview-button::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at center, rgba(0,0,0,0), rgba(0,0,0,.14) 54%, rgba(0,0,0,.26));
+      transition: background .25s ease;
+    }
+
+    .video-preview-button:hover::before,
+    .video-preview-button:focus-visible::before {
+      background:
+        radial-gradient(circle at center, rgba(0,0,0,0), rgba(0,0,0,.08) 54%, rgba(0,0,0,.20));
+    }
+
+    .video-play {
+      position: absolute;
+      left: 50%;
+      top: 42%;
+      width: 62px;
+      height: 62px;
+      transform: translate(-50%, -50%);
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: #17130a;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      box-shadow:
+        0 16px 42px rgba(0,0,0,.38),
+        0 0 0 7px rgba(216,182,106,.12);
+      font-size: 1.45rem;
+      line-height: 1;
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .video-preview-button:hover .video-play,
+    .video-preview-button:focus-visible .video-play {
+      transform: translate(-50%, -50%) scale(1.08);
+      box-shadow:
+        0 20px 48px rgba(0,0,0,.46),
+        0 0 0 9px rgba(216,182,106,.16);
+    }
+
+    .inline-youtube-player {
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #000;
+    }
+
+    .song-card.youtube-inline .song-card-content {
+      pointer-events: none;
+    }
+
+    .song-card.youtube-inline .song-actions {
+      pointer-events: auto;
+    }
+
+    .song-card.is-playing .song-card-content,
+    .song-card.is-playing::before {
+      opacity: 0;
+      pointer-events: none;
+    }
+
     .youtube-icon {
       width: 25px;
       height: 18px;
@@ -749,7 +828,7 @@
           <button class="filter-btn" type="button" data-filter="folk">Народна музика</button>
           <button class="filter-btn" type="button" data-filter="popfolk">Поп-фолк / Кафана</button>
           <button class="filter-btn" type="button" data-filter="estrada">Естрада</button>
-          <button class="filter-btn" type="button" data-filter="other">Други</button>
+          <button class="filter-btn" type="button" data-filter="other">Албум – Луда любов 2026</button>
         </div>
 
         <label class="search-box">
@@ -769,14 +848,29 @@
           </div>
 
           <div class="songs-grid">
-            <article class="song-card" data-category="folk" data-title="Елено, моме убаво"
-              style="--cover: url('images/eleno-mome-ubavo.png') center/cover;">
+            <article
+              class="song-card youtube-inline"
+              data-category="folk"
+              data-title="Елено, моме убаво"
+              data-video-id="FmUQEAQ6bFs"
+              data-video-title="Елено, моме убаво – Ангел Узунов"
+              style="--cover: url('https://i.ytimg.com/vi/FmUQEAQ6bFs/maxresdefault.jpg') center/cover;"
+            >
+              <button class="video-preview-button" type="button" aria-label="Пусни видеото Елено, моме убаво">
+                <span class="video-play" aria-hidden="true">▶</span>
+              </button>
               <div class="song-card-content">
                 <span class="song-category">Фолклор • 2026</span>
                 <h3>Елено, моме убаво</h3>
                 <p>Авторска песен, вдъхновена от красотата, мелодиката и духа на Пирин.</p>
                 <div class="song-actions">
-                  <a class="youtube-btn" href="https://www.youtube.com/watch?v=FmUQEAQ6bFs" target="_blank" rel="noopener">
+                  <a
+                    class="youtube-btn"
+                    href="https://www.youtube.com/watch?v=FmUQEAQ6bFs"
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="Отвори песента Елено, моме убаво в YouTube"
+                  >
                     <span class="youtube-icon">▶</span>
                     Слушай в YouTube
                   </a>
@@ -784,11 +878,93 @@
               </div>
             </article>
 
-            <article class="song-card placeholder-card" data-category="folk" data-title="Нова народна песен">
+            <article
+              class="song-card youtube-inline"
+              data-category="folk"
+              data-title="Росна зора"
+              data-video-id="z6I9QPKcCcY"
+              data-video-title="Росна зора – Ангел Узунов"
+              style="--cover: url('https://i.ytimg.com/vi/z6I9QPKcCcY/maxresdefault.jpg') center/cover;"
+            >
+              <button class="video-preview-button" type="button" aria-label="Пусни видеото Росна зора">
+                <span class="video-play" aria-hidden="true">▶</span>
+              </button>
               <div class="song-card-content">
-                <span class="song-category">Предстоящо добавяне</span>
-                <h3>Следваща народна песен</h3>
-                <p>Тук ще добавим следващото заглавие, обложка и официален YouTube линк.</p>
+                <span class="song-category">Фолклор • 2026</span>
+                <h3>Росна зора</h3>
+                <p>Българска фолклорна песен с традиционно звучене и силен народен дух.</p>
+                <div class="song-actions">
+                  <a
+                    class="youtube-btn"
+                    href="https://www.youtube.com/watch?v=z6I9QPKcCcY"
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="Отвори песента Росна зора в YouTube"
+                  >
+                    <span class="youtube-icon">▶</span>
+                    Слушай в YouTube
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <article
+              class="song-card youtube-inline"
+              data-category="folk"
+              data-title="Коле и Рада"
+              data-video-id="o_coeUCQS3A"
+              data-video-title="Коле и Рада – Ангел Узунов"
+              style="--cover: url('https://i.ytimg.com/vi/o_coeUCQS3A/maxresdefault.jpg') center/cover;"
+            >
+              <button class="video-preview-button" type="button" aria-label="Пусни видеото Коле и Рада">
+                <span class="video-play" aria-hidden="true">▶</span>
+              </button>
+              <div class="song-card-content">
+                <span class="song-category">Фолклор • 2026</span>
+                <h3>Коле и Рада</h3>
+                <p>Авторска народна песен с фолклорен характер и жива българска мелодика.</p>
+                <div class="song-actions">
+                  <a
+                    class="youtube-btn"
+                    href="https://www.youtube.com/watch?v=o_coeUCQS3A"
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="Отвори песента Коле и Рада в YouTube"
+                  >
+                    <span class="youtube-icon">▶</span>
+                    Слушай в YouTube
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <article
+              class="song-card youtube-inline"
+              data-category="folk"
+              data-title="Край чешмата"
+              data-video-id="ykNUxumIQRo"
+              data-video-title="Край чешмата – Ангел Узунов"
+              style="--cover: url('https://i.ytimg.com/vi/ykNUxumIQRo/maxresdefault.jpg') center/cover;"
+            >
+              <button class="video-preview-button" type="button" aria-label="Пусни видеото Край чешмата">
+                <span class="video-play" aria-hidden="true">▶</span>
+              </button>
+              <div class="song-card-content">
+                <span class="song-category">Фолклор • 2026</span>
+                <h3>Край чешмата</h3>
+                <p>Фолклорна песен с атмосфера на стара българска история и традиционно звучене.</p>
+                <div class="song-actions">
+                  <a
+                    class="youtube-btn"
+                    href="https://www.youtube.com/watch?v=ykNUxumIQRo"
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="Отвори песента Край чешмата в YouTube"
+                  >
+                    <span class="youtube-icon">▶</span>
+                    Слушай в YouTube
+                  </a>
+                </div>
               </div>
             </article>
           </div>
@@ -801,14 +977,29 @@
           </div>
 
           <div class="songs-grid">
-            <article class="song-card" data-category="popfolk" data-title="Не ме оставяй"
-              style="--cover: url('images/ne-me-ostavyay.png') center/cover;">
+            <article
+              class="song-card youtube-inline"
+              data-category="popfolk"
+              data-title="Не ме оставяй"
+              data-video-id="lyGRz83xOSY"
+              data-video-title="Не ме оставяй – Ангел Узунов"
+              style="--cover: url('https://i.ytimg.com/vi/lyGRz83xOSY/maxresdefault.jpg') center/cover;"
+            >
+              <button class="video-preview-button" type="button" aria-label="Пусни видеото Не ме оставяй">
+                <span class="video-play" aria-hidden="true">▶</span>
+              </button>
               <div class="song-card-content">
                 <span class="song-category">Поп-фолк балада • 2026</span>
                 <h3>Не ме оставяй</h3>
                 <p>Емоционална песен за любовта, страха от раздялата и човека, който превръща света в дом.</p>
                 <div class="song-actions">
-                  <a class="youtube-btn" href="https://www.youtube.com/watch?v=lyGRz83xOSY" target="_blank" rel="noopener">
+                  <a
+                    class="youtube-btn"
+                    href="https://www.youtube.com/watch?v=lyGRz83xOSY"
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="Отвори песента Не ме оставяй в YouTube"
+                  >
                     <span class="youtube-icon">▶</span>
                     Слушай в YouTube
                   </a>
@@ -816,14 +1007,29 @@
               </div>
             </article>
 
-            <article class="song-card" data-category="popfolk" data-title="Изповед"
-              style="--cover: url('images/izpoved.png') center/cover;">
+            <article
+              class="song-card youtube-inline"
+              data-category="popfolk"
+              data-title="Кръв и огън"
+              data-video-id="mHK8o9dvHks"
+              data-video-title="Кръв и огън – Ангел Узунов"
+              style="--cover: url('https://i.ytimg.com/vi/mHK8o9dvHks/maxresdefault.jpg') center/cover;"
+            >
+              <button class="video-preview-button" type="button" aria-label="Пусни видеото Кръв и огън">
+                <span class="video-play" aria-hidden="true">▶</span>
+              </button>
               <div class="song-card-content">
-                <span class="song-category">Поп-фолк балада • 2026</span>
-                <h3>Изповед</h3>
-                <p>Лична история за прошката, грешките и пътя обратно към сърцето.</p>
+                <span class="song-category">Поп-фолк • 2026</span>
+                <h3>Кръв и огън</h3>
+                <p>Силна авторска песен за страстта, сблъсъка на чувства и любовта, която гори.</p>
                 <div class="song-actions">
-                  <a class="youtube-btn" href="https://www.youtube.com/watch?v=e2ULPL_ozfE" target="_blank" rel="noopener">
+                  <a
+                    class="youtube-btn"
+                    href="https://www.youtube.com/watch?v=mHK8o9dvHks"
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="Отвори песента Кръв и огън в YouTube"
+                  >
                     <span class="youtube-icon">▶</span>
                     Слушай в YouTube
                   </a>
@@ -831,11 +1037,123 @@
               </div>
             </article>
 
-            <article class="song-card placeholder-card" data-category="popfolk" data-title="Нова поп фолк песен">
+            <article
+              class="song-card youtube-inline"
+              data-category="popfolk"
+              data-title="Сърцето ми гори"
+              data-video-id="yOIzCb_R2hw"
+              data-video-title="Сърцето ми гори – Ангел Узунов"
+              style="--cover: url('https://i.ytimg.com/vi/yOIzCb_R2hw/maxresdefault.jpg') center/cover;"
+            >
+              <button class="video-preview-button" type="button" aria-label="Пусни видеото Сърцето ми гори">
+                <span class="video-play" aria-hidden="true">▶</span>
+              </button>
               <div class="song-card-content">
-                <span class="song-category">Предстоящо добавяне</span>
-                <h3>Следваща поп-фолк песен</h3>
-                <p>Тук ще добавим следващото заглавие, обложка и официален YouTube линк.</p>
+                <span class="song-category">Поп-фолк • 2026</span>
+                <h3>Сърцето ми гори</h3>
+                <p>Емоционална песен с драматично любовно послание и модерно балканско звучене.</p>
+                <div class="song-actions">
+                  <a
+                    class="youtube-btn"
+                    href="https://www.youtube.com/watch?v=yOIzCb_R2hw"
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="Отвори песента Сърцето ми гори в YouTube"
+                  >
+                    <span class="youtube-icon">▶</span>
+                    Слушай в YouTube
+                  </a>
+                </div>
+              </div>
+            </article>
+
+<article
+              class="song-card youtube-inline"
+              data-category="popfolk"
+              data-title="Ти си искрата"
+              data-video-id="Y8y7K8PmVwM"
+              data-video-title="Ти си искрата – Ангел Узунов"
+              style="--cover: url('https://i.ytimg.com/vi/Y8y7K8PmVwM/maxresdefault.jpg') center/cover;"
+            >
+              <button class="video-preview-button" type="button" aria-label="Пусни видеото Ти си искрата">
+                <span class="video-play" aria-hidden="true">▶</span>
+              </button>
+              <div class="song-card-content">
+                <span class="song-category">Поп-фолк • 2026</span>
+                <h3>Ти си искрата</h3>
+                <p>Мелодична авторска песен за човека, който запалва надеждата и дава смисъл на чувствата.</p>
+                <div class="song-actions">
+                  <a
+                    class="youtube-btn"
+                    href="https://www.youtube.com/watch?v=Y8y7K8PmVwM"
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="Отвори песента Ти си искрата в YouTube"
+                  >
+                    <span class="youtube-icon">▶</span>
+                    Слушай в YouTube
+                  </a>
+                </div>
+              </div>
+            </article>
+
+<article
+              class="song-card youtube-inline"
+              data-category="popfolk"
+              data-title="Без теб не мога"
+              data-video-id="MLCLaXaSneI"
+              data-video-title="Без теб не мога – Ангел Узунов"
+              style="--cover: url('https://i.ytimg.com/vi/MLCLaXaSneI/maxresdefault.jpg') center/cover;"
+            >
+              <button class="video-preview-button" type="button" aria-label="Пусни видеото Без теб не мога">
+                <span class="video-play" aria-hidden="true">▶</span>
+              </button>
+              <div class="song-card-content">
+                <span class="song-category">Поп-фолк • 2026</span>
+                <h3>Без теб не мога</h3>
+                <p>Романтична песен за липсата, привързаността и любовта, без която светът остава празен.</p>
+                <div class="song-actions">
+                  <a
+                    class="youtube-btn"
+                    href="https://www.youtube.com/watch?v=MLCLaXaSneI"
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="Отвори песента Без теб не мога в YouTube"
+                  >
+                    <span class="youtube-icon">▶</span>
+                    Слушай в YouTube
+                  </a>
+                </div>
+              </div>
+            </article>
+
+<article
+              class="song-card youtube-inline"
+              data-category="popfolk"
+              data-title="Отключи ме"
+              data-video-id="TAdokYOzz38"
+              data-video-title="Отключи ме – Ангел Узунов"
+              style="--cover: url('https://i.ytimg.com/vi/TAdokYOzz38/maxresdefault.jpg') center/cover;"
+            >
+              <button class="video-preview-button" type="button" aria-label="Пусни видеото Отключи ме">
+                <span class="video-play" aria-hidden="true">▶</span>
+              </button>
+              <div class="song-card-content">
+                <span class="song-category">Поп-фолк • 2026</span>
+                <h3>Отключи ме</h3>
+                <p>Песен за любовта, която не се печели със сила и не се доказва само с красиви обещания.</p>
+                <div class="song-actions">
+                  <a
+                    class="youtube-btn"
+                    href="https://www.youtube.com/watch?v=TAdokYOzz38"
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="Отвори песента Отключи ме в YouTube"
+                  >
+                    <span class="youtube-icon">▶</span>
+                    Слушай в YouTube
+                  </a>
+                </div>
               </div>
             </article>
           </div>
@@ -848,18 +1166,29 @@
           </div>
 
           <div class="songs-grid">
-            <article class="song-card" data-category="estrada" data-title="Песен за душата"
-              style="--cover: url('images/ChatGPT Image 3.08.2026 г., 19_54_23.png') center/cover;">
+            <article
+              class="song-card youtube-inline"
+              data-category="estrada"
+              data-title="Песен за душата"
+              data-video-id="gpLYgQaU1Mk"
+              data-video-title="Песен за душата – Ангел Узунов"
+              style="--cover: url('https://i.ytimg.com/vi/gpLYgQaU1Mk/maxresdefault.jpg') center/cover;"
+            >
+              <button class="video-preview-button" type="button" aria-label="Пусни видеото Песен за душата">
+                <span class="video-play" aria-hidden="true">▶</span>
+              </button>
               <div class="song-card-content">
                 <span class="song-category">Естрада • 2026</span>
                 <h3>Песен за душата</h3>
-                <p>
-                  „Песен за душата“ е музика, която не се слуша… а се усеща.
-                  Разказ за тихите моменти, болката, любовта, която ни променя,
-                  и надеждата, която никога не угасва.
-                </p>
+                <p>„Песен за душата“ е музика, която не се слуша… а се усеща. Разказ за болката, любовта и надеждата.</p>
                 <div class="song-actions">
-                  <a class="youtube-btn" href="https://www.youtube.com/watch?v=gpLYgQaU1Mk&list=PLXwYMOQjhvHd_EDw64dVnyfGzP37Q-dcO&index=2" target="_blank" rel="noopener">
+                  <a
+                    class="youtube-btn"
+                    href="https://www.youtube.com/watch?v=gpLYgQaU1Mk"
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="Отвори песента Песен за душата в YouTube"
+                  >
                     <span class="youtube-icon">▶</span>
                     Слушай в YouTube
                   </a>
@@ -867,11 +1196,63 @@
               </div>
             </article>
 
-            <article class="song-card placeholder-card" data-category="estrada" data-title="Следваща естрадна песен">
+            <article
+              class="song-card youtube-inline"
+              data-category="estrada"
+              data-title="Когато душите запеят"
+              data-video-id="0065BaHiJgY"
+              data-video-title="Когато душите запеят – Ангел Узунов"
+              style="--cover: url('https://i.ytimg.com/vi/0065BaHiJgY/maxresdefault.jpg') center/cover;"
+            >
+              <button class="video-preview-button" type="button" aria-label="Пусни видеото Когато душите запеят">
+                <span class="video-play" aria-hidden="true">▶</span>
+              </button>
               <div class="song-card-content">
-                <span class="song-category">Предстоящо добавяне</span>
-                <h3>Следваща естрадна песен</h3>
-                <p>Тук ще добавим следващото заглавие, обложка и официален YouTube линк.</p>
+                <span class="song-category">Естрада • 2026</span>
+                <h3>Когато душите запеят</h3>
+                <p>Авторска песен за силата на музиката, човешката близост и момента, в който душите говорят чрез песен.</p>
+                <div class="song-actions">
+                  <a
+                    class="youtube-btn"
+                    href="https://www.youtube.com/watch?v=0065BaHiJgY"
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="Отвори песента Когато душите запеят в YouTube"
+                  >
+                    <span class="youtube-icon">▶</span>
+                    Слушай в YouTube
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <article
+              class="song-card youtube-inline"
+              data-category="estrada"
+              data-title="На стария риф"
+              data-video-id="03xM_dLyOwI"
+              data-video-title="На стария риф – Ангел Узунов"
+              style="--cover: url('https://i.ytimg.com/vi/03xM_dLyOwI/maxresdefault.jpg') center/cover;"
+            >
+              <button class="video-preview-button" type="button" aria-label="Пусни видеото На стария риф">
+                <span class="video-play" aria-hidden="true">▶</span>
+              </button>
+              <div class="song-card-content">
+                <span class="song-category">Естрада • 2026</span>
+                <h3>На стария риф</h3>
+                <p>Романтична песен за първата любов, раздялата и обещанието да се върнеш там, където морето помни.</p>
+                <div class="song-actions">
+                  <a
+                    class="youtube-btn"
+                    href="https://www.youtube.com/watch?v=03xM_dLyOwI"
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="Отвори песента На стария риф в YouTube"
+                  >
+                    <span class="youtube-icon">▶</span>
+                    Слушай в YouTube
+                  </a>
+                </div>
               </div>
             </article>
           </div>
@@ -879,16 +1260,39 @@
 
         <section class="category-section" data-category-section="other" id="other">
           <div class="category-heading">
-            <h2>Други</h2>
-            <p>Специални проекти, музикални експерименти, трибюти, патриотични песни и заглавия извън основните категории.</p>
+            <h2>Албум – Луда любов 2026</h2>
+            <p>Албумът „Луда любов“ – музикален проект от 2026 г. Слушайте албума директно чрез официалното видео в YouTube.</p>
           </div>
 
           <div class="songs-grid">
-            <article class="song-card placeholder-card" data-category="other" data-title="Друг музикален проект">
+            <article
+              class="song-card youtube-inline"
+              data-category="other"
+              data-title="Албум Луда любов 2026"
+              data-video-id="zxYwyu0oaYE"
+              data-video-title="Албум – Луда любов 2026 – Ангел Узунов"
+              data-video-start="2702"
+              style="--cover: url('https://i.ytimg.com/vi/zxYwyu0oaYE/maxresdefault.jpg') center/cover;"
+            >
+              <button class="video-preview-button" type="button" aria-label="Пусни албума Луда любов 2026">
+                <span class="video-play" aria-hidden="true">▶</span>
+              </button>
               <div class="song-card-content">
-                <span class="song-category">Предстоящо добавяне</span>
-                <h3>Специален проект</h3>
-                <p>Тук ще добавим заглавие, описание, обложка и официален YouTube линк.</p>
+                <span class="song-category">Албум • 2026</span>
+                <h3>Луда любов</h3>
+                <p>Албум „Луда любов“ – 2026. Слушайте директно в страницата или отворете официалното видео в YouTube.</p>
+                <div class="song-actions">
+                  <a
+                    class="youtube-btn"
+                    href="https://www.youtube.com/watch?v=zxYwyu0oaYE&t=2702s"
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="Отвори албума Луда любов 2026 в YouTube"
+                  >
+                    <span class="youtube-icon">▶</span>
+                    Слушай в YouTube
+                  </a>
+                </div>
               </div>
             </article>
           </div>
@@ -907,6 +1311,41 @@
       <a href="https://angeluzunov.site/">Обратно към основния сайт</a>
     </div>
   </footer>
+
+
+  <script>
+    /* Click-to-play YouTube: iframe се зарежда само при натискане. */
+    document.querySelectorAll(".youtube-inline").forEach((container) => {
+      const button = container.querySelector(".video-preview-button");
+      if (!button) return;
+
+      button.addEventListener("click", () => {
+        const videoId = container.dataset.videoId;
+        const videoTitle = container.dataset.videoTitle || "YouTube видео";
+        if (!videoId) return;
+
+        const iframe = document.createElement("iframe");
+        iframe.className = "inline-youtube-player";
+        const start = Number.parseInt(container.dataset.videoStart || "0", 10);
+        const startParam = Number.isFinite(start) && start > 0 ? "&start=" + start : "";
+
+        iframe.src =
+          "https://www.youtube-nocookie.com/embed/" +
+          encodeURIComponent(videoId) +
+          "?autoplay=1&rel=0&modestbranding=1&playsinline=1" +
+          startParam;
+        iframe.title = videoTitle;
+        iframe.allow =
+          "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+        iframe.allowFullscreen = true;
+        iframe.referrerPolicy = "strict-origin-when-cross-origin";
+
+        container.classList.add("is-playing");
+        button.remove();
+        container.appendChild(iframe);
+      }, { once: true });
+    });
+  </script>
 
   <script>
     const filterButtons = document.querySelectorAll(".filter-btn");
