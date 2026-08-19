@@ -573,6 +573,197 @@
       .duel{grid-template-columns:1fr}
       .vs{margin:auto}
     }
+
+    /* Supabase Auth — FAN ZONE only */
+    .auth-nav{
+      min-height:42px;
+      padding:0 16px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:9px;
+      border:1px solid rgba(216,182,106,.34);
+      border-radius:999px;
+      background:rgba(216,182,106,.07);
+      color:var(--gold-light);
+      font-size:.76rem;
+      font-weight:800;
+      cursor:pointer;
+      transition:.22s ease;
+    }
+    .auth-nav:hover{
+      transform:translateY(-2px);
+      border-color:rgba(243,217,147,.62);
+      background:rgba(216,182,106,.12);
+    }
+    .auth-user{
+      display:none;
+      align-items:center;
+      gap:9px;
+      min-height:42px;
+      padding:4px 7px 4px 5px;
+      border:1px solid rgba(216,182,106,.30);
+      border-radius:999px;
+      background:rgba(255,255,255,.035);
+    }
+    .auth-user.show{display:flex}
+    .auth-avatar{
+      width:32px;
+      height:32px;
+      border-radius:50%;
+      object-fit:cover;
+      background:linear-gradient(135deg,var(--gold-light),var(--gold));
+      color:#17130a;
+      display:grid;
+      place-items:center;
+      font-size:.72rem;
+      font-weight:900;
+    }
+    .auth-user-name{
+      max-width:120px;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+      color:#eee9df;
+      font-size:.72rem;
+      font-weight:800;
+    }
+    .auth-logout{
+      width:30px;
+      height:30px;
+      border:0;
+      border-radius:50%;
+      background:rgba(255,255,255,.055);
+      color:var(--gold-light);
+      cursor:pointer;
+      font-size:.76rem;
+      font-weight:900;
+    }
+
+    .auth-backdrop{
+      position:fixed;
+      inset:0;
+      z-index:5000;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      background:rgba(3,4,7,.78);
+      backdrop-filter:blur(12px);
+    }
+    .auth-backdrop.show{display:flex}
+    .auth-modal{
+      width:min(100%,470px);
+      position:relative;
+      padding:30px;
+      border:1px solid rgba(216,182,106,.34);
+      border-radius:26px;
+      background:
+        radial-gradient(circle at 10% 0%,rgba(142,36,48,.20),transparent 40%),
+        #101219;
+      box-shadow:0 28px 90px rgba(0,0,0,.62);
+    }
+    .auth-close{
+      position:absolute;
+      top:15px;
+      right:15px;
+      width:36px;
+      height:36px;
+      border:1px solid var(--border);
+      border-radius:50%;
+      background:rgba(255,255,255,.04);
+      color:#fff;
+      cursor:pointer;
+      font-size:1rem;
+    }
+    .auth-modal .topic-badge{margin-bottom:14px}
+    .auth-modal h3{
+      font-family:"Cormorant Garamond",serif;
+      font-size:2.35rem;
+      line-height:1;
+      margin-bottom:10px;
+    }
+    .auth-modal-copy{
+      color:var(--muted);
+      font-size:.79rem;
+      line-height:1.65;
+      margin-bottom:22px;
+    }
+    .auth-google{
+      width:100%;
+      min-height:50px;
+      border:1px solid rgba(216,182,106,.34);
+      border-radius:999px;
+      background:linear-gradient(135deg,var(--gold-light),var(--gold));
+      color:#17130a;
+      cursor:pointer;
+      font-weight:900;
+      font-size:.82rem;
+    }
+    .auth-divider{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin:18px 0;
+      color:#777;
+      font-size:.68rem;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+    }
+    .auth-divider::before,.auth-divider::after{
+      content:"";
+      flex:1;
+      height:1px;
+      background:var(--border);
+    }
+    .auth-email-form{display:grid;gap:10px}
+    .auth-email-row{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:9px;
+    }
+    .auth-email-btn{
+      min-height:48px;
+      padding:0 17px;
+      border:1px solid rgba(216,182,106,.36);
+      border-radius:14px;
+      background:rgba(216,182,106,.08);
+      color:var(--gold-light);
+      cursor:pointer;
+      font-weight:900;
+      font-size:.75rem;
+    }
+    .auth-message{
+      display:none;
+      margin-top:14px;
+      padding:11px 13px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      color:#d7d1c6;
+      background:rgba(255,255,255,.03);
+      font-size:.72rem;
+      line-height:1.55;
+    }
+    .auth-message.show{display:block}
+    .auth-message.error{
+      border-color:rgba(180,65,65,.45);
+      color:#f0b8b8;
+    }
+    .auth-footnote{
+      margin-top:14px;
+      color:#777;
+      font-size:.64rem;
+      line-height:1.5;
+    }
+
+    @media(max-width:640px){
+      .nav-actions{flex-wrap:wrap}
+      .auth-nav{flex:1}
+      .auth-user{width:100%;justify-content:space-between}
+      .auth-email-row{grid-template-columns:1fr}
+      .auth-email-btn{width:100%}
+    }
+
   </style>
 </head>
 <body>
@@ -586,6 +777,14 @@
       <div class="nav-actions">
         <a class="nav-link" href="https://angeluzunov.site/">Основен сайт</a>
         <a class="nav-link" href="https://angeluzunov.site/angel-uzunov-songs-v4.html">Музикален каталог</a>
+
+        <button class="auth-nav" id="authLoginButton" type="button">Вход</button>
+
+        <div class="auth-user" id="authUserBox" aria-live="polite">
+          <div class="auth-avatar" id="authAvatar">F</div>
+          <span class="auth-user-name" id="authUserName">Фен</span>
+          <button class="auth-logout" id="authLogoutButton" type="button" title="Изход" aria-label="Изход">↗</button>
+        </div>
       </div>
     </div>
   </header>
@@ -880,12 +1079,241 @@
     </section>
   </main>
 
+
+  <div class="auth-backdrop" id="authBackdrop" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <div class="auth-modal">
+      <button class="auth-close" id="authCloseButton" type="button" aria-label="Затвори">✕</button>
+
+      <span class="topic-badge">ANGEL FAN ZONE</span>
+      <h3 id="authTitle">Влез и участвай</h3>
+      <p class="auth-modal-copy">
+        Входът е само за FAN ZONE. След успешен вход ще бъдеш върнат обратно на тази страница.
+      </p>
+
+      <button class="auth-google" id="googleLoginButton" type="button">
+        Вход с Google
+      </button>
+
+      <div class="auth-divider">или</div>
+
+      <form class="auth-email-form" id="emailLoginForm">
+        <label class="auth-modal-copy" for="authEmail" style="margin:0">
+          Вход с имейл чрез защитен Magic Link
+        </label>
+        <div class="auth-email-row">
+          <input class="field" id="authEmail" type="email" autocomplete="email" placeholder="Вашият имейл" required>
+          <button class="auth-email-btn" type="submit">Изпрати линк</button>
+        </div>
+      </form>
+
+      <div class="auth-message" id="authMessage"></div>
+      <p class="auth-footnote">
+        Няма отделна парола за FAN ZONE. Google или Magic Link удостоверяват акаунта чрез Supabase Auth.
+      </p>
+    </div>
+  </div>
+
   <footer>
     <div class="container footer-row">
       <p>© 2026 Ангел Узунов. Всички права запазени.</p>
       <a href="https://angeluzunov.site/">Обратно към основния сайт</a>
     </div>
   </footer>
+
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+    const FAN_SUPABASE_URL = "https://cmiylzpmpwqbacjoqtkx.supabase.co";
+    const FAN_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNtaXlsenBtcHdxYmFjam9xdGt4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM5ODcwMDUsImV4cCI6MjA2OTU2MzAwNX0.FY2d1NSGTmw6SydxT_V0cKF7Kp2USbp91VdfO_eqZz8";
+    const FAN_ZONE_REDIRECT = "https://angeluzunov.site/fan-zone.html";
+
+    const fanSupabase = createClient(FAN_SUPABASE_URL, FAN_SUPABASE_ANON_KEY, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true
+      }
+    });
+
+    /* Expose only the browser client/session helper for the next integration stage. */
+    window.fanSupabase = fanSupabase;
+    window.getFanZoneSession = async () => {
+      const { data } = await fanSupabase.auth.getSession();
+      return data.session || null;
+    };
+
+    const loginButton = document.getElementById("authLoginButton");
+    const userBox = document.getElementById("authUserBox");
+    const userName = document.getElementById("authUserName");
+    const avatar = document.getElementById("authAvatar");
+    const logoutButton = document.getElementById("authLogoutButton");
+    const backdrop = document.getElementById("authBackdrop");
+    const closeButton = document.getElementById("authCloseButton");
+    const googleButton = document.getElementById("googleLoginButton");
+    const emailForm = document.getElementById("emailLoginForm");
+    const emailInput = document.getElementById("authEmail");
+    const message = document.getElementById("authMessage");
+
+    function openAuth() {
+      backdrop.classList.add("show");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeAuth() {
+      backdrop.classList.remove("show");
+      document.body.style.overflow = "";
+    }
+
+    function showMessage(text, isError = false) {
+      message.textContent = text;
+      message.classList.toggle("error", isError);
+      message.classList.add("show");
+    }
+
+    function clearMessage() {
+      message.textContent = "";
+      message.classList.remove("show", "error");
+    }
+
+    function getDisplayName(user) {
+      return (
+        user?.user_metadata?.full_name ||
+        user?.user_metadata?.name ||
+        user?.user_metadata?.user_name ||
+        user?.email?.split("@")[0] ||
+        "Фен"
+      );
+    }
+
+    function initials(name = "Фен") {
+      const parts = String(name).trim().split(/\s+/).filter(Boolean);
+      return (parts[0]?.[0] || "F") + (parts[1]?.[0] || "");
+    }
+
+    function renderAuth(session) {
+      const user = session?.user || null;
+
+      if (!user) {
+        loginButton.style.display = "inline-flex";
+        userBox.classList.remove("show");
+        return;
+      }
+
+      const name = getDisplayName(user);
+      const picture =
+        user.user_metadata?.avatar_url ||
+        user.user_metadata?.picture ||
+        "";
+
+      userName.textContent = name;
+      userName.title = user.email || name;
+
+      if (picture) {
+        avatar.innerHTML = "";
+        avatar.style.backgroundImage = `url("${picture.replaceAll('"', '%22')}")`;
+        avatar.style.backgroundSize = "cover";
+        avatar.style.backgroundPosition = "center";
+      } else {
+        avatar.style.backgroundImage = "";
+        avatar.textContent = initials(name).toUpperCase();
+      }
+
+      loginButton.style.display = "none";
+      userBox.classList.add("show");
+      closeAuth();
+    }
+
+    loginButton.addEventListener("click", () => {
+      clearMessage();
+      openAuth();
+    });
+
+    closeButton.addEventListener("click", closeAuth);
+
+    backdrop.addEventListener("click", (event) => {
+      if (event.target === backdrop) closeAuth();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeAuth();
+    });
+
+    googleButton.addEventListener("click", async () => {
+      clearMessage();
+      googleButton.disabled = true;
+      googleButton.textContent = "Пренасочване към Google...";
+
+      const { error } = await fanSupabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: FAN_ZONE_REDIRECT
+        }
+      });
+
+      if (error) {
+        googleButton.disabled = false;
+        googleButton.textContent = "Вход с Google";
+        showMessage(error.message || "Google входът не можа да бъде стартиран.", true);
+      }
+    });
+
+    emailForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      clearMessage();
+
+      const email = emailInput.value.trim();
+      if (!email) return;
+
+      const submit = emailForm.querySelector('button[type="submit"]');
+      submit.disabled = true;
+      submit.textContent = "Изпращане...";
+
+      const { error } = await fanSupabase.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: FAN_ZONE_REDIRECT
+        }
+      });
+
+      submit.disabled = false;
+      submit.textContent = "Изпрати линк";
+
+      if (error) {
+        showMessage(error.message || "Неуспешно изпращане на Magic Link.", true);
+        return;
+      }
+
+      showMessage("Изпратихме защитен линк за вход. Провери имейла си и отвори линка от същото устройство.");
+      emailForm.reset();
+    });
+
+    logoutButton.addEventListener("click", async () => {
+      logoutButton.disabled = true;
+      const { error } = await fanSupabase.auth.signOut();
+      logoutButton.disabled = false;
+
+      if (error) {
+        openAuth();
+        showMessage(error.message || "Неуспешен изход.", true);
+      }
+    });
+
+    fanSupabase.auth.onAuthStateChange((_event, session) => {
+      renderAuth(session);
+    });
+
+    const { data: sessionData } = await fanSupabase.auth.getSession();
+    renderAuth(sessionData.session);
+
+    /* Clean OAuth URL fragments/query noise after Supabase has consumed the session. */
+    if (
+      window.location.hash.includes("access_token") ||
+      window.location.search.includes("code=") ||
+      window.location.search.includes("error_description=")
+    ) {
+      window.history.replaceState({}, document.title, FAN_ZONE_REDIRECT);
+    }
+  </script>
 
   <script>
     document.querySelectorAll(".reaction").forEach(b=>b.addEventListener("click",()=>{if(b.classList.contains("active"))return;let n=Number(b.dataset.count||0)+1;b.dataset.count=n;b.querySelector("span").textContent=n;b.classList.add("active")}));
