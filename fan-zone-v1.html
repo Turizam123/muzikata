@@ -266,6 +266,56 @@
       .story-card{grid-template-columns:1fr}.story-media{min-height:240px}.replies{margin-left:10px;padding-left:10px}
     }
 
+
+    /* V3 targeted layout refinements */
+    .discussion-layout{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start;margin-top:38px}
+    .discussion-post{min-width:0}
+    .discussion-video{position:sticky;top:108px;min-height:380px}
+    .topic-comments[open]{max-height:520px;overflow:hidden}
+    .topic-comment-list{max-height:330px;overflow-y:auto;padding-right:8px;margin-top:10px;scrollbar-width:thin;scrollbar-color:rgba(216,182,106,.45) rgba(255,255,255,.04)}
+    .topic-comment-list::-webkit-scrollbar{width:7px}
+    .topic-comment-list::-webkit-scrollbar-track{background:rgba(255,255,255,.04);border-radius:20px}
+    .topic-comment-list::-webkit-scrollbar-thumb{background:rgba(216,182,106,.45);border-radius:20px}
+
+    .monthly-song{grid-template-columns:42px 150px minmax(0,1fr);position:relative}
+    .monthly-vote-area{min-width:0}
+    .monthly-title{margin-bottom:10px}
+    .vote-meter{
+      position:relative;height:34px;width:100%;overflow:hidden;border-radius:999px;
+      border:1px solid rgba(216,182,106,.22);background:rgba(255,255,255,.045);
+      backdrop-filter:blur(7px);cursor:pointer;
+    }
+    .vote-meter-fill{
+      position:absolute;inset:0 auto 0 0;width:var(--vote-width,0%);
+      background:linear-gradient(90deg,rgba(142,36,48,.62),rgba(216,182,106,.70));
+      border-radius:inherit;transition:width .45s ease;
+    }
+    .vote-meter-label{
+      position:relative;z-index:2;height:100%;display:flex;align-items:center;justify-content:space-between;
+      padding:0 13px;font-size:.7rem;font-weight:800;color:#f7efe1;
+    }
+    .vote-meter-label strong{color:var(--gold-light);font-size:.8rem}
+    .vote-meter.voted{border-color:rgba(243,217,147,.55);box-shadow:0 0 0 2px rgba(216,182,106,.06)}
+
+    .story-layout{display:grid;grid-template-columns:.9fr 1.1fr;gap:28px;align-items:start;margin-top:34px}
+    .story-video{min-height:390px;position:sticky;top:108px}
+    .story-post{padding:32px;border:1px solid var(--border);border-radius:28px;background:rgba(255,255,255,.035);box-shadow:var(--shadow)}
+    .story-post h3{font-family:"Cormorant Garamond",serif;font-size:2.4rem;margin:10px 0 14px}
+    .story-post p{color:var(--muted);line-height:1.75}
+    .story-comments{margin-top:22px;padding-top:18px;border-top:1px solid var(--border)}
+    .story-comments summary{cursor:pointer;color:var(--gold-light);font-size:.78rem;font-weight:800;list-style:none}
+
+    @media(max-width:900px){
+      .discussion-layout,.story-layout{grid-template-columns:1fr}
+      .discussion-video,.story-video{position:relative;top:auto}
+    }
+    @media(max-width:760px){
+      .monthly-song{grid-template-columns:34px 96px minmax(0,1fr)}
+      .monthly-vote-area{grid-column:3}
+      .monthly-title{font-size:1.15rem}
+      .vote-meter{height:32px}
+    }
+
     footer{padding:30px 0;border-top:1px solid var(--border)}
     .footer-row{display:flex;justify-content:space-between;gap:16px;color:var(--muted);font-size:.74rem}
 
@@ -324,20 +374,25 @@
         <span class="eyebrow">Сега се обсъжда</span>
         <h2 class="section-title">Музиката продължава и след песента</h2>
         <p class="section-text">Актуална тема, музика и разговор с хората, които я слушат.</p>
-        <div class="spotlight">
-          <article class="topic-card">
+        <div class="discussion-layout">
+          <article class="topic-card discussion-post">
             <span class="topic-badge">Тема на седмицата</span>
             <h3>Трябва ли съвременният фолклор да запазва традиционното си звучене?</h3>
             <p>Фолклорът живее, когато се предава нататък. Но докъде може да стигне модерното звучене, без да изгубим корена?</p>
             <div class="reaction-row"><button class="reaction" data-count="126">❤ <span>126</span></button><button class="reaction" data-count="31">🤔 <span>31</span></button></div>
             <details class="topic-comments">
-              <summary>💬 Коментари · 3</summary>
-              <div class="compact-comment"><strong>Мария</strong><p>Новото звучене е хубаво, когато разпознаваш корена още от първите секунди.</p></div>
-              <div class="compact-comment"><strong>Иван</strong><p>Традицията трябва да остане водеща, а модерното да бъде само акцент.</p></div>
+              <summary>💬 Коментари · 5</summary>
+              <div class="topic-comment-list">
+                <div class="compact-comment"><strong>Мария</strong><p>Новото звучене е хубаво, когато разпознаваш корена още от първите секунди.</p></div>
+                <div class="compact-comment"><strong>Иван</strong><p>Традицията трябва да остане водеща, а модерното да бъде само акцент.</p></div>
+                <div class="compact-comment"><strong>Елена</strong><p>Харесвам съчетанието на автентични инструменти с по-съвременен аранжимент.</p></div>
+                <div class="compact-comment"><strong>Петър</strong><p>За мен най-важното е песента да носи българския дух, независимо от аранжимента.</p></div>
+                <div class="compact-comment"><strong>Ралица</strong><p>Новото поколение също трябва да открива фолклора по свой начин.</p></div>
+              </div>
               <form class="comment-form" style="margin-top:14px"><input class="field" placeholder="Име или псевдоним"><textarea class="field" style="min-height:90px" placeholder="Твоето мнение..."></textarea><button class="btn btn-primary" type="button">Коментирай</button></form>
             </details>
           </article>
-          <article class="video-card" id="firstLoveVideo"><div class="video-thumb"></div><button class="play-btn" type="button" aria-label="Пусни Първо либе">▶</button><div class="video-caption"><small>Фолклор • Първо либе</small><h3>Първо либе – Ангел Узунов</h3></div></article>
+          <article class="video-card discussion-video" id="firstLoveVideo"><div class="video-thumb"></div><button class="play-btn" type="button" aria-label="Пусни Първо либе">▶</button><div class="video-caption"><small>Фолклор • Първо либе</small><h3>Първо либе – Ангел Узунов</h3></div></article>
         </div>
       </div>
     </section>
@@ -348,11 +403,61 @@
         <h2 class="section-title">Вие избирате</h2>
         <p class="section-text">Пет песни. Един месец. Вашият вот определя подредбата – песента с най-много гласове автоматично застава на първо място.</p>
         <div class="monthly-list" id="monthlyList">
-          <article class="monthly-song" data-votes="18"><span class="monthly-rank">1</span><a class="monthly-thumb" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=uD3WqddlOVg" style="--thumb:url('https://i.ytimg.com/vi/uD3WqddlOVg/hqdefault.jpg')"></a><div class="monthly-title">Първо либе<small>Ангел Узунов</small></div><button class="vote-btn">Гласувай <span class="vote-count">18 гласа</span></button></article>
-          <article class="monthly-song" data-votes="14"><span class="monthly-rank">2</span><a class="monthly-thumb" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=FmUQEAQ6bFs" style="--thumb:url('https://i.ytimg.com/vi/FmUQEAQ6bFs/hqdefault.jpg')"></a><div class="monthly-title">Елено, моме убаво<small>Ангел Узунов</small></div><button class="vote-btn">Гласувай <span class="vote-count">14 гласа</span></button></article>
-          <article class="monthly-song" data-votes="11"><span class="monthly-rank">3</span><a class="monthly-thumb" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=z6I9QPKcCcY" style="--thumb:url('https://i.ytimg.com/vi/z6I9QPKcCcY/hqdefault.jpg')"></a><div class="monthly-title">Росна зора<small>Ангел Узунов</small></div><button class="vote-btn">Гласувай <span class="vote-count">11 гласа</span></button></article>
-          <article class="monthly-song" data-votes="8"><span class="monthly-rank">4</span><a class="monthly-thumb" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=MLCLaXaSneI" style="--thumb:url('https://i.ytimg.com/vi/MLCLaXaSneI/hqdefault.jpg')"></a><div class="monthly-title">Без теб не мога<small>Ангел Узунов</small></div><button class="vote-btn">Гласувай <span class="vote-count">8 гласа</span></button></article>
-          <article class="monthly-song" data-votes="5"><span class="monthly-rank">5</span><a class="monthly-thumb" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=yOIzCb_R2hw" style="--thumb:url('https://i.ytimg.com/vi/yOIzCb_R2hw/hqdefault.jpg')"></a><div class="monthly-title">Сърцето ми гори<small>Ангел Узунов</small></div><button class="vote-btn">Гласувай <span class="vote-count">5 гласа</span></button></article>
+          <article class="monthly-song" data-votes="19">
+            <span class="monthly-rank">1</span>
+            <a class="monthly-thumb" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=uD3WqddlOVg" style="--thumb:url('https://i.ytimg.com/vi/uD3WqddlOVg/hqdefault.jpg')"></a>
+            <div class="monthly-vote-area">
+              <div class="monthly-title">Първо либе<small>Ангел Узунов</small></div>
+              <button class="vote-meter" type="button" aria-label="Гласувай за Първо либе">
+                <span class="vote-meter-fill" style="--vote-width:100.0%"></span>
+                <span class="vote-meter-label"><span>Гласувай</span><strong class="vote-count">19</strong></span>
+              </button>
+            </div>
+          </article>
+          <article class="monthly-song" data-votes="14">
+            <span class="monthly-rank">2</span>
+            <a class="monthly-thumb" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=FmUQEAQ6bFs" style="--thumb:url('https://i.ytimg.com/vi/FmUQEAQ6bFs/hqdefault.jpg')"></a>
+            <div class="monthly-vote-area">
+              <div class="monthly-title">Елено, моме убаво<small>Ангел Узунов</small></div>
+              <button class="vote-meter" type="button" aria-label="Гласувай за Елено, моме убаво">
+                <span class="vote-meter-fill" style="--vote-width:73.7%"></span>
+                <span class="vote-meter-label"><span>Гласувай</span><strong class="vote-count">14</strong></span>
+              </button>
+            </div>
+          </article>
+          <article class="monthly-song" data-votes="11">
+            <span class="monthly-rank">3</span>
+            <a class="monthly-thumb" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=z6I9QPKcCcY" style="--thumb:url('https://i.ytimg.com/vi/z6I9QPKcCcY/hqdefault.jpg')"></a>
+            <div class="monthly-vote-area">
+              <div class="monthly-title">Росна зора<small>Ангел Узунов</small></div>
+              <button class="vote-meter" type="button" aria-label="Гласувай за Росна зора">
+                <span class="vote-meter-fill" style="--vote-width:57.9%"></span>
+                <span class="vote-meter-label"><span>Гласувай</span><strong class="vote-count">11</strong></span>
+              </button>
+            </div>
+          </article>
+          <article class="monthly-song" data-votes="8">
+            <span class="monthly-rank">4</span>
+            <a class="monthly-thumb" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=MLCLaXaSneI" style="--thumb:url('https://i.ytimg.com/vi/MLCLaXaSneI/hqdefault.jpg')"></a>
+            <div class="monthly-vote-area">
+              <div class="monthly-title">Без теб не мога<small>Ангел Узунов</small></div>
+              <button class="vote-meter" type="button" aria-label="Гласувай за Без теб не мога">
+                <span class="vote-meter-fill" style="--vote-width:42.1%"></span>
+                <span class="vote-meter-label"><span>Гласувай</span><strong class="vote-count">8</strong></span>
+              </button>
+            </div>
+          </article>
+          <article class="monthly-song" data-votes="5">
+            <span class="monthly-rank">5</span>
+            <a class="monthly-thumb" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=yOIzCb_R2hw" style="--thumb:url('https://i.ytimg.com/vi/yOIzCb_R2hw/hqdefault.jpg')"></a>
+            <div class="monthly-vote-area">
+              <div class="monthly-title">Сърцето ми гори<small>Ангел Узунов</small></div>
+              <button class="vote-meter" type="button" aria-label="Гласувай за Сърцето ми гори">
+                <span class="vote-meter-fill" style="--vote-width:26.3%"></span>
+                <span class="vote-meter-label"><span>Гласувай</span><strong class="vote-count">5</strong></span>
+              </button>
+            </div>
+          </article>
         </div>
       </div>
     </section>
@@ -362,10 +467,26 @@
         <span class="eyebrow">Музикални истории</span>
         <h2 class="section-title">Зад песента</h2>
         <p class="section-text">Текстове, клипове и историите зад музиката – с място за мнението на слушателите.</p>
-        <article class="story-card">
-          <div class="story-media"><a href="https://www.youtube.com/watch?v=uD3WqddlOVg" target="_blank" rel="noopener">▶</a></div>
-          <div class="story-content"><span class="topic-badge">Нова публикация</span><h3>„Първо либе“ – песен за първата обич</h3><p>Тук може да стои кратката история на песента, идеята зад текста и това, което искаш да споделиш с хората.</p><div class="lyrics-preview">Погледни ме, първо либе,<br>погледни ме ти...<br>Днеска съм ти близо, либе,<br>утре кой ли знай.</div><div class="story-actions"><a class="btn btn-primary" href="https://www.youtube.com/watch?v=uD3WqddlOVg" target="_blank" rel="noopener">Гледай в YouTube</a><button class="btn btn-outline" type="button">💬 Коментари · 7</button></div></div>
-        </article>
+        <div class="story-layout">
+          <article class="video-card story-video" id="storyVideo">
+            <div class="video-thumb"></div>
+            <button class="play-btn" type="button" aria-label="Пусни Първо либе">▶</button>
+            <div class="video-caption"><small>Музикална история</small><h3>Първо либе – Ангел Узунов</h3></div>
+          </article>
+          <article class="story-post">
+            <span class="topic-badge">Нова публикация</span>
+            <h3>„Първо либе“ – песен за първата обич</h3>
+            <p>Тук може да стои кратката история на песента, идеята зад текста и това, което искаш да споделиш с хората.</p>
+            <div class="lyrics-preview">Погледни ме, първо либе,<br>погледни ме ти...<br>Днеска съм ти близо, либе,<br>утре кой ли знай.</div>
+            <div class="story-actions"><a class="btn btn-primary" href="https://www.youtube.com/watch?v=uD3WqddlOVg" target="_blank" rel="noopener">Гледай в YouTube</a></div>
+            <details class="story-comments">
+              <summary>💬 Коментари · 7</summary>
+              <div class="compact-comment"><strong>Даниела</strong><p>Много топла песен. Историята и мелодията си пасват прекрасно.</p></div>
+              <div class="compact-comment"><strong>Георги</strong><p>Точно такива песни пазят спомена за първата обич.</p></div>
+              <form class="comment-form" style="margin-top:14px"><input class="field" placeholder="Име или псевдоним"><textarea class="field" style="min-height:90px" placeholder="Коментар към публикацията..."></textarea><button class="btn btn-primary" type="button">Коментирай</button></form>
+            </details>
+          </article>
+        </div>
       </div>
     </section>
 
@@ -401,8 +522,37 @@
     const video=document.getElementById("firstLoveVideo");
     video.querySelector(".play-btn").addEventListener("click",()=>{const f=document.createElement("iframe");f.className="inline-player";f.src="https://www.youtube-nocookie.com/embed/uD3WqddlOVg?autoplay=1&rel=0&modestbranding=1&playsinline=1";f.title="Първо либе – Ангел Узунов";f.allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";f.allowFullscreen=true;f.referrerPolicy="strict-origin-when-cross-origin";video.appendChild(f)},{once:true});
     const list=document.getElementById("monthlyList");
-    function sortSongs(){[...list.children].sort((a,b)=>+b.dataset.votes-+a.dataset.votes).forEach((x,i)=>{list.appendChild(x);x.querySelector(".monthly-rank").textContent=i+1})}
-    list.querySelectorAll(".vote-btn").forEach(b=>b.addEventListener("click",()=>{if(b.classList.contains("active"))return;const r=b.closest(".monthly-song");r.dataset.votes=+r.dataset.votes+1;b.classList.add("active");b.childNodes[0].nodeValue="Гласувано ";b.querySelector(".vote-count").textContent=r.dataset.votes+" гласа";sortSongs()}));
+    function refreshMeters(){
+      const rows=[...list.children];
+      const max=Math.max(...rows.map(x=>+x.dataset.votes),1);
+      rows.forEach(x=>{
+        const fill=x.querySelector(".vote-meter-fill");
+        const count=x.querySelector(".vote-count");
+        fill.style.setProperty("--vote-width",((+x.dataset.votes/max)*100)+"%");
+        count.textContent=x.dataset.votes;
+      });
+    }
+    function sortSongs(){
+      [...list.children].sort((a,b)=>+b.dataset.votes-+a.dataset.votes).forEach((x,i)=>{
+        list.appendChild(x);x.querySelector(".monthly-rank").textContent=i+1;
+      });
+      refreshMeters();
+    }
+    list.querySelectorAll(".vote-meter").forEach(b=>b.addEventListener("click",()=>{
+      if(b.classList.contains("voted"))return;
+      const r=b.closest(".monthly-song");r.dataset.votes=+r.dataset.votes+1;
+      b.classList.add("voted");b.querySelector(".vote-meter-label > span").textContent="Гласувано";
+      sortSongs();
+    }));
+    refreshMeters();
+
+    const storyVideo=document.getElementById("storyVideo");
+    storyVideo.querySelector(".play-btn").addEventListener("click",()=>{
+      const f=document.createElement("iframe");f.className="inline-player";
+      f.src="https://www.youtube-nocookie.com/embed/uD3WqddlOVg?autoplay=1&rel=0&modestbranding=1&playsinline=1";
+      f.title="Първо либе – Ангел Узунов";f.allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+      f.allowFullscreen=true;f.referrerPolicy="strict-origin-when-cross-origin";storyVideo.appendChild(f);
+    },{once:true});
     document.addEventListener("click",e=>{const t=e.target.closest(".reply-toggle");if(t){const c=t.closest(".fan-post,.reply");const f=c.querySelector(":scope > .reply-form");if(f)f.classList.toggle("open")}const v=e.target.closest(".vote-up,.vote-down");if(v&&!v.dataset.voted){const p=v.textContent.trim().split(" ");v.textContent=p[0]+" "+(+p[1]+1);v.dataset.voted="1"}});
     document.getElementById("fanPostForm").addEventListener("submit",e=>{e.preventDefault();const n=document.getElementById("fanName").value.trim(),t=document.getElementById("fanText").value.trim();if(!n||!t)return;const a=document.createElement("article");a.className="fan-post";const h=document.createElement("div");h.className="fan-post-head";h.innerHTML='<span class="fan-post-author"></span><span class="fan-post-time">току-що</span>';h.querySelector(".fan-post-author").textContent=n;const p=document.createElement("p");p.textContent=t;const x=document.createElement("div");x.className="thread-actions";x.innerHTML='<button class="thread-btn vote-up">👍 0</button><button class="thread-btn vote-down">👎 0</button><button class="thread-btn reply-toggle">💬 Отговори</button>';a.append(h,p,x);document.getElementById("fanFeed").prepend(a);e.target.reset()});
   </script>
