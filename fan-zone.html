@@ -1074,7 +1074,15 @@
           </article>
         </div>
 
-        <form class="fan-post-form panel" id="fanPostForm"><h3>Сподели с феновете</h3><input class="field" id="fanName" type="text" placeholder="Име или псевдоним" required><textarea class="field" id="fanText" maxlength="500" placeholder="Напиши кратка фен публикация..." required></textarea><button class="btn btn-primary" type="submit">Публикувай</button></form>
+        <form class="fan-post-form panel" id="fanPostForm">
+          <h3>Сподели с феновете</h3>
+          <p class="section-text" style="font-size:.76rem;margin-top:-8px">
+            Публикацията ще бъде записана с името на профила, с който си влязъл във FAN ZONE.
+          </p>
+          <textarea class="field" id="fanText" maxlength="500" placeholder="Напиши кратка фен публикация..." required></textarea>
+          <button class="btn btn-primary" id="fanPostSubmit" type="submit">Публикувай</button>
+          <div class="auth-message" id="fanPostMessage"></div>
+        </form>
       </div>
     </section>
   </main>
@@ -1158,6 +1166,7 @@
       backdrop.classList.add("show");
       document.body.style.overflow = "hidden";
     }
+    window.openFanZoneAuth = openAuth;
 
     function closeAuth() {
       backdrop.classList.remove("show");
@@ -1316,6 +1325,103 @@
   </script>
 
   <script>
+    const FAN_ZONE_API = "https://cmiylzpmpwqbacjoqtkx.supabase.co/functions/v1/fan-zone-api";
+
+    function getFanDeviceId(){
+      const key = "angel_fan_zone_device_id";
+      let id = localStorage.getItem(key);
+      if(!id){
+        id = (crypto.randomUUID ? crypto.randomUUID() : `fan-${Date.now()}-${Math.random().toString(36).slice(2)}`);
+        localStorage.setItem(key,id);
+      }
+      return id;
+    }
+
+    function showFanPostMessage(text, isError=false){
+      const box = document.getElementById("fanPostMessage");
+      if(!box) return;
+      box.textContent = text;
+      box.classList.toggle("error", isError);
+      box.classList.add("show");
+    }
+
+    function clearFanPostMessage(){
+      const box = document.getElementById("fanPostMessage");
+      if(!box) return;
+      box.textContent = "";
+      box.classList.remove("show","error");
+    }
+
+    async function fanApiPost(payload){
+      const session = await window.getFanZoneSession?.();
+      if(!session?.access_token){
+        const error = new Error("AUTH_REQUIRED");
+        error.code = "AUTH_REQUIRED";
+        throw error;
+      }
+
+      const response = await fetch(FAN_ZONE_API,{
+        method:"POST",
+        headers:{
+          "Authorization":`Bearer ${session.access_token}`,
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify(payload)
+      });
+
+      const data = await response.json().catch(()=>({}));
+      if(!response.ok || !data?.ok){
+        const error = new Error(data?.error || "Неуспешна заявка към FAN ZONE.");
+        error.status = response.status;
+        error.payload = data;
+        throw error;
+      }
+      return data;
+    }
+
+    function createRealFanPostCard(post){
+      const article = document.createElement("article");
+      article.className = "fan-post";
+      article.dataset.postId = post.id;
+
+      const head = document.createElement("div");
+      head.className = "fan-post-head";
+
+      const author = document.createElement("span");
+      author.className = "fan-post-author";
+      author.textContent = post.author_name || "Фен";
+
+      const time = document.createElement("span");
+      time.className = "fan-post-time";
+      time.textContent = "току-що";
+
+      head.append(author,time);
+
+      const p = document.createElement("p");
+      p.textContent = post.body || "";
+
+      const actions = document.createElement("div");
+      actions.className = "thread-actions";
+      actions.innerHTML = `
+        <button class="thread-btn vote-up" type="button" data-target-type="post" data-target-id="${post.id}">👍 0</button>
+        <button class="thread-btn vote-down" type="button" data-target-type="post" data-target-id="${post.id}">👎 0</button>
+      `;
+
+      const details = document.createElement("details");
+      details.className = "fan-post-comments";
+      details.innerHTML = `
+        <summary>💬 Коментари · 0</summary>
+        <div class="fan-post-comment-list"></div>
+        <form class="fan-post-comment-form" data-post-id="${post.id}">
+          <input class="field" placeholder="Коментирай публикацията...">
+          <button class="btn btn-outline small-btn" type="submit">Коментирай</button>
+        </form>
+      `;
+
+      article.append(head,p,actions,details);
+      return article;
+    }
+
     document.querySelectorAll(".reaction").forEach(b=>b.addEventListener("click",()=>{if(b.classList.contains("active"))return;let n=Number(b.dataset.count||0)+1;b.dataset.count=n;b.querySelector("span").textContent=n;b.classList.add("active")}));
     const video=document.getElementById("firstLoveVideo");
     video.querySelector(".play-btn").addEventListener("click",()=>{const f=document.createElement("iframe");f.className="inline-player";f.src="https://www.youtube-nocookie.com/embed/uD3WqddlOVg?autoplay=1&rel=0&modestbranding=1&playsinline=1";f.title="Първо либе – Ангел Узунов";f.allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";f.allowFullscreen=true;f.referrerPolicy="strict-origin-when-cross-origin";video.appendChild(f)},{once:true});
@@ -1382,9 +1488,52 @@
       });
     });
 
-    document.getElementById("fanPostForm").addEventListener("submit",e=>{e.preventDefault();const n=document.getElementById("fanName").value.trim(),t=document.getElementById("fanText").value.trim();if(!n||!t)return;const a=document.createElement("article");a.className="fan-post";const h=document.createElement("div");h.className="fan-post-head";h.innerHTML='<span class="fan-post-author"></span><span class="fan-post-time">току-що</span>';h.querySelector(".fan-post-author").textContent=n;const p=document.createElement("p");p.textContent=t;const x=document.createElement("div");x.className="thread-actions";x.innerHTML='<button class="thread-btn vote-up">👍 0</button><button class="thread-btn vote-down">👎 0</button><button class="thread-btn reply-toggle">💬 Отговори</button>';a.append(h,p,x);document.getElementById("fanFeed").prepend(a);e.target.reset()});
-  
-    document.querySelectorAll(".fan-post-comment-form").forEach(form=>{
+    document.getElementById("fanPostForm").addEventListener("submit", async (e)=>{
+      e.preventDefault();
+      clearFanPostMessage();
+
+      const text = document.getElementById("fanText").value.trim();
+      const submit = document.getElementById("fanPostSubmit");
+      if(!text) return;
+
+      const session = await window.getFanZoneSession?.();
+      if(!session?.access_token){
+        showFanPostMessage("За да публикуваш във FAN ZONE, първо влез с Google или имейл.", true);
+        window.openFanZoneAuth?.();
+        return;
+      }
+
+      submit.disabled = true;
+      submit.textContent = "Публикуване...";
+
+      try{
+        const data = await fanApiPost({
+          action:"create_fan_post",
+          body:text,
+          device_id:getFanDeviceId()
+        });
+
+        if(data?.post){
+          const card = createRealFanPostCard(data.post);
+          document.getElementById("fanFeed").prepend(card);
+        }
+
+        document.getElementById("fanText").value = "";
+        showFanPostMessage("Публикацията е записана успешно.");
+      }catch(error){
+        if(error?.code === "AUTH_REQUIRED" || error?.status === 401){
+          showFanPostMessage("Сесията е изтекла. Влез отново във FAN ZONE.", true);
+          window.openFanZoneAuth?.();
+        }else{
+          showFanPostMessage(error?.message || "Публикацията не можа да бъде записана.", true);
+        }
+      }finally{
+        submit.disabled = false;
+        submit.textContent = "Публикувай";
+      }
+    });
+
+document.querySelectorAll(".fan-post-comment-form").forEach(form=>{
       form.addEventListener("submit",e=>{
         e.preventDefault();
         const input=form.querySelector("input");
