@@ -7,6 +7,9 @@
   <meta name="description" content="ANGEL FAN ZONE – интерактивна фен зона с музика, класации, анкети, дискусии и коментари.">
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#09090d">
+  <link rel="icon" type="image/png" href="AU_favicon.png">
+  <link rel="shortcut icon" type="image/png" href="AU_favicon.png">
+  <link rel="apple-touch-icon" href="AU_favicon.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -460,8 +463,33 @@
       .fan-post-comments > .fan-post-comment-form{max-height:210px}
     }
 
-    footer{padding:30px 0;border-top:1px solid var(--border)}
-    .footer-row{display:flex;justify-content:space-between;gap:16px;color:var(--muted);font-size:.74rem}
+    footer{
+      padding:28px 0;
+      border-top:1px solid rgba(255,255,255,.07);
+      background:rgba(5,6,9,.76);
+    }
+    .footer-row{
+      min-height:26px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:24px;
+      color:rgba(220,216,208,.72);
+      font-size:.74rem;
+    }
+    .footer-row a{
+      color:rgba(220,216,208,.72);
+      transition:color .2s ease;
+    }
+    .footer-row a:hover{color:var(--gold-light)}
+    @media(max-width:640px){
+      .footer-row{
+        flex-direction:column;
+        justify-content:center;
+        text-align:center;
+        gap:10px;
+      }
+    }
 
     @media(max-width:900px){
       .spotlight,.dashboard,.community{grid-template-columns:1fr}
@@ -476,7 +504,6 @@
       .section{padding:72px 0}
       .duel{grid-template-columns:1fr}
       .vs{margin:auto}
-      .footer-row{flex-direction:column;text-align:center}
     }
   </style>
 </head>
@@ -787,7 +814,7 @@
 
   <footer>
     <div class="container footer-row">
-      <p>© 2026 Ангел Узунов. FAN ZONE – тестова визуална версия.</p>
+      <p>© 2026 Ангел Узунов. Всички права запазени.</p>
       <a href="https://angeluzunov.site/">Обратно към основния сайт</a>
     </div>
   </footer>
