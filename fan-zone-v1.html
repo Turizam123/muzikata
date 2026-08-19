@@ -350,6 +350,32 @@
     .fan-post-comment-form{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:12px}
     .fan-post-comment-form .field{padding:11px 13px}
 
+
+    /* V6: visible action buttons in ALL comment/reply sections */
+    .reply-form .btn,
+    .thread-comment-form .btn,
+    .fan-post-comment-form .btn,
+    .comment-form .btn,
+    .post-thread .btn,
+    .story-comments .btn,
+    .topic-comments .btn{
+      background:linear-gradient(135deg,var(--gold-light),var(--gold)) !important;
+      color:#17130a !important;
+      border:1px solid rgba(243,217,147,.72) !important;
+      box-shadow:0 8px 22px rgba(216,182,106,.16);
+      font-weight:900;
+    }
+    .reply-form .btn:hover,
+    .thread-comment-form .btn:hover,
+    .fan-post-comment-form .btn:hover,
+    .comment-form .btn:hover,
+    .post-thread .btn:hover,
+    .story-comments .btn:hover,
+    .topic-comments .btn:hover{
+      filter:brightness(1.08);
+      transform:translateY(-1px);
+    }
+
     footer{padding:30px 0;border-top:1px solid var(--border)}
     .footer-row{display:flex;justify-content:space-between;gap:16px;color:var(--muted);font-size:.74rem}
 
