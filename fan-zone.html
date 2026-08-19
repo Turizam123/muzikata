@@ -764,6 +764,20 @@
       .auth-email-btn{width:100%}
     }
 
+
+    /* V13: all writing actions require FAN ZONE authentication */
+    .auth-required-note{
+      display:none;
+      margin-top:8px;
+      color:var(--gold-light);
+      font-size:.68rem;
+      line-height:1.5;
+    }
+    .auth-required-note.show{display:block}
+    .write-auth-locked .field{
+      cursor:pointer;
+    }
+
   </style>
 </head>
 <body>
@@ -826,12 +840,12 @@
                     <div class="thread-comment-head"><span class="thread-comment-author">Мария</span><span class="thread-comment-time">преди 11 мин.</span></div>
                     <p>Новото звучене е хубаво, когато разпознаваш корена още от първите секунди.</p>
                     <div class="thread-comment-actions"><button class="thread-comment-btn vote-up">👍 8</button><button class="thread-comment-btn vote-down">👎 1</button><button class="thread-comment-btn reply-toggle">Отговори</button></div>
-                    <form class="thread-comment-form"><input class="field" placeholder="Отговори на Мария..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>
+                    <form class="thread-comment-form auth-write-form"><input class="field" placeholder="Отговори на Мария..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>
                     <div class="thread-comment">
                       <div class="thread-comment-head"><span class="thread-comment-author">Иван</span><span class="thread-comment-time">преди 7 мин.</span></div>
                       <p>Съгласен съм – модерното не трябва да заличава характера.</p>
                       <div class="thread-comment-actions"><button class="thread-comment-btn vote-up">👍 4</button><button class="thread-comment-btn vote-down">👎 0</button><button class="thread-comment-btn reply-toggle">Отговори</button></div>
-                      <form class="thread-comment-form"><input class="field" placeholder="Отговори на Иван..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>
+                      <form class="thread-comment-form auth-write-form"><input class="field" placeholder="Отговори на Иван..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>
                     </div>
                   </div>
 
@@ -839,35 +853,35 @@
                     <div class="thread-comment-head"><span class="thread-comment-author">Елена</span><span class="thread-comment-time">преди 18 мин.</span></div>
                     <p>Харесвам съчетанието на автентични инструменти с по-съвременен аранжимент.</p>
                     <div class="thread-comment-actions"><button class="thread-comment-btn vote-up">👍 6</button><button class="thread-comment-btn vote-down">👎 1</button><button class="thread-comment-btn reply-toggle">Отговори</button></div>
-                    <form class="thread-comment-form"><input class="field" placeholder="Отговори на Елена..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>
+                    <form class="thread-comment-form auth-write-form"><input class="field" placeholder="Отговори на Елена..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>
                   </div>
 
                   <div class="thread-comment">
                     <div class="thread-comment-head"><span class="thread-comment-author">Петър</span><span class="thread-comment-time">преди 25 мин.</span></div>
                     <p>За мен най-важното е песента да носи българския дух, независимо от аранжимента.</p>
                     <div class="thread-comment-actions"><button class="thread-comment-btn vote-up">👍 5</button><button class="thread-comment-btn vote-down">👎 2</button><button class="thread-comment-btn reply-toggle">Отговори</button></div>
-                    <form class="thread-comment-form"><input class="field" placeholder="Отговори на Петър..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>
+                    <form class="thread-comment-form auth-write-form"><input class="field" placeholder="Отговори на Петър..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>
                   </div>
 
                   <div class="thread-comment">
                     <div class="thread-comment-head"><span class="thread-comment-author">Ралица</span><span class="thread-comment-time">преди 31 мин.</span></div>
                     <p>Новото поколение също трябва да открива фолклора по свой начин.</p>
                     <div class="thread-comment-actions"><button class="thread-comment-btn vote-up">👍 7</button><button class="thread-comment-btn vote-down">👎 0</button><button class="thread-comment-btn reply-toggle">Отговори</button></div>
-                    <form class="thread-comment-form"><input class="field" placeholder="Отговори на Ралица..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>
+                    <form class="thread-comment-form auth-write-form"><input class="field" placeholder="Отговори на Ралица..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>
                   </div>
 
                   <div class="thread-comment">
                     <div class="thread-comment-head"><span class="thread-comment-author">Николай</span><span class="thread-comment-time">преди 36 мин.</span></div>
                     <p>И двете посоки имат място, стига песента да е направена с уважение към традицията.</p>
                     <div class="thread-comment-actions"><button class="thread-comment-btn vote-up">👍 3</button><button class="thread-comment-btn vote-down">👎 1</button><button class="thread-comment-btn reply-toggle">Отговори</button></div>
-                    <form class="thread-comment-form"><input class="field" placeholder="Отговори на Николай..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>
+                    <form class="thread-comment-form auth-write-form"><input class="field" placeholder="Отговори на Николай..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>
                   </div>
                 </div>
               </div>
-              <form class="comment-form" style="margin-top:14px">
-                <input class="field" placeholder="Име или псевдоним">
+              <form class="comment-form auth-write-form" style="margin-top:14px">
                 <textarea class="field" style="min-height:90px" placeholder="Твоето мнение..."></textarea>
-                <button class="btn btn-primary" type="button">Коментирай</button>
+                <button class="btn btn-primary" type="submit">Коментирай</button>
+                <div class="auth-required-note">За да коментираш, влез във FAN ZONE.</div>
               </form>
             </details>
           </article>
@@ -966,26 +980,26 @@
                     <div class="thread-comment-head"><span class="thread-comment-author">Даниела</span><span class="thread-comment-time">преди 16 мин.</span></div>
                     <p>Много топла песен. Историята и мелодията си пасват прекрасно.</p>
                     <div class="thread-comment-actions"><button class="thread-comment-btn vote-up">👍 9</button><button class="thread-comment-btn vote-down">👎 0</button><button class="thread-comment-btn reply-toggle">Отговори</button></div>
-                    <form class="thread-comment-form"><input class="field" placeholder="Отговори на Даниела..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>
+                    <form class="thread-comment-form auth-write-form"><input class="field" placeholder="Отговори на Даниела..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>
                     <div class="thread-comment">
                       <div class="thread-comment-head"><span class="thread-comment-author">Георги</span><span class="thread-comment-time">преди 12 мин.</span></div>
                       <p>Точно така – текстът носи усещане за спомен.</p>
                       <div class="thread-comment-actions"><button class="thread-comment-btn vote-up">👍 4</button><button class="thread-comment-btn vote-down">👎 0</button><button class="thread-comment-btn reply-toggle">Отговори</button></div>
-                      <form class="thread-comment-form"><input class="field" placeholder="Отговори на Георги..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>
+                      <form class="thread-comment-form auth-write-form"><input class="field" placeholder="Отговори на Георги..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>
                     </div>
                   </div>
                   <div class="thread-comment">
                     <div class="thread-comment-head"><span class="thread-comment-author">Силвия</span><span class="thread-comment-time">преди 29 мин.</span></div>
                     <p>Харесва ми, че историята зад песента е отделена от самия клип.</p>
                     <div class="thread-comment-actions"><button class="thread-comment-btn vote-up">👍 5</button><button class="thread-comment-btn vote-down">👎 1</button><button class="thread-comment-btn reply-toggle">Отговори</button></div>
-                    <form class="thread-comment-form"><input class="field" placeholder="Отговори на Силвия..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>
+                    <form class="thread-comment-form auth-write-form"><input class="field" placeholder="Отговори на Силвия..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>
                   </div>
                 </div>
               </div>
-              <form class="comment-form" style="margin-top:14px">
-                <input class="field" placeholder="Име или псевдоним">
+              <form class="comment-form auth-write-form" style="margin-top:14px">
                 <textarea class="field" style="min-height:90px" placeholder="Коментар към публикацията..."></textarea>
-                <button class="btn btn-primary" type="button">Коментирай</button>
+                <button class="btn btn-primary" type="submit">Коментирай</button>
+                <div class="auth-required-note">За да коментираш, влез във FAN ZONE.</div>
               </form>
             </details>
           </article>
@@ -1018,7 +1032,7 @@
                     <button class="thread-comment-btn vote-down">👎 0</button>
                     <button class="thread-comment-btn reply-toggle">Отговори</button>
                   </div>
-                  <form class="thread-comment-form">
+                  <form class="thread-comment-form auth-write-form">
                     <input class="field" placeholder="Отговори на Иван...">
                     <button class="btn btn-outline small-btn" type="submit">Изпрати</button>
                   </form>
@@ -1034,7 +1048,7 @@
                 </div>
               </div>
 
-              <form class="fan-post-comment-form">
+              <form class="fan-post-comment-form auth-write-form">
                 <input class="field" placeholder="Коментирай публикацията...">
                 <button class="btn btn-outline small-btn" type="submit">Коментирай</button>
               </form>
@@ -1059,14 +1073,14 @@
                     <button class="thread-comment-btn vote-down">👎 0</button>
                     <button class="thread-comment-btn reply-toggle">Отговори</button>
                   </div>
-                  <form class="thread-comment-form">
+                  <form class="thread-comment-form auth-write-form">
                     <input class="field" placeholder="Отговори на Ралица...">
                     <button class="btn btn-outline small-btn" type="submit">Изпрати</button>
                   </form>
                 </div>
               </div>
 
-              <form class="fan-post-comment-form">
+              <form class="fan-post-comment-form auth-write-form">
                 <input class="field" placeholder="Коментирай публикацията...">
                 <button class="btn btn-outline small-btn" type="submit">Коментирай</button>
               </form>
@@ -1081,6 +1095,7 @@
           </p>
           <textarea class="field" id="fanText" maxlength="500" placeholder="Напиши кратка фен публикация..." required></textarea>
           <button class="btn btn-primary" id="fanPostSubmit" type="submit">Публикувай</button>
+          <div class="auth-required-note">За да публикуваш, влез във FAN ZONE.</div>
           <div class="auth-message" id="fanPostMessage"></div>
         </form>
       </div>
@@ -1379,6 +1394,34 @@
       return data;
     }
 
+    async function requireFanAuthForWriting(form){
+      const session = await window.getFanZoneSession?.();
+      if(session?.access_token) return session;
+
+      form?.classList.add("write-auth-locked");
+      const note = form?.querySelector(".auth-required-note");
+      note?.classList.add("show");
+      window.openFanZoneAuth?.();
+      return null;
+    }
+
+    document.addEventListener("focusin", async (event)=>{
+      const field = event.target.closest(
+        ".auth-write-form .field, #fanPostForm .field"
+      );
+      if(!field) return;
+
+      const session = await window.getFanZoneSession?.();
+      if(session?.access_token) return;
+
+      event.preventDefault();
+      field.blur();
+      const form = field.closest("form");
+      const note = form?.querySelector(".auth-required-note");
+      note?.classList.add("show");
+      window.openFanZoneAuth?.();
+    });
+
     function createRealFanPostCard(post){
       const article = document.createElement("article");
       article.className = "fan-post";
@@ -1393,7 +1436,11 @@
 
       const time = document.createElement("span");
       time.className = "fan-post-time";
-      time.textContent = "току-що";
+      const created = post.created_at ? new Date(post.created_at) : new Date();
+      time.textContent = created.toLocaleString("bg-BG", {
+        day:"2-digit", month:"2-digit", year:"numeric",
+        hour:"2-digit", minute:"2-digit"
+      });
 
       head.append(author,time);
 
@@ -1403,16 +1450,17 @@
       const actions = document.createElement("div");
       actions.className = "thread-actions";
       actions.innerHTML = `
-        <button class="thread-btn vote-up" type="button" data-target-type="post" data-target-id="${post.id}">👍 0</button>
-        <button class="thread-btn vote-down" type="button" data-target-type="post" data-target-id="${post.id}">👎 0</button>
+        <button class="thread-btn vote-up" type="button" data-target-type="post" data-target-id="${post.id}">👍 ${Number(post.thumbs_up || 0)}</button>
+        <button class="thread-btn vote-down" type="button" data-target-type="post" data-target-id="${post.id}">👎 ${Number(post.thumbs_down || 0)}</button>
       `;
 
+      const comments = Array.isArray(post.comments) ? post.comments : [];
       const details = document.createElement("details");
       details.className = "fan-post-comments";
       details.innerHTML = `
-        <summary>💬 Коментари · 0</summary>
+        <summary>💬 Коментари · ${comments.length}</summary>
         <div class="fan-post-comment-list"></div>
-        <form class="fan-post-comment-form" data-post-id="${post.id}">
+        <form class="fan-post-comment-form auth-write-form" data-post-id="${post.id}">
           <input class="field" placeholder="Коментирай публикацията...">
           <button class="btn btn-outline small-btn" type="submit">Коментирай</button>
         </form>
@@ -1421,6 +1469,43 @@
       article.append(head,p,actions,details);
       return article;
     }
+
+    async function loadRealFanPosts(){
+      const feed = document.getElementById("fanFeed");
+      if(!feed) return;
+
+      try{
+        const response = await fetch(`${FAN_ZONE_API}?action=posts&section=fan&limit=50`, {
+          method:"GET",
+          headers:{ "Accept":"application/json" },
+          cache:"no-store"
+        });
+
+        const data = await response.json().catch(()=>({}));
+
+        if(!response.ok || !data?.ok){
+          throw new Error(data?.error || "Неуспешно зареждане на публикациите.");
+        }
+
+        feed.innerHTML = "";
+
+        if(!Array.isArray(data.posts) || data.posts.length === 0){
+          const empty = document.createElement("div");
+          empty.className = "panel";
+          empty.innerHTML = "<p class='section-text'>Все още няма публикувани фен постове. Бъди първият, който ще сподели мнение.</p>";
+          feed.appendChild(empty);
+          return;
+        }
+
+        data.posts.forEach(post=>{
+          feed.appendChild(createRealFanPostCard(post));
+        });
+      }catch(error){
+        console.error("FAN ZONE posts load error:", error);
+        showFanPostMessage("Публикациите са записани, но не успяхме да ги заредим от сървъра.", true);
+      }
+    }
+
 
     document.querySelectorAll(".reaction").forEach(b=>b.addEventListener("click",()=>{if(b.classList.contains("active"))return;let n=Number(b.dataset.count||0)+1;b.dataset.count=n;b.querySelector("span").textContent=n;b.classList.add("active")}));
     const video=document.getElementById("firstLoveVideo");
@@ -1480,7 +1565,7 @@
         const parent=form.closest(".thread-comment");
         const reply=document.createElement("div");
         reply.className="thread-comment";
-        reply.innerHTML='<div class="thread-comment-head"><span class="thread-comment-author">Фен</span><span class="thread-comment-time">току-що</span></div><p></p><div class="thread-comment-actions"><button class="thread-comment-btn vote-up">👍 0</button><button class="thread-comment-btn vote-down">👎 0</button><button class="thread-comment-btn reply-toggle">Отговори</button></div><form class="thread-comment-form"><input class="field" placeholder="Напиши отговор..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>';
+        reply.innerHTML='<div class="thread-comment-head"><span class="thread-comment-author">Фен</span><span class="thread-comment-time">току-що</span></div><p></p><div class="thread-comment-actions"><button class="thread-comment-btn vote-up">👍 0</button><button class="thread-comment-btn vote-down">👎 0</button><button class="thread-comment-btn reply-toggle">Отговори</button></div><form class="thread-comment-form auth-write-form"><input class="field" placeholder="Напиши отговор..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>';
         reply.querySelector("p").textContent=input.value.trim();
         parent.appendChild(reply);
         input.value="";
@@ -1513,13 +1598,9 @@
           device_id:getFanDeviceId()
         });
 
-        if(data?.post){
-          const card = createRealFanPostCard(data.post);
-          document.getElementById("fanFeed").prepend(card);
-        }
-
         document.getElementById("fanText").value = "";
         showFanPostMessage("Публикацията е записана успешно.");
+        await loadRealFanPosts();
       }catch(error){
         if(error?.code === "AUTH_REQUIRED" || error?.status === 401){
           showFanPostMessage("Сесията е изтекла. Влез отново във FAN ZONE.", true);
@@ -1543,13 +1624,27 @@ document.querySelectorAll(".fan-post-comment-form").forEach(form=>{
         const list=details.querySelector(".fan-post-comment-list");
         const c=document.createElement("div");
         c.className="thread-comment";
-        c.innerHTML='<div class="thread-comment-head"><span class="thread-comment-author">Фен</span><span class="thread-comment-time">току-що</span></div><p></p><div class="thread-comment-actions"><button class="thread-comment-btn vote-up">👍 0</button><button class="thread-comment-btn vote-down">👎 0</button><button class="thread-comment-btn reply-toggle">Отговори</button></div><form class="thread-comment-form"><input class="field" placeholder="Напиши отговор..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>';
+        c.innerHTML='<div class="thread-comment-head"><span class="thread-comment-author">Фен</span><span class="thread-comment-time">току-що</span></div><p></p><div class="thread-comment-actions"><button class="thread-comment-btn vote-up">👍 0</button><button class="thread-comment-btn vote-down">👎 0</button><button class="thread-comment-btn reply-toggle">Отговори</button></div><form class="thread-comment-form auth-write-form"><input class="field" placeholder="Напиши отговор..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>';
         c.querySelector("p").textContent=text;
         list.appendChild(c);
         input.value="";
         details.open=true;
       });
     });
+
+    document.querySelectorAll(".comment-form.auth-write-form").forEach(form=>{
+      form.addEventListener("submit", async (e)=>{
+        e.preventDefault();
+        const session = await requireFanAuthForWriting(form);
+        if(!session) return;
+
+        /* Real persistence for these comments will be connected in the next API step.
+           For now authenticated users may type, but no fake database confirmation is shown. */
+      });
+    });
+
+    loadRealFanPosts();
+
 </script>
 </body>
 </html>
