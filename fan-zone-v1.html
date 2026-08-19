@@ -316,6 +316,40 @@
       .vote-meter{height:32px}
     }
 
+
+    /* V4: unified threaded comments for every post */
+    .post-thread{margin-top:18px;padding-top:16px;border-top:1px solid var(--border)}
+    .post-thread summary{cursor:pointer;color:var(--gold-light);font-size:.78rem;font-weight:800;list-style:none}
+    .post-thread summary::-webkit-details-marker{display:none}
+    .thread-list{display:grid;gap:10px;margin-top:14px}
+    .thread-comment{padding:13px 14px;border-radius:14px;background:rgba(255,255,255,.025)}
+    .thread-comment .thread-comment{margin-top:10px;margin-left:18px;border-left:1px solid rgba(216,182,106,.22)}
+    .thread-comment-head{display:flex;justify-content:space-between;gap:12px;margin-bottom:6px}
+    .thread-comment-author{color:var(--gold-light);font-size:.76rem;font-weight:800}
+    .thread-comment-time{color:#888;font-size:.66rem}
+    .thread-comment p{color:#d9d3ca;line-height:1.6;font-size:.8rem}
+    .thread-comment-actions{display:flex;gap:12px;align-items:center;margin-top:9px;flex-wrap:wrap}
+    .thread-comment-btn{border:0;background:transparent;color:#cfc8bc;cursor:pointer;font-size:.72rem;font-weight:700}
+    .thread-comment-btn:hover{color:var(--gold-light)}
+    .thread-comment-form{display:none;grid-template-columns:1fr auto;gap:8px;margin-top:10px}
+    .thread-comment-form.open{display:grid}
+    .thread-comment-form .field{padding:10px 12px}
+    .topic-comment-list{max-height:360px}
+    .story-thread-scroll{max-height:360px;overflow-y:auto;padding-right:7px;scrollbar-width:thin;scrollbar-color:rgba(216,182,106,.45) rgba(255,255,255,.04)}
+    .story-thread-scroll::-webkit-scrollbar{width:7px}
+    .story-thread-scroll::-webkit-scrollbar-track{background:rgba(255,255,255,.04);border-radius:20px}
+    .story-thread-scroll::-webkit-scrollbar-thumb{background:rgba(216,182,106,.45);border-radius:20px}
+
+
+    /* V5: each fan post is its own card with its own comment area */
+    .fan-post{box-shadow:0 16px 42px rgba(0,0,0,.20)}
+    .fan-post-comments{margin-top:16px;padding-top:14px;border-top:1px solid var(--border)}
+    .fan-post-comments summary{cursor:pointer;color:var(--gold-light);font-size:.75rem;font-weight:800;list-style:none}
+    .fan-post-comments summary::-webkit-details-marker{display:none}
+    .fan-post-comment-list{display:grid;gap:10px;margin-top:12px}
+    .fan-post-comment-form{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:12px}
+    .fan-post-comment-form .field{padding:11px 13px}
+
     footer{padding:30px 0;border-top:1px solid var(--border)}
     .footer-row{display:flex;justify-content:space-between;gap:16px;color:var(--muted);font-size:.74rem}
 
@@ -380,16 +414,57 @@
             <h3>Трябва ли съвременният фолклор да запазва традиционното си звучене?</h3>
             <p>Фолклорът живее, когато се предава нататък. Но докъде може да стигне модерното звучене, без да изгубим корена?</p>
             <div class="reaction-row"><button class="reaction" data-count="126">❤ <span>126</span></button><button class="reaction" data-count="31">🤔 <span>31</span></button></div>
-            <details class="topic-comments">
+            <details class="topic-comments post-thread">
               <summary>💬 Коментари · 5</summary>
               <div class="topic-comment-list">
-                <div class="compact-comment"><strong>Мария</strong><p>Новото звучене е хубаво, когато разпознаваш корена още от първите секунди.</p></div>
-                <div class="compact-comment"><strong>Иван</strong><p>Традицията трябва да остане водеща, а модерното да бъде само акцент.</p></div>
-                <div class="compact-comment"><strong>Елена</strong><p>Харесвам съчетанието на автентични инструменти с по-съвременен аранжимент.</p></div>
-                <div class="compact-comment"><strong>Петър</strong><p>За мен най-важното е песента да носи българския дух, независимо от аранжимента.</p></div>
-                <div class="compact-comment"><strong>Ралица</strong><p>Новото поколение също трябва да открива фолклора по свой начин.</p></div>
+                <div class="thread-list">
+                  <div class="thread-comment">
+                    <div class="thread-comment-head"><span class="thread-comment-author">Мария</span><span class="thread-comment-time">преди 11 мин.</span></div>
+                    <p>Новото звучене е хубаво, когато разпознаваш корена още от първите секунди.</p>
+                    <div class="thread-comment-actions"><button class="thread-comment-btn vote-up">👍 8</button><button class="thread-comment-btn vote-down">👎 1</button><button class="thread-comment-btn reply-toggle">Отговори</button></div>
+                    <form class="thread-comment-form"><input class="field" placeholder="Отговори на Мария..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>
+                    <div class="thread-comment">
+                      <div class="thread-comment-head"><span class="thread-comment-author">Иван</span><span class="thread-comment-time">преди 7 мин.</span></div>
+                      <p>Съгласен съм – модерното не трябва да заличава характера.</p>
+                      <div class="thread-comment-actions"><button class="thread-comment-btn vote-up">👍 4</button><button class="thread-comment-btn vote-down">👎 0</button><button class="thread-comment-btn reply-toggle">Отговори</button></div>
+                      <form class="thread-comment-form"><input class="field" placeholder="Отговори на Иван..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>
+                    </div>
+                  </div>
+
+                  <div class="thread-comment">
+                    <div class="thread-comment-head"><span class="thread-comment-author">Елена</span><span class="thread-comment-time">преди 18 мин.</span></div>
+                    <p>Харесвам съчетанието на автентични инструменти с по-съвременен аранжимент.</p>
+                    <div class="thread-comment-actions"><button class="thread-comment-btn vote-up">👍 6</button><button class="thread-comment-btn vote-down">👎 1</button><button class="thread-comment-btn reply-toggle">Отговори</button></div>
+                    <form class="thread-comment-form"><input class="field" placeholder="Отговори на Елена..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>
+                  </div>
+
+                  <div class="thread-comment">
+                    <div class="thread-comment-head"><span class="thread-comment-author">Петър</span><span class="thread-comment-time">преди 25 мин.</span></div>
+                    <p>За мен най-важното е песента да носи българския дух, независимо от аранжимента.</p>
+                    <div class="thread-comment-actions"><button class="thread-comment-btn vote-up">👍 5</button><button class="thread-comment-btn vote-down">👎 2</button><button class="thread-comment-btn reply-toggle">Отговори</button></div>
+                    <form class="thread-comment-form"><input class="field" placeholder="Отговори на Петър..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>
+                  </div>
+
+                  <div class="thread-comment">
+                    <div class="thread-comment-head"><span class="thread-comment-author">Ралица</span><span class="thread-comment-time">преди 31 мин.</span></div>
+                    <p>Новото поколение също трябва да открива фолклора по свой начин.</p>
+                    <div class="thread-comment-actions"><button class="thread-comment-btn vote-up">👍 7</button><button class="thread-comment-btn vote-down">👎 0</button><button class="thread-comment-btn reply-toggle">Отговори</button></div>
+                    <form class="thread-comment-form"><input class="field" placeholder="Отговори на Ралица..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>
+                  </div>
+
+                  <div class="thread-comment">
+                    <div class="thread-comment-head"><span class="thread-comment-author">Николай</span><span class="thread-comment-time">преди 36 мин.</span></div>
+                    <p>И двете посоки имат място, стига песента да е направена с уважение към традицията.</p>
+                    <div class="thread-comment-actions"><button class="thread-comment-btn vote-up">👍 3</button><button class="thread-comment-btn vote-down">👎 1</button><button class="thread-comment-btn reply-toggle">Отговори</button></div>
+                    <form class="thread-comment-form"><input class="field" placeholder="Отговори на Николай..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>
+                  </div>
+                </div>
               </div>
-              <form class="comment-form" style="margin-top:14px"><input class="field" placeholder="Име или псевдоним"><textarea class="field" style="min-height:90px" placeholder="Твоето мнение..."></textarea><button class="btn btn-primary" type="button">Коментирай</button></form>
+              <form class="comment-form" style="margin-top:14px">
+                <input class="field" placeholder="Име или псевдоним">
+                <textarea class="field" style="min-height:90px" placeholder="Твоето мнение..."></textarea>
+                <button class="btn btn-primary" type="button">Коментирай</button>
+              </form>
             </details>
           </article>
           <article class="video-card discussion-video" id="firstLoveVideo"><div class="video-thumb"></div><button class="play-btn" type="button" aria-label="Пусни Първо либе">▶</button><div class="video-caption"><small>Фолклор • Първо либе</small><h3>Първо либе – Ангел Узунов</h3></div></article>
@@ -479,11 +554,35 @@
             <p>Тук може да стои кратката история на песента, идеята зад текста и това, което искаш да споделиш с хората.</p>
             <div class="lyrics-preview">Погледни ме, първо либе,<br>погледни ме ти...<br>Днеска съм ти близо, либе,<br>утре кой ли знай.</div>
             <div class="story-actions"><a class="btn btn-primary" href="https://www.youtube.com/watch?v=uD3WqddlOVg" target="_blank" rel="noopener">Гледай в YouTube</a></div>
-            <details class="story-comments">
+            <details class="story-comments post-thread">
               <summary>💬 Коментари · 7</summary>
-              <div class="compact-comment"><strong>Даниела</strong><p>Много топла песен. Историята и мелодията си пасват прекрасно.</p></div>
-              <div class="compact-comment"><strong>Георги</strong><p>Точно такива песни пазят спомена за първата обич.</p></div>
-              <form class="comment-form" style="margin-top:14px"><input class="field" placeholder="Име или псевдоним"><textarea class="field" style="min-height:90px" placeholder="Коментар към публикацията..."></textarea><button class="btn btn-primary" type="button">Коментирай</button></form>
+              <div class="story-thread-scroll">
+                <div class="thread-list">
+                  <div class="thread-comment">
+                    <div class="thread-comment-head"><span class="thread-comment-author">Даниела</span><span class="thread-comment-time">преди 16 мин.</span></div>
+                    <p>Много топла песен. Историята и мелодията си пасват прекрасно.</p>
+                    <div class="thread-comment-actions"><button class="thread-comment-btn vote-up">👍 9</button><button class="thread-comment-btn vote-down">👎 0</button><button class="thread-comment-btn reply-toggle">Отговори</button></div>
+                    <form class="thread-comment-form"><input class="field" placeholder="Отговори на Даниела..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>
+                    <div class="thread-comment">
+                      <div class="thread-comment-head"><span class="thread-comment-author">Георги</span><span class="thread-comment-time">преди 12 мин.</span></div>
+                      <p>Точно така – текстът носи усещане за спомен.</p>
+                      <div class="thread-comment-actions"><button class="thread-comment-btn vote-up">👍 4</button><button class="thread-comment-btn vote-down">👎 0</button><button class="thread-comment-btn reply-toggle">Отговори</button></div>
+                      <form class="thread-comment-form"><input class="field" placeholder="Отговори на Георги..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>
+                    </div>
+                  </div>
+                  <div class="thread-comment">
+                    <div class="thread-comment-head"><span class="thread-comment-author">Силвия</span><span class="thread-comment-time">преди 29 мин.</span></div>
+                    <p>Харесва ми, че историята зад песента е отделена от самия клип.</p>
+                    <div class="thread-comment-actions"><button class="thread-comment-btn vote-up">👍 5</button><button class="thread-comment-btn vote-down">👎 1</button><button class="thread-comment-btn reply-toggle">Отговори</button></div>
+                    <form class="thread-comment-form"><input class="field" placeholder="Отговори на Силвия..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>
+                  </div>
+                </div>
+              </div>
+              <form class="comment-form" style="margin-top:14px">
+                <input class="field" placeholder="Име или псевдоним">
+                <textarea class="field" style="min-height:90px" placeholder="Коментар към публикацията..."></textarea>
+                <button class="btn btn-primary" type="button">Коментирай</button>
+              </form>
             </details>
           </article>
         </div>
@@ -495,17 +594,83 @@
         <span class="eyebrow">Гласът на феновете</span>
         <h2 class="section-title">Фен публикации</h2>
         <p class="section-text">Кратки публикации от феновете, разговори и отговори – без регистрация.</p>
-        <form class="fan-post-form panel" id="fanPostForm"><h3>Сподели с феновете</h3><input class="field" id="fanName" type="text" placeholder="Име или псевдоним" required><textarea class="field" id="fanText" maxlength="500" placeholder="Напиши кратка фен публикация..." required></textarea><button class="btn btn-primary" type="submit">Публикувай</button></form>
         <div class="fan-feed" id="fanFeed">
           <article class="fan-post">
             <div class="fan-post-head"><span class="fan-post-author">Мария</span><span class="fan-post-time">преди 20 мин.</span></div>
             <p>„Първо либе“ ме върна към музиката, която слушахме като деца. Искам повече песни с такова народно звучене.</p>
-            <div class="thread-actions"><button class="thread-btn vote-up">👍 18</button><button class="thread-btn vote-down">👎 1</button><button class="thread-btn reply-toggle">💬 Отговори</button></div>
-            <form class="reply-form"><input class="field" placeholder="Напиши отговор..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>
-            <div class="replies"><div class="reply"><div class="fan-post-head"><span class="fan-post-author">Иван</span><span class="fan-post-time">преди 14 мин.</span></div><p>Напълно съм съгласен. Това звучене има характер.</p><div class="thread-actions"><button class="thread-btn vote-up">👍 6</button><button class="thread-btn vote-down">👎 0</button><button class="thread-btn reply-toggle">Отговори</button></div><form class="reply-form"><input class="field" placeholder="Отговори на Иван..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form><div class="replies"><div class="reply"><div class="fan-post-head"><span class="fan-post-author">Мария</span><span class="fan-post-time">преди 9 мин.</span></div><p>Точно това имах предвид – модерно, но да си личи откъде идва.</p><div class="thread-actions"><button class="thread-btn vote-up">👍 3</button><button class="thread-btn vote-down">👎 0</button></div></div></div></div></div>
+            <div class="thread-actions">
+              <button class="thread-btn vote-up">👍 18</button>
+              <button class="thread-btn vote-down">👎 1</button>
+            </div>
+
+            <details class="fan-post-comments" open>
+              <summary>💬 Коментари · 2</summary>
+              <div class="fan-post-comment-list">
+                <div class="thread-comment">
+                  <div class="thread-comment-head"><span class="thread-comment-author">Иван</span><span class="thread-comment-time">преди 14 мин.</span></div>
+                  <p>Напълно съм съгласен. Това звучене има характер.</p>
+                  <div class="thread-comment-actions">
+                    <button class="thread-comment-btn vote-up">👍 6</button>
+                    <button class="thread-comment-btn vote-down">👎 0</button>
+                    <button class="thread-comment-btn reply-toggle">Отговори</button>
+                  </div>
+                  <form class="thread-comment-form">
+                    <input class="field" placeholder="Отговори на Иван...">
+                    <button class="btn btn-outline small-btn" type="submit">Изпрати</button>
+                  </form>
+
+                  <div class="thread-comment">
+                    <div class="thread-comment-head"><span class="thread-comment-author">Мария</span><span class="thread-comment-time">преди 9 мин.</span></div>
+                    <p>Точно това имах предвид – модерно, но да си личи откъде идва.</p>
+                    <div class="thread-comment-actions">
+                      <button class="thread-comment-btn vote-up">👍 3</button>
+                      <button class="thread-comment-btn vote-down">👎 0</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <form class="fan-post-comment-form">
+                <input class="field" placeholder="Коментирай публикацията...">
+                <button class="btn btn-outline small-btn" type="submit">Коментирай</button>
+              </form>
+            </details>
           </article>
-          <article class="fan-post"><div class="fan-post-head"><span class="fan-post-author">Николай</span><span class="fan-post-time">преди 43 мин.</span></div><p>За следващата месечна класация бих искал да има повече балади. Интересно е да видим как ще гласуват хората.</p><div class="thread-actions"><button class="thread-btn vote-up">👍 9</button><button class="thread-btn vote-down">👎 2</button><button class="thread-btn reply-toggle">💬 Отговори</button></div><form class="reply-form"><input class="field" placeholder="Напиши отговор..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form></article>
+          <article class="fan-post">
+            <div class="fan-post-head"><span class="fan-post-author">Николай</span><span class="fan-post-time">преди 43 мин.</span></div>
+            <p>За следващата месечна класация бих искал да има повече балади. Интересно е да видим как ще гласуват хората.</p>
+            <div class="thread-actions">
+              <button class="thread-btn vote-up">👍 9</button>
+              <button class="thread-btn vote-down">👎 2</button>
+            </div>
+
+            <details class="fan-post-comments">
+              <summary>💬 Коментари · 1</summary>
+              <div class="fan-post-comment-list">
+                <div class="thread-comment">
+                  <div class="thread-comment-head"><span class="thread-comment-author">Ралица</span><span class="thread-comment-time">преди 31 мин.</span></div>
+                  <p>Да, една отделна балада в класацията би дала хубаво разнообразие.</p>
+                  <div class="thread-comment-actions">
+                    <button class="thread-comment-btn vote-up">👍 4</button>
+                    <button class="thread-comment-btn vote-down">👎 0</button>
+                    <button class="thread-comment-btn reply-toggle">Отговори</button>
+                  </div>
+                  <form class="thread-comment-form">
+                    <input class="field" placeholder="Отговори на Ралица...">
+                    <button class="btn btn-outline small-btn" type="submit">Изпрати</button>
+                  </form>
+                </div>
+              </div>
+
+              <form class="fan-post-comment-form">
+                <input class="field" placeholder="Коментирай публикацията...">
+                <button class="btn btn-outline small-btn" type="submit">Коментирай</button>
+              </form>
+            </details>
+          </article>
         </div>
+
+        <form class="fan-post-form panel" id="fanPostForm"><h3>Сподели с феновете</h3><input class="field" id="fanName" type="text" placeholder="Име или псевдоним" required><textarea class="field" id="fanText" maxlength="500" placeholder="Напиши кратка фен публикация..." required></textarea><button class="btn btn-primary" type="submit">Публикувай</button></form>
       </div>
     </section>
   </main>
@@ -553,8 +718,56 @@
       f.title="Първо либе – Ангел Узунов";f.allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
       f.allowFullscreen=true;f.referrerPolicy="strict-origin-when-cross-origin";storyVideo.appendChild(f);
     },{once:true});
-    document.addEventListener("click",e=>{const t=e.target.closest(".reply-toggle");if(t){const c=t.closest(".fan-post,.reply");const f=c.querySelector(":scope > .reply-form");if(f)f.classList.toggle("open")}const v=e.target.closest(".vote-up,.vote-down");if(v&&!v.dataset.voted){const p=v.textContent.trim().split(" ");v.textContent=p[0]+" "+(+p[1]+1);v.dataset.voted="1"}});
+    document.addEventListener("click",e=>{
+      const t=e.target.closest(".reply-toggle");
+      if(t){
+        const c=t.closest(".fan-post,.reply,.thread-comment");
+        const f=c?.querySelector(":scope > .reply-form, :scope > .thread-comment-form");
+        if(f)f.classList.toggle("open");
+      }
+      const v=e.target.closest(".vote-up,.vote-down");
+      if(v&&!v.dataset.voted){
+        const p=v.textContent.trim().split(" ");
+        v.textContent=p[0]+" "+(+p[1]+1);
+        v.dataset.voted="1";
+      }
+    });
+
+    document.querySelectorAll(".thread-comment-form").forEach(form=>{
+      form.addEventListener("submit",e=>{
+        e.preventDefault();
+        const input=form.querySelector("input");
+        if(!input?.value.trim())return;
+        const parent=form.closest(".thread-comment");
+        const reply=document.createElement("div");
+        reply.className="thread-comment";
+        reply.innerHTML='<div class="thread-comment-head"><span class="thread-comment-author">Фен</span><span class="thread-comment-time">току-що</span></div><p></p><div class="thread-comment-actions"><button class="thread-comment-btn vote-up">👍 0</button><button class="thread-comment-btn vote-down">👎 0</button><button class="thread-comment-btn reply-toggle">Отговори</button></div><form class="thread-comment-form"><input class="field" placeholder="Напиши отговор..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>';
+        reply.querySelector("p").textContent=input.value.trim();
+        parent.appendChild(reply);
+        input.value="";
+        form.classList.remove("open");
+      });
+    });
+
     document.getElementById("fanPostForm").addEventListener("submit",e=>{e.preventDefault();const n=document.getElementById("fanName").value.trim(),t=document.getElementById("fanText").value.trim();if(!n||!t)return;const a=document.createElement("article");a.className="fan-post";const h=document.createElement("div");h.className="fan-post-head";h.innerHTML='<span class="fan-post-author"></span><span class="fan-post-time">току-що</span>';h.querySelector(".fan-post-author").textContent=n;const p=document.createElement("p");p.textContent=t;const x=document.createElement("div");x.className="thread-actions";x.innerHTML='<button class="thread-btn vote-up">👍 0</button><button class="thread-btn vote-down">👎 0</button><button class="thread-btn reply-toggle">💬 Отговори</button>';a.append(h,p,x);document.getElementById("fanFeed").prepend(a);e.target.reset()});
-  </script>
+  
+    document.querySelectorAll(".fan-post-comment-form").forEach(form=>{
+      form.addEventListener("submit",e=>{
+        e.preventDefault();
+        const input=form.querySelector("input");
+        const text=input?.value.trim();
+        if(!text)return;
+        const details=form.closest(".fan-post-comments");
+        const list=details.querySelector(".fan-post-comment-list");
+        const c=document.createElement("div");
+        c.className="thread-comment";
+        c.innerHTML='<div class="thread-comment-head"><span class="thread-comment-author">Фен</span><span class="thread-comment-time">току-що</span></div><p></p><div class="thread-comment-actions"><button class="thread-comment-btn vote-up">👍 0</button><button class="thread-comment-btn vote-down">👎 0</button><button class="thread-comment-btn reply-toggle">Отговори</button></div><form class="thread-comment-form"><input class="field" placeholder="Напиши отговор..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>';
+        c.querySelector("p").textContent=text;
+        list.appendChild(c);
+        input.value="";
+        details.open=true;
+      });
+    });
+</script>
 </body>
 </html>
