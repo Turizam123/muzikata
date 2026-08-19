@@ -1469,6 +1469,7 @@
 
       const replyForm = document.createElement("form");
       replyForm.className = "thread-comment-form auth-write-form";
+      replyForm.setAttribute("action", "javascript:void(0)");
       replyForm.dataset.commentId = comment.id;
       replyForm.innerHTML = `
         <input class="field" placeholder="Напиши отговор...">
@@ -1534,7 +1535,7 @@
       details.innerHTML = `
         <summary>💬 Коментари · ${mainComments.length}</summary>
         <div class="fan-post-comment-list"></div>
-        <form class="fan-post-comment-form auth-write-form" data-post-id="${post.id}">
+        <form class="fan-post-comment-form auth-write-form" action="javascript:void(0)" data-post-id="${post.id}">
           <input class="field" placeholder="Коментирай публикацията...">
           <button class="btn btn-outline small-btn" type="submit">Коментирай</button>
           <div class="auth-required-note">За да коментираш, влез във FAN ZONE.</div>
@@ -1616,7 +1617,14 @@
         });
 
         input.value = "";
+
+        // Запазваме текущата позиция. Презареждането на #fanFeed
+        // не трябва да мести потребителя към началото на страницата.
+        const scrollYBeforeReload = window.scrollY;
         await loadRealFanPosts();
+        requestAnimationFrame(() => {
+          window.scrollTo({ top: scrollYBeforeReload, left: 0, behavior: "auto" });
+        });
       }catch(error){
         console.error("FAN ZONE comment error:", error);
         if(error?.code === "AUTH_REQUIRED" || error?.status === 401){
@@ -1694,8 +1702,6 @@
       }
     });
 
-});
-
     document.getElementById("fanPostForm").addEventListener("submit", async (e)=>{
       e.preventDefault();
       clearFanPostMessage();
@@ -1735,24 +1741,6 @@
         submit.disabled = false;
         submit.textContent = "Публикувай";
       }
-    });
-
-document.querySelectorAll(".fan-post-comment-form").forEach(form=>{
-      form.addEventListener("submit",e=>{
-        e.preventDefault();
-        const input=form.querySelector("input");
-        const text=input?.value.trim();
-        if(!text)return;
-        const details=form.closest(".fan-post-comments");
-        const list=details.querySelector(".fan-post-comment-list");
-        const c=document.createElement("div");
-        c.className="thread-comment";
-        c.innerHTML='<div class="thread-comment-head"><span class="thread-comment-author">Фен</span><span class="thread-comment-time">току-що</span></div><p></p><div class="thread-comment-actions"><button class="thread-comment-btn vote-up">👍 0</button><button class="thread-comment-btn vote-down">👎 0</button><button class="thread-comment-btn reply-toggle">Отговори</button></div><form class="thread-comment-form auth-write-form"><input class="field" placeholder="Напиши отговор..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>';
-        c.querySelector("p").textContent=text;
-        list.appendChild(c);
-        input.value="";
-        details.open=true;
-      });
     });
 
     document.querySelectorAll(".comment-form.auth-write-form").forEach(form=>{
