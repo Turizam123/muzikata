@@ -376,6 +376,90 @@
       transform:translateY(-1px);
     }
 
+
+    /* V7: independent scrolling for long comment areas AND their input/form area */
+    .topic-comments[open],
+    .story-comments[open],
+    .fan-post-comments[open]{
+      overflow:visible !important;
+      max-height:none !important;
+    }
+
+    /* Comments themselves: first scroll */
+    .topic-comment-list,
+    .story-thread-scroll,
+    .fan-post-comment-list{
+      max-height:360px;
+      overflow-y:auto;
+      overscroll-behavior:contain;
+      padding-right:8px;
+      scrollbar-gutter:stable;
+      scrollbar-width:thin;
+      scrollbar-color:rgba(216,182,106,.58) rgba(255,255,255,.045);
+    }
+
+    /* Input/reply zone: second independent scroll when it grows */
+    .topic-comments > .comment-form,
+    .story-comments > .comment-form,
+    .fan-post-comments > .fan-post-comment-form{
+      position:relative;
+      max-height:230px;
+      overflow-y:auto;
+      overscroll-behavior:contain;
+      padding:12px 8px 8px 0;
+      scrollbar-gutter:stable;
+      scrollbar-width:thin;
+      scrollbar-color:rgba(216,182,106,.58) rgba(255,255,255,.045);
+    }
+
+    .topic-comment-list::-webkit-scrollbar,
+    .story-thread-scroll::-webkit-scrollbar,
+    .fan-post-comment-list::-webkit-scrollbar,
+    .topic-comments > .comment-form::-webkit-scrollbar,
+    .story-comments > .comment-form::-webkit-scrollbar,
+    .fan-post-comments > .fan-post-comment-form::-webkit-scrollbar{
+      width:7px;
+    }
+    .topic-comment-list::-webkit-scrollbar-track,
+    .story-thread-scroll::-webkit-scrollbar-track,
+    .fan-post-comment-list::-webkit-scrollbar-track,
+    .topic-comments > .comment-form::-webkit-scrollbar-track,
+    .story-comments > .comment-form::-webkit-scrollbar-track,
+    .fan-post-comments > .fan-post-comment-form::-webkit-scrollbar-track{
+      background:rgba(255,255,255,.045);
+      border-radius:20px;
+    }
+    .topic-comment-list::-webkit-scrollbar-thumb,
+    .story-thread-scroll::-webkit-scrollbar-thumb,
+    .fan-post-comment-list::-webkit-scrollbar-thumb,
+    .topic-comments > .comment-form::-webkit-scrollbar-thumb,
+    .story-comments > .comment-form::-webkit-scrollbar-thumb,
+    .fan-post-comments > .fan-post-comment-form::-webkit-scrollbar-thumb{
+      background:rgba(216,182,106,.58);
+      border-radius:20px;
+    }
+
+    /* Keep long nested reply threads contained instead of stretching cards indefinitely */
+    .thread-list,
+    .replies{
+      min-height:0;
+    }
+    .thread-comment-form.open,
+    .reply-form.open{
+      max-height:180px;
+      overflow-y:auto;
+      scrollbar-gutter:stable;
+    }
+
+    @media(max-width:760px){
+      .topic-comment-list,
+      .story-thread-scroll,
+      .fan-post-comment-list{max-height:300px}
+      .topic-comments > .comment-form,
+      .story-comments > .comment-form,
+      .fan-post-comments > .fan-post-comment-form{max-height:210px}
+    }
+
     footer{padding:30px 0;border-top:1px solid var(--border)}
     .footer-row{display:flex;justify-content:space-between;gap:16px;color:var(--muted);font-size:.74rem}
 
