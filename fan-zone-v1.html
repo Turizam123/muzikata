@@ -226,6 +226,46 @@
     .comment-reactions{display:flex;gap:10px;margin-top:12px}
     .mini-react{border:0;background:transparent;color:var(--gold-light);cursor:pointer;font-size:.78rem;font-weight:800}
 
+
+    .topic-comments{margin-top:24px;padding-top:20px;border-top:1px solid var(--border)}
+    .topic-comments summary{cursor:pointer;color:var(--gold-light);font-size:.78rem;font-weight:800;list-style:none}
+    .compact-comment{margin-top:12px;padding:13px 14px;border-left:2px solid rgba(216,182,106,.35);background:rgba(255,255,255,.025);border-radius:0 14px 14px 0}
+    .compact-comment strong{font-size:.76rem;color:var(--gold-light)}
+    .compact-comment p{font-size:.8rem;margin-top:5px}
+    .monthly-list{display:grid;gap:12px;margin-top:34px}
+    .monthly-song{display:grid;grid-template-columns:42px 150px 1fr auto;gap:16px;align-items:center;padding:12px;border:1px solid var(--border);border-radius:18px;background:rgba(255,255,255,.028);transition:.3s ease}
+    .monthly-rank{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:rgba(216,182,106,.1);color:var(--gold-light);font-weight:900}
+    .monthly-thumb{aspect-ratio:16/9;border-radius:12px;background:var(--thumb) center/cover no-repeat;position:relative;overflow:hidden}
+    .monthly-thumb::after{content:"▶";position:absolute;inset:0;display:grid;place-items:center;background:rgba(0,0,0,.24)}
+    .monthly-title{font-family:"Cormorant Garamond",serif;font-size:1.45rem;font-weight:700}
+    .monthly-title small{display:block;margin-top:4px;font-family:"Montserrat",sans-serif;color:var(--muted);font-size:.65rem;font-weight:500}
+    .vote-btn{min-width:112px;min-height:42px;border:1px solid rgba(216,182,106,.32);border-radius:999px;background:rgba(216,182,106,.07);color:var(--gold-light);font-weight:800;cursor:pointer}
+    .vote-btn.active{background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#17130a}
+    .vote-count{display:block;font-size:.66rem;margin-top:2px}
+    .story-card{display:grid;grid-template-columns:.9fr 1.1fr;overflow:hidden;margin-top:34px;border:1px solid var(--border);border-radius:28px;background:rgba(255,255,255,.035)}
+    .story-media{min-height:360px;position:relative;background:linear-gradient(to top,rgba(7,8,11,.8),transparent),url("https://i.ytimg.com/vi/uD3WqddlOVg/maxresdefault.jpg") center/cover no-repeat}
+    .story-media a{position:absolute;inset:0;display:grid;place-items:center;font-size:2rem}
+    .story-content{padding:32px}.story-content h3{font-family:"Cormorant Garamond",serif;font-size:2.4rem;margin:10px 0 14px}
+    .story-content p{color:var(--muted);line-height:1.75}
+    .lyrics-preview{margin-top:18px;padding:16px;border-left:2px solid var(--gold);background:rgba(255,255,255,.025);color:#ddd4c4;line-height:1.7;font-family:"Cormorant Garamond",serif;font-size:1.08rem}
+    .story-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+    .fan-post-form{display:grid;gap:12px;margin-top:28px}.fan-feed{display:grid;gap:16px;margin-top:28px}
+    .fan-post{padding:22px;border:1px solid var(--border);border-radius:20px;background:rgba(255,255,255,.028)}
+    .fan-post-head{display:flex;justify-content:space-between;gap:12px;margin-bottom:10px}
+    .fan-post-author{color:var(--gold-light);font-weight:800;font-size:.8rem}.fan-post-time{color:#888;font-size:.68rem}
+    .fan-post>p,.reply p{color:#ded8ce;line-height:1.7;font-size:.86rem}
+    .thread-actions{display:flex;gap:14px;align-items:center;margin-top:14px;flex-wrap:wrap}
+    .thread-btn{border:0;background:transparent;color:#cfc8bc;cursor:pointer;font-size:.75rem;font-weight:700}
+    .thread-btn:hover{color:var(--gold-light)}
+    .replies{margin-top:14px;margin-left:26px;padding-left:16px;border-left:1px solid rgba(216,182,106,.24);display:grid;gap:10px}
+    .reply{padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.025)}
+    .reply .replies{margin-left:18px}.reply-form{display:none;grid-template-columns:1fr auto;gap:8px;margin-top:12px}.reply-form.open{display:grid}
+    .reply-form .field{padding:11px 13px}.small-btn{min-height:40px;padding:0 14px}
+    @media(max-width:760px){
+      .monthly-song{grid-template-columns:34px 100px 1fr;gap:10px}.monthly-song .vote-btn{grid-column:2/4;width:100%}
+      .story-card{grid-template-columns:1fr}.story-media{min-height:240px}.replies{margin-left:10px;padding-left:10px}
+    }
+
     footer{padding:30px 0;border-top:1px solid var(--border)}
     .footer-row{display:flex;justify-content:space-between;gap:16px;color:var(--muted);font-size:.74rem}
 
@@ -272,142 +312,78 @@
             Тук феновете не просто слушат – те участват.
           </p>
           <div class="hero-actions">
-            <a class="btn btn-primary" href="#community">Включи се</a>
-            <a class="btn btn-outline" href="#top10">Виж TOP 10</a>
+            <a class="btn btn-primary" href="#discussion">Виж какво се обсъжда</a>
+            <a class="btn btn-outline" href="#monthly">Гласувай за песен</a>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section" id="discussion">
       <div class="container">
         <span class="eyebrow">Сега се обсъжда</span>
         <h2 class="section-title">Музиката продължава и след песента</h2>
-        <p class="section-text">
-          Първата версия е визуален прототип. Реалните гласове, коментари и класации ще бъдат свързани по-късно.
-        </p>
-
+        <p class="section-text">Актуална тема, музика и разговор с хората, които я слушат.</p>
         <div class="spotlight">
           <article class="topic-card">
             <span class="topic-badge">Тема на седмицата</span>
             <h3>Трябва ли съвременният фолклор да запазва традиционното си звучене?</h3>
-            <p>
-              Фолклорът живее, когато се предава нататък. Но докъде може да стигне модерното звучене,
-              без да изгубим корена?
-            </p>
-            <div class="reaction-row">
-              <button class="reaction" data-count="126">❤ <span>126</span></button>
-              <button class="reaction" data-count="31">🤔 <span>31</span></button>
-            </div>
+            <p>Фолклорът живее, когато се предава нататък. Но докъде може да стигне модерното звучене, без да изгубим корена?</p>
+            <div class="reaction-row"><button class="reaction" data-count="126">❤ <span>126</span></button><button class="reaction" data-count="31">🤔 <span>31</span></button></div>
+            <details class="topic-comments">
+              <summary>💬 Коментари · 3</summary>
+              <div class="compact-comment"><strong>Мария</strong><p>Новото звучене е хубаво, когато разпознаваш корена още от първите секунди.</p></div>
+              <div class="compact-comment"><strong>Иван</strong><p>Традицията трябва да остане водеща, а модерното да бъде само акцент.</p></div>
+              <form class="comment-form" style="margin-top:14px"><input class="field" placeholder="Име или псевдоним"><textarea class="field" style="min-height:90px" placeholder="Твоето мнение..."></textarea><button class="btn btn-primary" type="button">Коментирай</button></form>
+            </details>
           </article>
-
-          <article class="video-card" id="firstLoveVideo">
-            <div class="video-thumb"></div>
-            <button class="play-btn" type="button" aria-label="Пусни Първо либе">▶</button>
-            <div class="video-caption">
-              <small>Фолклор • Първо либе</small>
-              <h3>Първо либе – Ангел Узунов</h3>
-            </div>
-          </article>
+          <article class="video-card" id="firstLoveVideo"><div class="video-thumb"></div><button class="play-btn" type="button" aria-label="Пусни Първо либе">▶</button><div class="video-caption"><small>Фолклор • Първо либе</small><h3>Първо либе – Ангел Узунов</h3></div></article>
         </div>
       </div>
     </section>
 
-    <section class="section" id="top10">
+    <section class="section" id="monthly">
       <div class="container">
-        <span class="eyebrow">Фен класация</span>
-        <h2 class="section-title">TOP 10 на феновете</h2>
-        <p class="section-text">По-късно тази класация ще се захранва автоматично от реалните харесвания в музикалния каталог.</p>
-
-        <div class="dashboard">
-          <article class="panel">
-            <h3>Тази седмица</h3>
-            <div class="top-list">
-              <div class="top-item"><span class="rank">1</span><span class="song-name">Първо либе</span><span class="likes">❤ 128</span></div>
-              <div class="top-item"><span class="rank">2</span><span class="song-name">Отключи ме</span><span class="likes">❤ 116</span></div>
-              <div class="top-item"><span class="rank">3</span><span class="song-name">На стария риф</span><span class="likes">❤ 102</span></div>
-              <div class="top-item"><span class="rank">4</span><span class="song-name">Росна зора</span><span class="likes">❤ 94</span></div>
-              <div class="top-item"><span class="rank">5</span><span class="song-name">Не ме оставяй</span><span class="likes">❤ 89</span></div>
-            </div>
-          </article>
-
-          <article class="panel">
-            <h3>Музикален дуел</h3>
-            <div class="duel">
-              <button class="duel-card" style="--duel-cover:url('https://i.ytimg.com/vi/uD3WqddlOVg/maxresdefault.jpg')">
-                <span>Първо либе</span>
-              </button>
-              <div class="vs">VS</div>
-              <button class="duel-card" style="--duel-cover:url('https://i.ytimg.com/vi/FmUQEAQ6bFs/maxresdefault.jpg')">
-                <span>Елено, моме убаво</span>
-              </button>
-            </div>
-          </article>
+        <span class="eyebrow">Месечен избор на феновете</span>
+        <h2 class="section-title">Вие избирате</h2>
+        <p class="section-text">Пет песни. Един месец. Вашият вот определя подредбата – песента с най-много гласове автоматично застава на първо място.</p>
+        <div class="monthly-list" id="monthlyList">
+          <article class="monthly-song" data-votes="18"><span class="monthly-rank">1</span><a class="monthly-thumb" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=uD3WqddlOVg" style="--thumb:url('https://i.ytimg.com/vi/uD3WqddlOVg/hqdefault.jpg')"></a><div class="monthly-title">Първо либе<small>Ангел Узунов</small></div><button class="vote-btn">Гласувай <span class="vote-count">18 гласа</span></button></article>
+          <article class="monthly-song" data-votes="14"><span class="monthly-rank">2</span><a class="monthly-thumb" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=FmUQEAQ6bFs" style="--thumb:url('https://i.ytimg.com/vi/FmUQEAQ6bFs/hqdefault.jpg')"></a><div class="monthly-title">Елено, моме убаво<small>Ангел Узунов</small></div><button class="vote-btn">Гласувай <span class="vote-count">14 гласа</span></button></article>
+          <article class="monthly-song" data-votes="11"><span class="monthly-rank">3</span><a class="monthly-thumb" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=z6I9QPKcCcY" style="--thumb:url('https://i.ytimg.com/vi/z6I9QPKcCcY/hqdefault.jpg')"></a><div class="monthly-title">Росна зора<small>Ангел Узунов</small></div><button class="vote-btn">Гласувай <span class="vote-count">11 гласа</span></button></article>
+          <article class="monthly-song" data-votes="8"><span class="monthly-rank">4</span><a class="monthly-thumb" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=MLCLaXaSneI" style="--thumb:url('https://i.ytimg.com/vi/MLCLaXaSneI/hqdefault.jpg')"></a><div class="monthly-title">Без теб не мога<small>Ангел Узунов</small></div><button class="vote-btn">Гласувай <span class="vote-count">8 гласа</span></button></article>
+          <article class="monthly-song" data-votes="5"><span class="monthly-rank">5</span><a class="monthly-thumb" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=yOIzCb_R2hw" style="--thumb:url('https://i.ytimg.com/vi/yOIzCb_R2hw/hqdefault.jpg')"></a><div class="monthly-title">Сърцето ми гори<small>Ангел Узунов</small></div><button class="vote-btn">Гласувай <span class="vote-count">5 гласа</span></button></article>
         </div>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section" id="stories">
       <div class="container">
-        <span class="eyebrow">Вие избирате</span>
-        <h2 class="section-title">Какво искате да чуете следващо?</h2>
-
-        <div class="dashboard">
-          <article class="panel">
-            <h3>Фен анкета</h3>
-            <div class="poll-options">
-              <button class="poll-btn">Нова народна песен</button>
-              <button class="poll-btn">Поп-фолк балада</button>
-              <button class="poll-btn">Кафана песен</button>
-              <button class="poll-btn">Естрадна балада</button>
-            </div>
-          </article>
-
-          <article class="panel">
-            <h3>Зад песента</h3>
-            <p class="section-text">
-              Тук може да публикуваш кратки истории – как се е родил текстът,
-              какво те е вдъхновило и какво стои зад конкретна песен.
-            </p>
-            <div class="reaction-row">
-              <button class="btn btn-outline">Прочети историята</button>
-            </div>
-          </article>
-        </div>
+        <span class="eyebrow">Музикални истории</span>
+        <h2 class="section-title">Зад песента</h2>
+        <p class="section-text">Текстове, клипове и историите зад музиката – с място за мнението на слушателите.</p>
+        <article class="story-card">
+          <div class="story-media"><a href="https://www.youtube.com/watch?v=uD3WqddlOVg" target="_blank" rel="noopener">▶</a></div>
+          <div class="story-content"><span class="topic-badge">Нова публикация</span><h3>„Първо либе“ – песен за първата обич</h3><p>Тук може да стои кратката история на песента, идеята зад текста и това, което искаш да споделиш с хората.</p><div class="lyrics-preview">Погледни ме, първо либе,<br>погледни ме ти...<br>Днеска съм ти близо, либе,<br>утре кой ли знай.</div><div class="story-actions"><a class="btn btn-primary" href="https://www.youtube.com/watch?v=uD3WqddlOVg" target="_blank" rel="noopener">Гледай в YouTube</a><button class="btn btn-outline" type="button">💬 Коментари · 7</button></div></div>
+        </article>
       </div>
     </section>
 
     <section class="section" id="community">
       <div class="container">
         <span class="eyebrow">Гласът на феновете</span>
-        <h2 class="section-title">Кажи какво мислиш</h2>
-        <p class="section-text">Без регистрация. Само име или псевдоним и твоето мнение.</p>
-
-        <div class="community">
-          <article class="panel">
-            <h3>Нов коментар</h3>
-            <form class="comment-form" id="demoCommentForm">
-              <input class="field" id="demoName" type="text" placeholder="Име или псевдоним" required>
-              <textarea class="field" id="demoText" placeholder="Напиши коментар..." required></textarea>
-              <button class="btn btn-primary" type="submit">Публикувай</button>
-            </form>
+        <h2 class="section-title">Фен публикации</h2>
+        <p class="section-text">Кратки публикации от феновете, разговори и отговори – без регистрация.</p>
+        <form class="fan-post-form panel" id="fanPostForm"><h3>Сподели с феновете</h3><input class="field" id="fanName" type="text" placeholder="Име или псевдоним" required><textarea class="field" id="fanText" maxlength="500" placeholder="Напиши кратка фен публикация..." required></textarea><button class="btn btn-primary" type="submit">Публикувай</button></form>
+        <div class="fan-feed" id="fanFeed">
+          <article class="fan-post">
+            <div class="fan-post-head"><span class="fan-post-author">Мария</span><span class="fan-post-time">преди 20 мин.</span></div>
+            <p>„Първо либе“ ме върна към музиката, която слушахме като деца. Искам повече песни с такова народно звучене.</p>
+            <div class="thread-actions"><button class="thread-btn vote-up">👍 18</button><button class="thread-btn vote-down">👎 1</button><button class="thread-btn reply-toggle">💬 Отговори</button></div>
+            <form class="reply-form"><input class="field" placeholder="Напиши отговор..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form>
+            <div class="replies"><div class="reply"><div class="fan-post-head"><span class="fan-post-author">Иван</span><span class="fan-post-time">преди 14 мин.</span></div><p>Напълно съм съгласен. Това звучене има характер.</p><div class="thread-actions"><button class="thread-btn vote-up">👍 6</button><button class="thread-btn vote-down">👎 0</button><button class="thread-btn reply-toggle">Отговори</button></div><form class="reply-form"><input class="field" placeholder="Отговори на Иван..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form><div class="replies"><div class="reply"><div class="fan-post-head"><span class="fan-post-author">Мария</span><span class="fan-post-time">преди 9 мин.</span></div><p>Точно това имах предвид – модерно, но да си личи откъде идва.</p><div class="thread-actions"><button class="thread-btn vote-up">👍 3</button><button class="thread-btn vote-down">👎 0</button></div></div></div></div></div>
           </article>
-
-          <article class="panel">
-            <h3>Последни мнения</h3>
-            <div class="comments" id="commentsList">
-              <div class="comment">
-                <div class="comment-head"><span class="comment-author">Мария</span><span class="comment-time">преди 12 мин.</span></div>
-                <p>Фолклорът може да се развива, стига да запази душата и характерното си звучене.</p>
-                <div class="comment-reactions"><button class="mini-react">❤ 14</button><button class="mini-react">🤔 2</button></div>
-              </div>
-              <div class="comment">
-                <div class="comment-head"><span class="comment-author">Иван</span><span class="comment-time">преди 28 мин.</span></div>
-                <p>Искам повече песни като „Първо либе“. Това звучене ми липсва в съвременната музика.</p>
-                <div class="comment-reactions"><button class="mini-react">❤ 11</button><button class="mini-react">🤔 1</button></div>
-              </div>
-            </div>
-          </article>
+          <article class="fan-post"><div class="fan-post-head"><span class="fan-post-author">Николай</span><span class="fan-post-time">преди 43 мин.</span></div><p>За следващата месечна класация бих искал да има повече балади. Интересно е да видим как ще гласуват хората.</p><div class="thread-actions"><button class="thread-btn vote-up">👍 9</button><button class="thread-btn vote-down">👎 2</button><button class="thread-btn reply-toggle">💬 Отговори</button></div><form class="reply-form"><input class="field" placeholder="Напиши отговор..."><button class="btn btn-outline small-btn" type="submit">Изпрати</button></form></article>
         </div>
       </div>
     </section>
@@ -421,67 +397,14 @@
   </footer>
 
   <script>
-    document.querySelectorAll(".reaction").forEach(button=>{
-      button.addEventListener("click",()=>{
-        if(button.classList.contains("active")) return;
-        const count = Number(button.dataset.count || "0") + 1;
-        button.dataset.count = String(count);
-        button.querySelector("span").textContent = String(count);
-        button.classList.add("active");
-      });
-    });
-
-    document.querySelectorAll(".duel-card").forEach(card=>{
-      card.addEventListener("click",()=>{
-        document.querySelectorAll(".duel-card").forEach(x=>x.classList.remove("active"));
-        card.classList.add("active");
-      });
-    });
-
-    document.querySelectorAll(".poll-btn").forEach(btn=>{
-      btn.addEventListener("click",()=>{
-        document.querySelectorAll(".poll-btn").forEach(x=>x.classList.remove("active"));
-        btn.classList.add("active");
-      });
-    });
-
-    const video = document.getElementById("firstLoveVideo");
-    video.querySelector(".play-btn").addEventListener("click",()=>{
-      const iframe = document.createElement("iframe");
-      iframe.className = "inline-player";
-      iframe.src = "https://www.youtube-nocookie.com/embed/uD3WqddlOVg?autoplay=1&rel=0&modestbranding=1&playsinline=1";
-      iframe.title = "Първо либе – Ангел Узунов";
-      iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
-      iframe.allowFullscreen = true;
-      iframe.referrerPolicy = "strict-origin-when-cross-origin";
-      video.appendChild(iframe);
-    },{once:true});
-
-    const form = document.getElementById("demoCommentForm");
-    form.addEventListener("submit",(e)=>{
-      e.preventDefault();
-      const name = document.getElementById("demoName").value.trim();
-      const text = document.getElementById("demoText").value.trim();
-      if(!name || !text) return;
-
-      const comment = document.createElement("div");
-      comment.className = "comment";
-      comment.innerHTML = `
-        <div class="comment-head">
-          <span class="comment-author"></span>
-          <span class="comment-time">току-що</span>
-        </div>
-        <p></p>
-        <div class="comment-reactions">
-          <button class="mini-react">❤ 0</button>
-          <button class="mini-react">🤔 0</button>
-        </div>
-      `;
-      comment.querySelector(".comment-author").textContent = name;
-      comment.querySelector("p").textContent = text;
-      document.getElementById("commentsList").prepend(comment);
-      form.reset();
-    });
+    document.querySelectorAll(".reaction").forEach(b=>b.addEventListener("click",()=>{if(b.classList.contains("active"))return;let n=Number(b.dataset.count||0)+1;b.dataset.count=n;b.querySelector("span").textContent=n;b.classList.add("active")}));
+    const video=document.getElementById("firstLoveVideo");
+    video.querySelector(".play-btn").addEventListener("click",()=>{const f=document.createElement("iframe");f.className="inline-player";f.src="https://www.youtube-nocookie.com/embed/uD3WqddlOVg?autoplay=1&rel=0&modestbranding=1&playsinline=1";f.title="Първо либе – Ангел Узунов";f.allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";f.allowFullscreen=true;f.referrerPolicy="strict-origin-when-cross-origin";video.appendChild(f)},{once:true});
+    const list=document.getElementById("monthlyList");
+    function sortSongs(){[...list.children].sort((a,b)=>+b.dataset.votes-+a.dataset.votes).forEach((x,i)=>{list.appendChild(x);x.querySelector(".monthly-rank").textContent=i+1})}
+    list.querySelectorAll(".vote-btn").forEach(b=>b.addEventListener("click",()=>{if(b.classList.contains("active"))return;const r=b.closest(".monthly-song");r.dataset.votes=+r.dataset.votes+1;b.classList.add("active");b.childNodes[0].nodeValue="Гласувано ";b.querySelector(".vote-count").textContent=r.dataset.votes+" гласа";sortSongs()}));
+    document.addEventListener("click",e=>{const t=e.target.closest(".reply-toggle");if(t){const c=t.closest(".fan-post,.reply");const f=c.querySelector(":scope > .reply-form");if(f)f.classList.toggle("open")}const v=e.target.closest(".vote-up,.vote-down");if(v&&!v.dataset.voted){const p=v.textContent.trim().split(" ");v.textContent=p[0]+" "+(+p[1]+1);v.dataset.voted="1"}});
+    document.getElementById("fanPostForm").addEventListener("submit",e=>{e.preventDefault();const n=document.getElementById("fanName").value.trim(),t=document.getElementById("fanText").value.trim();if(!n||!t)return;const a=document.createElement("article");a.className="fan-post";const h=document.createElement("div");h.className="fan-post-head";h.innerHTML='<span class="fan-post-author"></span><span class="fan-post-time">току-що</span>';h.querySelector(".fan-post-author").textContent=n;const p=document.createElement("p");p.textContent=t;const x=document.createElement("div");x.className="thread-actions";x.innerHTML='<button class="thread-btn vote-up">👍 0</button><button class="thread-btn vote-down">👎 0</button><button class="thread-btn reply-toggle">💬 Отговори</button>';a.append(h,p,x);document.getElementById("fanFeed").prepend(a);e.target.reset()});
   </script>
 </body>
 </html>
