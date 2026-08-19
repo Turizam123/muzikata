@@ -778,6 +778,30 @@
       cursor:pointer;
     }
 
+
+    /* V17: real Supabase reactions + monthly vote */
+    .vote-up.is-selected,
+    .vote-down.is-selected{
+      color:var(--gold-light) !important;
+      font-weight:900;
+    }
+    .real-post-reactions{
+      display:flex;
+      gap:14px;
+      align-items:center;
+      margin-top:18px;
+      flex-wrap:wrap;
+    }
+    .real-post-reactions .thread-btn{
+      padding:0;
+    }
+    .vote-meter[disabled],
+    .thread-btn[disabled],
+    .thread-comment-btn[disabled]{
+      opacity:.68;
+      cursor:wait;
+    }
+
   </style>
 </head>
 <body>
@@ -831,7 +855,10 @@
             <span class="topic-badge">Тема на седмицата</span>
             <h3>Трябва ли съвременният фолклор да запазва традиционното си звучене?</h3>
             <p>Фолклорът живее, когато се предава нататък. Но докъде може да стигне модерното звучене, без да изгубим корена?</p>
-            <div class="reaction-row"><button class="reaction" data-count="126">❤ <span>126</span></button><button class="reaction" data-count="31">🤔 <span>31</span></button></div>
+            <div class="real-post-reactions" id="discussionPostReactions">
+              <button class="thread-btn vote-up" type="button" data-target-type="post" data-target-id="55dc83c6-1ede-477b-a1ce-dc09c5c8d9f6">👍 0</button>
+              <button class="thread-btn vote-down" type="button" data-target-type="post" data-target-id="55dc83c6-1ede-477b-a1ce-dc09c5c8d9f6">👎 0</button>
+            </div>
             <details class="topic-comments post-thread">
               <summary>💬 Коментари · 5</summary>
               <div class="topic-comment-list">
@@ -972,6 +999,10 @@
             <p>Тук може да стои кратката история на песента, идеята зад текста и това, което искаш да споделиш с хората.</p>
             <div class="lyrics-preview">Погледни ме, първо либе,<br>погледни ме ти...<br>Днеска съм ти близо, либе,<br>утре кой ли знай.</div>
             <div class="story-actions"><a class="btn btn-primary" href="https://www.youtube.com/watch?v=uD3WqddlOVg" target="_blank" rel="noopener">Гледай в YouTube</a></div>
+            <div class="real-post-reactions" id="storyPostReactions">
+              <button class="thread-btn vote-up" type="button" data-target-type="post" data-target-id="c51995da-bde7-47fc-852a-fb27a464c956">👍 0</button>
+              <button class="thread-btn vote-down" type="button" data-target-type="post" data-target-id="c51995da-bde7-47fc-852a-fb27a464c956">👎 0</button>
+            </div>
             <details class="story-comments post-thread">
               <summary>💬 Коментари · 7</summary>
               <div class="story-thread-scroll">
@@ -1650,35 +1681,129 @@
       event.stopImmediatePropagation();
       await submitRealFanComment(fanCommentForm);
     }, true);
-
-
-    document.querySelectorAll(".reaction").forEach(b=>b.addEventListener("click",()=>{if(b.classList.contains("active"))return;let n=Number(b.dataset.count||0)+1;b.dataset.count=n;b.querySelector("span").textContent=n;b.classList.add("active")}));
     const video=document.getElementById("firstLoveVideo");
     video.querySelector(".play-btn").addEventListener("click",()=>{const f=document.createElement("iframe");f.className="inline-player";f.src="https://www.youtube-nocookie.com/embed/uD3WqddlOVg?autoplay=1&rel=0&modestbranding=1&playsinline=1";f.title="Първо либе – Ангел Узунов";f.allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";f.allowFullscreen=true;f.referrerPolicy="strict-origin-when-cross-origin";video.appendChild(f)},{once:true});
     const list=document.getElementById("monthlyList");
-    function refreshMeters(){
-      const rows=[...list.children];
-      const max=Math.max(...rows.map(x=>+x.dataset.votes),1);
-      rows.forEach(x=>{
-        const fill=x.querySelector(".vote-meter-fill");
-        const count=x.querySelector(".vote-count");
-        fill.style.setProperty("--vote-width",((+x.dataset.votes/max)*100)+"%");
-        count.textContent=x.dataset.votes;
+    let activeMonthlyPollId = null;
+
+    function youtubeThumb(videoId){
+      return videoId
+        ? `https://i.ytimg.com/vi/${encodeURIComponent(videoId)}/hqdefault.jpg`
+        : "";
+    }
+
+    function renderMonthlyRanking(songs){
+      if(!list) return;
+
+      list.innerHTML = "";
+
+      const rows = Array.isArray(songs) ? songs : [];
+      if(rows.length === 0){
+        const empty = document.createElement("div");
+        empty.className = "panel";
+        empty.innerHTML = "<p class='section-text'>В момента няма активна месечна класация.</p>";
+        list.appendChild(empty);
+        return;
+      }
+
+      const maxVotes = Math.max(...rows.map(song=>Number(song.votes || 0)), 1);
+
+      rows.forEach((song,index)=>{
+        const article = document.createElement("article");
+        article.className = "monthly-song";
+        article.dataset.songId = song.song_id;
+        article.dataset.votes = Number(song.votes || 0);
+
+        const rank = Number(song.rank || (index + 1));
+        const votes = Number(song.votes || 0);
+        const width = Math.max(0, Math.min(100, (votes / maxVotes) * 100));
+        const videoId = song.youtube_video_id || "";
+        const url = song.youtube_url || (videoId ? `https://www.youtube.com/watch?v=${videoId}` : "#");
+
+        article.innerHTML = `
+          <span class="monthly-rank">${rank}</span>
+          <a class="monthly-thumb" target="_blank" rel="noopener"
+             href="${url}"
+             style="--thumb:url('${youtubeThumb(videoId)}')"></a>
+          <div class="monthly-vote-area">
+            <div class="monthly-title">${song.title || "Песен"}<small>${song.artist_name || "Ангел Узунов"}</small></div>
+            <button class="vote-meter real-monthly-vote" type="button"
+                    data-song-id="${song.song_id}"
+                    aria-label="Гласувай за ${song.title || "песента"}">
+              <span class="vote-meter-fill" style="--vote-width:${width}%"></span>
+              <span class="vote-meter-label">
+                <span>Гласувай</span>
+                <strong class="vote-count">${votes}</strong>
+              </span>
+            </button>
+          </div>
+        `;
+
+        list.appendChild(article);
       });
     }
-    function sortSongs(){
-      [...list.children].sort((a,b)=>+b.dataset.votes-+a.dataset.votes).forEach((x,i)=>{
-        list.appendChild(x);x.querySelector(".monthly-rank").textContent=i+1;
-      });
-      refreshMeters();
+
+    async function loadRealMonthlyPoll(){
+      try{
+        const response = await fetch(`${FAN_ZONE_API}?action=monthly_poll`,{
+          method:"GET",
+          headers:{ "Accept":"application/json" },
+          cache:"no-store"
+        });
+
+        const data = await response.json().catch(()=>({}));
+        if(!response.ok || !data?.ok){
+          throw new Error(data?.error || "Неуспешно зареждане на класацията.");
+        }
+
+        activeMonthlyPollId = data.poll?.id || null;
+        renderMonthlyRanking(data.songs || []);
+      }catch(error){
+        console.error("FAN ZONE monthly poll load error:", error);
+      }
     }
-    list.querySelectorAll(".vote-meter").forEach(b=>b.addEventListener("click",()=>{
-      if(b.classList.contains("voted"))return;
-      const r=b.closest(".monthly-song");r.dataset.votes=+r.dataset.votes+1;
-      b.classList.add("voted");b.querySelector(".vote-meter-label > span").textContent="Гласувано";
-      sortSongs();
-    }));
-    refreshMeters();
+
+    document.addEventListener("click", async (event)=>{
+      const button = event.target.closest(".real-monthly-vote");
+      if(!button) return;
+
+      event.preventDefault();
+
+      const session = await window.getFanZoneSession?.();
+      if(!session?.access_token){
+        window.openFanZoneAuth?.();
+        return;
+      }
+
+      const songId = button.dataset.songId;
+      if(!activeMonthlyPollId || !songId) return;
+
+      button.disabled = true;
+      const label = button.querySelector(".vote-meter-label > span");
+      const oldLabel = label?.textContent || "Гласувай";
+      if(label) label.textContent = "Записване...";
+
+      try{
+        const data = await fanApiPost({
+          action:"vote_monthly",
+          poll_id:activeMonthlyPollId,
+          song_id:songId,
+          device_id:getFanDeviceId()
+        });
+
+        renderMonthlyRanking(data.songs || []);
+      }catch(error){
+        console.error("FAN ZONE monthly vote error:", error);
+        if(error?.status === 401 || error?.code === "AUTH_REQUIRED"){
+          window.openFanZoneAuth?.();
+        }else{
+          alert(error?.message || "Вотът не можа да бъде записан.");
+        }
+        if(label) label.textContent = oldLabel;
+      }finally{
+        button.disabled = false;
+      }
+    });
 
     const storyVideo=document.getElementById("storyVideo");
     storyVideo.querySelector(".play-btn").addEventListener("click",()=>{
@@ -1704,10 +1829,61 @@
         }
       }
       const v=e.target.closest(".vote-up,.vote-down");
-      if(v&&!v.dataset.voted){
-        const p=v.textContent.trim().split(" ");
-        v.textContent=p[0]+" "+(+p[1]+1);
-        v.dataset.voted="1";
+      if(v && v.dataset.targetType && v.dataset.targetId){
+        e.preventDefault();
+
+        (async ()=>{
+          const session = await window.getFanZoneSession?.();
+          if(!session?.access_token){
+            window.openFanZoneAuth?.();
+            return;
+          }
+
+          if(v.disabled) return;
+
+          const targetType = v.dataset.targetType;
+          const targetId = v.dataset.targetId;
+          const reaction = v.classList.contains("vote-up") ? 1 : -1;
+
+          const container = v.closest(
+            ".thread-comment-actions,.thread-actions,.real-post-reactions"
+          );
+
+          const upButton = container?.querySelector(".vote-up");
+          const downButton = container?.querySelector(".vote-down");
+
+          v.disabled = true;
+
+          try{
+            const data = await fanApiPost({
+              action:"react",
+              target_type:targetType,
+              target_id:targetId,
+              reaction,
+              device_id:getFanDeviceId()
+            });
+
+            if(upButton){
+              upButton.textContent = `👍 ${Number(data.thumbs_up || 0)}`;
+              upButton.classList.toggle("is-selected", reaction === 1);
+            }
+
+            if(downButton){
+              downButton.textContent = `👎 ${Number(data.thumbs_down || 0)}`;
+              downButton.classList.toggle("is-selected", reaction === -1);
+            }
+          }catch(error){
+            console.error("FAN ZONE reaction error:", error);
+
+            if(error?.status === 401 || error?.code === "AUTH_REQUIRED"){
+              window.openFanZoneAuth?.();
+            }else{
+              alert(error?.message || "Реакцията не можа да бъде записана.");
+            }
+          }finally{
+            v.disabled = false;
+          }
+        })();
       }
     });
 
@@ -1748,6 +1924,17 @@
         : document.querySelector("#stories .story-thread-scroll .thread-list");
 
       if(!details || !list) return;
+
+      const postReactionBox = section === "discussion"
+        ? document.getElementById("discussionPostReactions")
+        : document.getElementById("storyPostReactions");
+
+      if(postReactionBox){
+        const up = postReactionBox.querySelector(".vote-up");
+        const down = postReactionBox.querySelector(".vote-down");
+        if(up) up.textContent = `👍 ${Number(post.thumbs_up || 0)}`;
+        if(down) down.textContent = `👎 ${Number(post.thumbs_down || 0)}`;
+      }
 
       const comments = Array.isArray(post.comments) ? post.comments : [];
       const roots = comments.filter(comment=>!comment.parent_comment_id);
@@ -1913,6 +2100,7 @@
 
     loadRealSectionThread("discussion");
     loadRealSectionThread("story");
+    loadRealMonthlyPoll();
     loadRealFanPosts();
 
 </script>
