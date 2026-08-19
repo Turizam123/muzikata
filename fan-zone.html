@@ -827,7 +827,7 @@
         <h2 class="section-title">Музиката продължава и след песента</h2>
         <p class="section-text">Актуална тема, музика и разговор с хората, които я слушат.</p>
         <div class="discussion-layout">
-          <article class="topic-card discussion-post">
+          <article class="topic-card discussion-post" data-post-id="55dc83c6-1ede-477b-a1ce-dc09c5c8d9f6">
             <span class="topic-badge">Тема на седмицата</span>
             <h3>Трябва ли съвременният фолклор да запазва традиционното си звучене?</h3>
             <p>Фолклорът живее, когато се предава нататък. Но докъде може да стигне модерното звучене, без да изгубим корена?</p>
@@ -878,7 +878,7 @@
                   </div>
                 </div>
               </div>
-              <form class="comment-form auth-write-form" style="margin-top:14px">
+              <form class="comment-form auth-write-form real-section-comment-form" action="javascript:void(0)" data-post-id="55dc83c6-1ede-477b-a1ce-dc09c5c8d9f6" data-section="discussion" style="margin-top:14px">
                 <textarea class="field" style="min-height:90px" placeholder="Твоето мнение..."></textarea>
                 <button class="btn btn-primary" type="submit">Коментирай</button>
                 <div class="auth-required-note">За да коментираш, влез във FAN ZONE.</div>
@@ -966,7 +966,7 @@
             <button class="play-btn" type="button" aria-label="Пусни Първо либе">▶</button>
             <div class="video-caption"><small>Музикална история</small><h3>Първо либе – Ангел Узунов</h3></div>
           </article>
-          <article class="story-post">
+          <article class="story-post" data-post-id="c51995da-bde7-47fc-852a-fb27a464c956">
             <span class="topic-badge">Нова публикация</span>
             <h3>„Първо либе“ – песен за първата обич</h3>
             <p>Тук може да стои кратката история на песента, идеята зад текста и това, което искаш да споделиш с хората.</p>
@@ -996,7 +996,7 @@
                   </div>
                 </div>
               </div>
-              <form class="comment-form auth-write-form" style="margin-top:14px">
+              <form class="comment-form auth-write-form real-section-comment-form" action="javascript:void(0)" data-post-id="c51995da-bde7-47fc-852a-fb27a464c956" data-section="story" style="margin-top:14px">
                 <textarea class="field" style="min-height:90px" placeholder="Коментар към публикацията..."></textarea>
                 <button class="btn btn-primary" type="submit">Коментирай</button>
                 <div class="auth-required-note">За да коментираш, влез във FAN ZONE.</div>
@@ -1011,7 +1011,7 @@
       <div class="container">
         <span class="eyebrow">Гласът на феновете</span>
         <h2 class="section-title">Фен публикации</h2>
-        <p class="section-text">Кратки публикации от феновете, разговори и отговори – без регистрация.</p>
+        <p class="section-text">Кратки публикации от феновете, разговори и отговори – с вход за участие.</p>
         <div class="fan-feed" id="fanFeed">
           <article class="fan-post">
             <div class="fan-post-head"><span class="fan-post-author">Мария</span><span class="fan-post-time">преди 20 мин.</span></div>
@@ -1692,7 +1692,16 @@
       if(t){
         const c=t.closest(".fan-post,.reply,.thread-comment");
         const f=c?.querySelector(":scope > .reply-form, :scope > .thread-comment-form");
-        if(f)f.classList.toggle("open");
+        if(f){
+          if(f.closest("#discussion")){
+            f.dataset.section = "discussion";
+            f.dataset.postId = REAL_SECTION_POSTS.discussion;
+          }else if(f.closest("#stories")){
+            f.dataset.section = "story";
+            f.dataset.postId = REAL_SECTION_POSTS.story;
+          }
+          f.classList.toggle("open");
+        }
       }
       const v=e.target.closest(".vote-up,.vote-down");
       if(v&&!v.dataset.voted){
@@ -1701,6 +1710,165 @@
         v.dataset.voted="1";
       }
     });
+
+
+    const REAL_SECTION_POSTS = {
+      discussion: "55dc83c6-1ede-477b-a1ce-dc09c5c8d9f6",
+      story: "c51995da-bde7-47fc-852a-fb27a464c956"
+    };
+
+    async function fetchRealSectionPost(section){
+      const response = await fetch(
+        `${FAN_ZONE_API}?action=posts&section=${encodeURIComponent(section)}&limit=10`,
+        {
+          method:"GET",
+          headers:{"Accept":"application/json"},
+          cache:"no-store"
+        }
+      );
+
+      const data = await response.json().catch(()=>({}));
+      if(!response.ok || !data?.ok){
+        throw new Error(data?.error || "Неуспешно зареждане на публикацията.");
+      }
+
+      const expectedId = REAL_SECTION_POSTS[section];
+      return (data.posts || []).find(post=>post.id === expectedId) || null;
+    }
+
+    function renderRealSectionThread(section, post){
+      if(!post) return;
+
+      const details = section === "discussion"
+        ? document.querySelector("#discussion .topic-comments")
+        : document.querySelector("#stories .story-comments");
+
+      const list = section === "discussion"
+        ? document.querySelector("#discussion .topic-comment-list .thread-list")
+        : document.querySelector("#stories .story-thread-scroll .thread-list");
+
+      if(!details || !list) return;
+
+      const comments = Array.isArray(post.comments) ? post.comments : [];
+      const roots = comments.filter(comment=>!comment.parent_comment_id);
+      const childrenMap = new Map();
+
+      comments
+        .filter(comment=>comment.parent_comment_id)
+        .forEach(comment=>{
+          const children = childrenMap.get(comment.parent_comment_id) || [];
+          children.push(comment);
+          childrenMap.set(comment.parent_comment_id, children);
+        });
+
+      list.innerHTML = "";
+
+      roots.forEach(comment=>{
+        const node = createRealCommentNode(comment, childrenMap);
+
+        node.querySelectorAll(".thread-comment-form").forEach(form=>{
+          form.dataset.section = section;
+          form.dataset.postId = post.id;
+        });
+
+        list.appendChild(node);
+      });
+
+      const summary = details.querySelector("summary");
+      if(summary){
+        summary.textContent = `💬 Коментари · ${roots.length}`;
+      }
+    }
+
+    async function loadRealSectionThread(section){
+      try{
+        const post = await fetchRealSectionPost(section);
+        renderRealSectionThread(section, post);
+      }catch(error){
+        console.error(`FAN ZONE ${section} load error:`, error);
+      }
+    }
+
+    async function reloadRealSectionThread(section){
+      const scrollYBefore = window.scrollY;
+      await loadRealSectionThread(section);
+      requestAnimationFrame(()=>{
+        window.scrollTo({top:scrollYBefore,left:0,behavior:"auto"});
+      });
+    }
+
+    async function submitRealSectionComment(form){
+      const session = await requireFanAuthForWriting(form);
+      if(!session) return;
+
+      const section = form.dataset.section;
+      const postId = form.dataset.postId || REAL_SECTION_POSTS[section];
+      const parentCommentId = form.dataset.commentId || null;
+      const input = form.querySelector("textarea, input");
+      const text = input?.value.trim();
+
+      if(!section || !postId || !text) return;
+
+      const submit = form.querySelector('button[type="submit"]');
+      const originalText = submit?.textContent || "Изпрати";
+
+      if(submit){
+        submit.disabled = true;
+        submit.textContent = "Публикуване...";
+      }
+
+      try{
+        await fanApiPost({
+          action:"create_comment",
+          post_id:postId,
+          parent_comment_id:parentCommentId || undefined,
+          body:text,
+          device_id:getFanDeviceId()
+        });
+
+        input.value = "";
+        if(submit) submit.textContent = "Публикувано ✓";
+
+        await reloadRealSectionThread(section);
+
+        setTimeout(()=>{
+          if(submit) submit.textContent = originalText;
+        },1200);
+      }catch(error){
+        console.error("FAN ZONE section comment error:", error);
+
+        if(error?.code === "AUTH_REQUIRED" || error?.status === 401){
+          window.openFanZoneAuth?.();
+        }else{
+          alert(error?.message || "Коментарът не можа да бъде публикуван.");
+        }
+      }finally{
+        if(submit) submit.disabled = false;
+      }
+    }
+
+    document.addEventListener("submit", async (event)=>{
+      const form = event.target.closest(
+        ".real-section-comment-form, #discussion .thread-comment-form, #stories .thread-comment-form"
+      );
+
+      if(!form) return;
+
+      event.preventDefault();
+      event.stopImmediatePropagation();
+
+      if(!form.dataset.section){
+        if(form.closest("#discussion")){
+          form.dataset.section = "discussion";
+          form.dataset.postId = REAL_SECTION_POSTS.discussion;
+        }else if(form.closest("#stories")){
+          form.dataset.section = "story";
+          form.dataset.postId = REAL_SECTION_POSTS.story;
+        }
+      }
+
+      await submitRealSectionComment(form);
+    }, true);
 
     document.getElementById("fanPostForm").addEventListener("submit", async (e)=>{
       e.preventDefault();
@@ -1743,17 +1911,8 @@
       }
     });
 
-    document.querySelectorAll(".comment-form.auth-write-form").forEach(form=>{
-      form.addEventListener("submit", async (e)=>{
-        e.preventDefault();
-        const session = await requireFanAuthForWriting(form);
-        if(!session) return;
-
-        /* Real persistence for these comments will be connected in the next API step.
-           For now authenticated users may type, but no fake database confirmation is shown. */
-      });
-    });
-
+    loadRealSectionThread("discussion");
+    loadRealSectionThread("story");
     loadRealFanPosts();
 
 </script>
