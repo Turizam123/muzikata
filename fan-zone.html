@@ -1691,6 +1691,7 @@
 
   <script>
     const FAN_ZONE_API = "https://cmiylzpmpwqbacjoqtkx.supabase.co/functions/v1/fan-zone-api";
+    const FAN_ZONE_FRONTEND_VERSION = "20.1-editorial-reactions-fixed";
 
     function getFanDeviceId(){
       const key = "angel_fan_zone_device_id";
@@ -2519,8 +2520,36 @@
         throw new Error(data?.error || "Неуспешно зареждане на коментарите.");
       }
 
+      /*
+       * V20.1 FIX:
+       * editorial_thread зарежда реалните коментари.
+       * За броячите на реакциите на основната публикация зареждаме
+       * и самия реален post чрез post_by_id.
+       */
+      let postData = null;
+
+      try{
+        const postResponse = await fetch(
+          `${FAN_ZONE_API}?action=post_by_id&post_id=${encodeURIComponent(expectedId)}`,
+          {
+            method:"GET",
+            headers:{"Accept":"application/json"},
+            cache:"no-store"
+          }
+        );
+
+        const postPayload = await postResponse.json().catch(()=>({}));
+        if(postResponse.ok && postPayload?.ok){
+          postData = postPayload.post || null;
+        }
+      }catch(error){
+        console.error(`FAN ZONE ${section} post reaction load error:`, error);
+      }
+
       return {
         id: expectedId,
+        thumbs_up: Number(postData?.thumbs_up || 0),
+        thumbs_down: Number(postData?.thumbs_down || 0),
         comments: Array.isArray(data.comments) ? data.comments : []
       };
     }
