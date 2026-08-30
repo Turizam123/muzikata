@@ -1011,6 +1011,16 @@
     .owner-comments-label{display:none;color:var(--gold-light);font-size:.62rem;font-weight:800}
     body.owner-mode .owner-comments-label{display:inline}
 
+    /* V19.5: weekly topic is permanent; OWNER controls comments only */
+    #discussion .discussion-post > .moderation-actions{display:none !important}
+    body.owner-mode #discussion .owner-comments-label{
+      display:inline;
+      color:var(--gold-light);
+      font-size:.60rem;
+      font-weight:900;
+      letter-spacing:.04em;
+    }
+
   </style>
 </head>
 <body>
@@ -1071,7 +1081,7 @@
               <button class="thread-btn vote-down" type="button" data-target-type="post" data-target-id="55dc83c6-1ede-477b-a1ce-dc09c5c8d9f6">👎 0</button>
             </div>
             <details class="topic-comments post-thread">
-              <summary>💬 Коментари · 5 <span class="owner-comments-label">· OWNER контрол на коментарите</span></summary>
+              <summary>💬 Коментари · <span class="discussion-comment-count">...</span> <span class="owner-comments-label">· OWNER контрол на коментарите</span></summary>
               <div class="topic-comment-list">
                 <div class="thread-list">
                   <div class="thread-comment">
@@ -2367,7 +2377,7 @@
       if(!expectedId) return null;
 
       const response = await fetch(
-        `${FAN_ZONE_API}?action=post_by_id&post_id=${encodeURIComponent(expectedId)}`,
+        `${FAN_ZONE_API}?action=editorial_thread&post_id=${encodeURIComponent(expectedId)}`,
         {
           method:"GET",
           headers:{"Accept":"application/json"},
@@ -2377,10 +2387,13 @@
 
       const data = await response.json().catch(()=>({}));
       if(!response.ok || !data?.ok){
-        throw new Error(data?.error || "Неуспешно зареждане на публикацията.");
+        throw new Error(data?.error || "Неуспешно зареждане на коментарите.");
       }
 
-      return data.post || null;
+      return {
+        id: expectedId,
+        comments: Array.isArray(data.comments) ? data.comments : []
+      };
     }
 
     function renderRealSectionThread(section, post){
@@ -2434,7 +2447,16 @@
 
       const summary = details.querySelector("summary");
       if(summary){
-        summary.textContent = `💬 Коментари · ${roots.length}`;
+        if(section === "discussion"){
+          let count = summary.querySelector(".discussion-comment-count");
+          if(!count){
+            summary.innerHTML = `💬 Коментари · <span class="discussion-comment-count">${roots.length}</span> <span class="owner-comments-label">· OWNER контрол на коментарите</span>`;
+          }else{
+            count.textContent = String(roots.length);
+          }
+        }else{
+          summary.textContent = `💬 Коментари · ${roots.length}`;
+        }
       }
     }
 
@@ -2452,7 +2474,7 @@
 
         if(!post){
           if(list){
-            list.innerHTML = `<div class="thread-comment"><p>Публикацията не е налична в базата.</p></div>`;
+            list.innerHTML = `<div class="thread-comment"><p>В момента няма налични коментари.</p></div>`;
           }
           return;
         }
