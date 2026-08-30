@@ -1060,6 +1060,15 @@
         <div class="discussion-layout">
           <article class="topic-card discussion-post" data-post-id="55dc83c6-1ede-477b-a1ce-dc09c5c8d9f6">
             <span class="topic-badge">Тема на седмицата</span>
+            <div class="moderation-actions discussion-owner-toolbar"
+                 data-mod-target="post"
+                 data-mod-id="55dc83c6-1ede-477b-a1ce-dc09c5c8d9f6"
+                 data-mod-user="">
+              <strong style="color:var(--gold-light);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;margin-right:4px">Публикация</strong>
+              <button class="mod-btn mod-hide" type="button">Скрий</button>
+              <button class="mod-btn mod-restore" type="button">Възстанови</button>
+              <button class="mod-btn mod-danger mod-delete" type="button">Изтрий публикацията</button>
+            </div>
             <h3>Трябва ли съвременният фолклор да запазва традиционното си звучене?</h3>
             <p>Фолклорът живее, когато се предава нататък. Но докъде може да стигне модерното звучене, без да изгубим корена?</p>
             <div class="real-post-reactions" id="discussionPostReactions">
@@ -1784,6 +1793,7 @@
               data-mod-target="comment"
               data-mod-id="${comment.id}"
               data-mod-user="${comment.user_id || ""}">
+          <strong style="color:var(--gold-light);font-size:.58rem;letter-spacing:.08em;text-transform:uppercase">Коментар</strong>
           <button class="mod-btn mod-hide" type="button">Скрий</button>
           <button class="mod-btn mod-restore" type="button">Възстанови</button>
           <button class="mod-btn mod-danger mod-delete" type="button">Изтрий</button>
@@ -2358,8 +2368,11 @@
     };
 
     async function fetchRealSectionPost(section){
+      const expectedId = REAL_SECTION_POSTS[section];
+      if(!expectedId) return null;
+
       const response = await fetch(
-        `${FAN_ZONE_API}?action=posts&section=${encodeURIComponent(section)}&limit=10`,
+        `${FAN_ZONE_API}?action=post_by_id&post_id=${encodeURIComponent(expectedId)}`,
         {
           method:"GET",
           headers:{"Accept":"application/json"},
@@ -2372,8 +2385,7 @@
         throw new Error(data?.error || "Неуспешно зареждане на публикацията.");
       }
 
-      const expectedId = REAL_SECTION_POSTS[section];
-      return (data.posts || []).find(post=>post.id === expectedId) || null;
+      return data.post || null;
     }
 
     function renderRealSectionThread(section, post){
@@ -2403,7 +2415,10 @@
       const postHost = section === "discussion"
         ? document.querySelector("#discussion .discussion-post")
         : document.querySelector("#stories .story-post");
-      if(postHost && !postHost.querySelector(`.moderation-actions[data-mod-id="${post.id}"]`)){
+      if(
+        postHost &&
+        !postHost.querySelector(`.moderation-actions[data-mod-id="${post.id}"]`)
+      ){
         appendModerationControls(postHost, "post", post.id, post.user_id || "");
       }
 
@@ -2439,11 +2454,37 @@
     }
 
     async function loadRealSectionThread(section){
+      const list = section === "discussion"
+        ? document.querySelector("#discussion .topic-comment-list .thread-list")
+        : document.querySelector("#stories .story-thread-scroll .thread-list");
+
+      if(list){
+        list.innerHTML = `<div class="thread-comment"><p>Зареждане на реалните коментари...</p></div>`;
+      }
+
       try{
         const post = await fetchRealSectionPost(section);
+
+        if(!post){
+          if(list){
+            list.innerHTML = `<div class="thread-comment"><p>Публикацията не е налична в базата.</p></div>`;
+          }
+          return;
+        }
+
         renderRealSectionThread(section, post);
+
+        if(section === "discussion"){
+          const toolbar = document.querySelector("#discussion .discussion-owner-toolbar");
+          if(toolbar){
+            toolbar.dataset.modUser = post.user_id || "";
+          }
+        }
       }catch(error){
         console.error(`FAN ZONE ${section} load error:`, error);
+        if(list){
+          list.innerHTML = `<div class="thread-comment"><p>Коментарите не можаха да бъдат заредени от сървъра.</p></div>`;
+        }
       }
     }
 
