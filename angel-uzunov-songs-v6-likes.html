@@ -849,6 +849,142 @@
       font-size:.62rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;
     }
 
+    /* V19.1: Custom OWNER modal — replaces browser confirm/alert */
+    .owner-modal-backdrop{
+      position:fixed;
+      inset:0;
+      z-index:9000;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:22px;
+      background:rgba(3,4,7,.82);
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
+    }
+    .owner-modal-backdrop.show{display:flex}
+    .owner-modal{
+      width:min(100%,540px);
+      position:relative;
+      overflow:hidden;
+      padding:30px;
+      border:1px solid rgba(216,182,106,.42);
+      border-radius:28px;
+      background:
+        radial-gradient(circle at 12% 0%,rgba(142,36,48,.18),transparent 40%),
+        radial-gradient(circle at 92% 8%,rgba(216,182,106,.10),transparent 34%),
+        linear-gradient(180deg,#101219 0%,#0a0b10 100%);
+      box-shadow:
+        0 34px 100px rgba(0,0,0,.68),
+        0 0 0 1px rgba(255,255,255,.025) inset;
+    }
+    .owner-modal::before{
+      content:"";
+      position:absolute;
+      left:0;right:0;top:0;
+      height:1px;
+      background:linear-gradient(90deg,transparent,var(--gold-light),transparent);
+      opacity:.8;
+    }
+    .owner-modal-icon{
+      width:58px;height:58px;
+      display:grid;place-items:center;
+      margin:0 auto 16px;
+      border-radius:50%;
+      border:1px solid rgba(216,182,106,.34);
+      background:rgba(216,182,106,.08);
+      color:var(--gold-light);
+      font-size:1.45rem;
+      box-shadow:0 0 0 7px rgba(216,182,106,.04);
+    }
+    .owner-modal-kicker{
+      text-align:center;
+      color:var(--gold-light);
+      font-size:.66rem;
+      font-weight:900;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      margin-bottom:9px;
+    }
+    .owner-modal-title{
+      font-family:"Cormorant Garamond",serif;
+      text-align:center;
+      font-size:clamp(2rem,5vw,2.7rem);
+      line-height:1;
+      margin-bottom:13px;
+      color:var(--text);
+    }
+    .owner-modal-text{
+      max-width:430px;
+      margin:0 auto;
+      text-align:center;
+      color:#c9c4ba;
+      font-size:.82rem;
+      line-height:1.75;
+    }
+    .owner-modal-note{
+      margin-top:14px;
+      padding:11px 13px;
+      text-align:center;
+      border:1px solid rgba(216,182,106,.16);
+      border-radius:14px;
+      background:rgba(216,182,106,.045);
+      color:#9f998f;
+      font-size:.68rem;
+      line-height:1.55;
+    }
+    .owner-modal-actions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:24px;
+    }
+    .owner-modal-btn{
+      min-height:48px;
+      border-radius:999px;
+      border:1px solid rgba(216,182,106,.30);
+      cursor:pointer;
+      font-weight:900;
+      font-size:.76rem;
+      transition:.2s ease;
+    }
+    .owner-modal-btn:hover{transform:translateY(-2px)}
+    .owner-modal-cancel{
+      background:rgba(255,255,255,.035);
+      color:#e9e3d8;
+    }
+    .owner-modal-confirm{
+      background:linear-gradient(135deg,var(--gold-light),var(--gold));
+      color:#17130a;
+      box-shadow:0 10px 28px rgba(216,182,106,.18);
+    }
+    .owner-modal-confirm.danger{
+      color:#fff5ef;
+      border-color:rgba(221,105,105,.45);
+      background:linear-gradient(135deg,#9b2f3d,#641723);
+      box-shadow:0 10px 28px rgba(142,36,48,.28);
+    }
+    .owner-modal-close{
+      position:absolute;
+      right:14px;top:14px;
+      width:36px;height:36px;
+      border-radius:50%;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.035);
+      color:#d9d4cb;
+      cursor:pointer;
+      font-size:.95rem;
+    }
+    .owner-modal.single .owner-modal-actions{
+      grid-template-columns:1fr;
+    }
+    .owner-modal.single .owner-modal-cancel{display:none}
+
+    @media(max-width:560px){
+      .owner-modal{padding:28px 20px 22px;border-radius:22px}
+      .owner-modal-actions{grid-template-columns:1fr}
+    }
+
   </style>
 </head>
 <body>
@@ -1224,6 +1360,23 @@
       <p class="auth-footnote">
         Няма отделна парола за FAN ZONE. Google или Magic Link удостоверяват акаунта чрез Supabase Auth.
       </p>
+    </div>
+  </div>
+
+
+  <!-- OWNER MODERATION MODAL -->
+  <div class="owner-modal-backdrop" id="ownerModalBackdrop" aria-hidden="true">
+    <div class="owner-modal" id="ownerModal" role="dialog" aria-modal="true" aria-labelledby="ownerModalTitle">
+      <button class="owner-modal-close" id="ownerModalClose" type="button" aria-label="Затвори">✕</button>
+      <div class="owner-modal-icon" id="ownerModalIcon">◆</div>
+      <div class="owner-modal-kicker">ANGEL FAN ZONE · OWNER</div>
+      <h3 class="owner-modal-title" id="ownerModalTitle">Потвърждение</h3>
+      <p class="owner-modal-text" id="ownerModalText"></p>
+      <div class="owner-modal-note" id="ownerModalNote" style="display:none"></div>
+      <div class="owner-modal-actions">
+        <button class="owner-modal-btn owner-modal-cancel" id="ownerModalCancel" type="button">Отказ</button>
+        <button class="owner-modal-btn owner-modal-confirm" id="ownerModalConfirm" type="button">Потвърди</button>
+      </div>
     </div>
   </div>
 
@@ -2346,6 +2499,114 @@
     }, true);
 
 
+
+    const ownerModalBackdrop = document.getElementById("ownerModalBackdrop");
+    const ownerModal = document.getElementById("ownerModal");
+    const ownerModalTitle = document.getElementById("ownerModalTitle");
+    const ownerModalText = document.getElementById("ownerModalText");
+    const ownerModalNote = document.getElementById("ownerModalNote");
+    const ownerModalIcon = document.getElementById("ownerModalIcon");
+    const ownerModalConfirm = document.getElementById("ownerModalConfirm");
+    const ownerModalCancel = document.getElementById("ownerModalCancel");
+    const ownerModalClose = document.getElementById("ownerModalClose");
+
+    let ownerModalResolver = null;
+
+    function closeOwnerModal(result=false){
+      ownerModalBackdrop?.classList.remove("show");
+      ownerModalBackdrop?.setAttribute("aria-hidden","true");
+      document.body.style.overflow = "";
+      const resolver = ownerModalResolver;
+      ownerModalResolver = null;
+      resolver?.(result);
+    }
+
+    function ownerConfirm({
+      title="Потвърждение",
+      text="Сигурни ли сте?",
+      note="",
+      confirmText="Потвърди",
+      cancelText="Отказ",
+      danger=false,
+      icon="◆"
+    }={}){
+      if(!ownerModalBackdrop) return Promise.resolve(false);
+
+      ownerModal.classList.remove("single");
+      ownerModalTitle.textContent = title;
+      ownerModalText.textContent = text;
+      ownerModalIcon.textContent = icon;
+      ownerModalConfirm.textContent = confirmText;
+      ownerModalCancel.textContent = cancelText;
+      ownerModalConfirm.classList.toggle("danger", !!danger);
+
+      if(note){
+        ownerModalNote.style.display = "block";
+        ownerModalNote.textContent = note;
+      }else{
+        ownerModalNote.style.display = "none";
+        ownerModalNote.textContent = "";
+      }
+
+      ownerModalBackdrop.classList.add("show");
+      ownerModalBackdrop.setAttribute("aria-hidden","false");
+      document.body.style.overflow = "hidden";
+
+      setTimeout(()=>ownerModalConfirm.focus(), 30);
+
+      return new Promise(resolve=>{
+        ownerModalResolver = resolve;
+      });
+    }
+
+    function ownerNotice({
+      title="ANGEL FAN ZONE",
+      text="",
+      note="",
+      buttonText="Разбрах",
+      danger=false,
+      icon="◆"
+    }={}){
+      if(!ownerModalBackdrop) return Promise.resolve(true);
+
+      ownerModal.classList.add("single");
+      ownerModalTitle.textContent = title;
+      ownerModalText.textContent = text;
+      ownerModalIcon.textContent = icon;
+      ownerModalConfirm.textContent = buttonText;
+      ownerModalConfirm.classList.toggle("danger", !!danger);
+
+      if(note){
+        ownerModalNote.style.display = "block";
+        ownerModalNote.textContent = note;
+      }else{
+        ownerModalNote.style.display = "none";
+        ownerModalNote.textContent = "";
+      }
+
+      ownerModalBackdrop.classList.add("show");
+      ownerModalBackdrop.setAttribute("aria-hidden","false");
+      document.body.style.overflow = "hidden";
+
+      setTimeout(()=>ownerModalConfirm.focus(), 30);
+
+      return new Promise(resolve=>{
+        ownerModalResolver = resolve;
+      });
+    }
+
+    ownerModalConfirm?.addEventListener("click",()=>closeOwnerModal(true));
+    ownerModalCancel?.addEventListener("click",()=>closeOwnerModal(false));
+    ownerModalClose?.addEventListener("click",()=>closeOwnerModal(false));
+    ownerModalBackdrop?.addEventListener("click",(event)=>{
+      if(event.target === ownerModalBackdrop) closeOwnerModal(false);
+    });
+    document.addEventListener("keydown",(event)=>{
+      if(event.key === "Escape" && ownerModalBackdrop?.classList.contains("show")){
+        closeOwnerModal(false);
+      }
+    });
+
     document.addEventListener("click", async (event)=>{
       const btn = event.target.closest(".mod-btn");
       if(!btn) return;
@@ -2365,10 +2626,23 @@
 
       if(btn.classList.contains("mod-block")){
         if(!targetUserId){
-          alert("Този запис няма свързан потребителски профил.");
+          await ownerNotice({
+            title:"Няма свързан профил",
+            text:"Този запис няма свързан потребителски профил и не може да бъде блокиран.",
+            icon:"!"
+          });
           return;
         }
-        if(!confirm("Да блокирам ли този потребител от участие във FAN ZONE?")) return;
+        const blockApproved = await ownerConfirm({
+          title:"Блокиране на потребител",
+          text:"Потребителят няма да може да публикува, коментира, реагира или гласува във FAN ZONE.",
+          note:"Действието се записва в журнала на модерацията.",
+          confirmText:"Да, блокирай",
+          cancelText:"Отказ",
+          danger:true,
+          icon:"⛔"
+        });
+        if(!blockApproved) return;
         btn.disabled = true;
         try{
           await fanApiPost({
@@ -2378,7 +2652,12 @@
           });
           btn.textContent = "Блокиран ✓";
         }catch(error){
-          alert(error?.message || "Потребителят не можа да бъде блокиран.");
+          await ownerNotice({
+            title:"Неуспешно блокиране",
+            text:error?.message || "Потребителят не можа да бъде блокиран.",
+            danger:true,
+            icon:"!"
+          });
         }finally{
           btn.disabled = false;
         }
@@ -2386,7 +2665,18 @@
       }
 
       if(!operation) return;
-      if(operation === "delete" && !confirm("Да изтрия ли това съдържание от публичната FAN ZONE? Записът ще остане в базата като soft-delete.")) return;
+      if(operation === "delete"){
+        const deleteApproved = await ownerConfirm({
+          title:"Изтриване на съдържание",
+          text:"Да изтрия ли това съдържание от публичната FAN ZONE?",
+          note:"Записът ще остане в базата като soft-delete и действието ще бъде записано в журнала на модерацията.",
+          confirmText:"Да, изтрий",
+          cancelText:"Отказ",
+          danger:true,
+          icon:"✦"
+        });
+        if(!deleteApproved) return;
+      }
 
       btn.disabled = true;
       const oldText = btn.textContent;
@@ -2419,7 +2709,12 @@
         setTimeout(()=>{ if(btn.isConnected){ btn.textContent = oldText; btn.disabled = false; } },1200);
       }catch(error){
         console.error("Moderation error:", error);
-        alert(error?.message || "Модераторското действие не можа да бъде изпълнено.");
+        await ownerNotice({
+          title:"Грешка при модерация",
+          text:error?.message || "Модераторското действие не можа да бъде изпълнено.",
+          danger:true,
+          icon:"!"
+        });
         btn.textContent = oldText;
         btn.disabled = false;
       }
