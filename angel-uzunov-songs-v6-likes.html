@@ -985,6 +985,28 @@
       .owner-modal-actions{grid-template-columns:1fr}
     }
 
+    /* V19.2: OWNER controls directly on every real comment */
+    .comment-owner-controls{
+      display:none;
+      gap:7px;
+      align-items:center;
+      flex-wrap:wrap;
+      margin-left:auto;
+    }
+    body.owner-mode .comment-owner-controls{display:flex}
+    .comment-owner-controls .mod-btn{
+      min-height:27px;
+      padding:0 9px;
+      font-size:.60rem;
+    }
+    @media(max-width:640px){
+      .comment-owner-controls{
+        width:100%;
+        margin-left:0;
+        margin-top:3px;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -1758,6 +1780,15 @@
           👎 ${Number(comment.thumbs_down || 0)}
         </button>
         <button class="thread-comment-btn reply-toggle" type="button">Отговори</button>
+        <span class="comment-owner-controls moderation-actions"
+              data-mod-target="comment"
+              data-mod-id="${comment.id}"
+              data-mod-user="${comment.user_id || ""}">
+          <button class="mod-btn mod-hide" type="button">Скрий</button>
+          <button class="mod-btn mod-restore" type="button">Възстанови</button>
+          <button class="mod-btn mod-danger mod-delete" type="button">Изтрий</button>
+          ${comment.user_id ? '<button class="mod-btn mod-block" type="button">Блокирай</button>' : ''}
+        </span>
       `;
 
       const replyForm = document.createElement("form");
@@ -1770,7 +1801,6 @@
       `;
 
       node.append(head,text,actions,replyForm);
-      appendModerationControls(node, "comment", comment.id, comment.user_id || "");
 
       const children = childrenMap.get(comment.id) || [];
       children.forEach(child=>{
