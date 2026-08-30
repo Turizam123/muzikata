@@ -1007,6 +1007,10 @@
       }
     }
 
+    /* V19.4: fixed editorial posts stay protected; OWNER moderates comments only */
+    .owner-comments-label{display:none;color:var(--gold-light);font-size:.62rem;font-weight:800}
+    body.owner-mode .owner-comments-label{display:inline}
+
   </style>
 </head>
 <body>
@@ -1060,15 +1064,6 @@
         <div class="discussion-layout">
           <article class="topic-card discussion-post" data-post-id="55dc83c6-1ede-477b-a1ce-dc09c5c8d9f6">
             <span class="topic-badge">Тема на седмицата</span>
-            <div class="moderation-actions discussion-owner-toolbar"
-                 data-mod-target="post"
-                 data-mod-id="55dc83c6-1ede-477b-a1ce-dc09c5c8d9f6"
-                 data-mod-user="">
-              <strong style="color:var(--gold-light);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;margin-right:4px">Публикация</strong>
-              <button class="mod-btn mod-hide" type="button">Скрий</button>
-              <button class="mod-btn mod-restore" type="button">Възстанови</button>
-              <button class="mod-btn mod-danger mod-delete" type="button">Изтрий публикацията</button>
-            </div>
             <h3>Трябва ли съвременният фолклор да запазва традиционното си звучене?</h3>
             <p>Фолклорът живее, когато се предава нататък. Но докъде може да стигне модерното звучене, без да изгубим корена?</p>
             <div class="real-post-reactions" id="discussionPostReactions">
@@ -1076,7 +1071,7 @@
               <button class="thread-btn vote-down" type="button" data-target-type="post" data-target-id="55dc83c6-1ede-477b-a1ce-dc09c5c8d9f6">👎 0</button>
             </div>
             <details class="topic-comments post-thread">
-              <summary>💬 Коментари · 5</summary>
+              <summary>💬 Коментари · 5 <span class="owner-comments-label">· OWNER контрол на коментарите</span></summary>
               <div class="topic-comment-list">
                 <div class="thread-list">
                   <div class="thread-comment">
@@ -2412,16 +2407,6 @@
         if(down) down.textContent = `👎 ${Number(post.thumbs_down || 0)}`;
       }
 
-      const postHost = section === "discussion"
-        ? document.querySelector("#discussion .discussion-post")
-        : document.querySelector("#stories .story-post");
-      if(
-        postHost &&
-        !postHost.querySelector(`.moderation-actions[data-mod-id="${post.id}"]`)
-      ){
-        appendModerationControls(postHost, "post", post.id, post.user_id || "");
-      }
-
       const comments = Array.isArray(post.comments) ? post.comments : [];
       const roots = comments.filter(comment=>!comment.parent_comment_id);
       const childrenMap = new Map();
@@ -2474,12 +2459,6 @@
 
         renderRealSectionThread(section, post);
 
-        if(section === "discussion"){
-          const toolbar = document.querySelector("#discussion .discussion-owner-toolbar");
-          if(toolbar){
-            toolbar.dataset.modUser = post.user_id || "";
-          }
-        }
       }catch(error){
         console.error(`FAN ZONE ${section} load error:`, error);
         if(list){
