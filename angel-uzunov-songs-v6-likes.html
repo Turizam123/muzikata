@@ -822,6 +822,33 @@
       cursor:wait;
     }
 
+    /* V19: OWNER moderation */
+    .owner-badge{
+      display:none;align-items:center;gap:7px;margin-left:2px;padding:6px 10px;
+      border:1px solid rgba(243,217,147,.48);border-radius:999px;
+      background:linear-gradient(135deg,rgba(216,182,106,.16),rgba(142,36,48,.10));
+      color:var(--gold-light);font-size:.62rem;font-weight:900;letter-spacing:.10em;text-transform:uppercase;
+    }
+    .owner-badge.show{display:inline-flex}
+    .moderation-actions{
+      display:none;gap:7px;align-items:center;flex-wrap:wrap;margin-top:10px;padding-top:9px;
+      border-top:1px dashed rgba(216,182,106,.22)
+    }
+    body.owner-mode .moderation-actions{display:flex}
+    .mod-btn{
+      min-height:30px;padding:0 10px;border-radius:999px;border:1px solid rgba(216,182,106,.28);
+      background:rgba(255,255,255,.035);color:#d8d2c8;cursor:pointer;font-size:.64rem;font-weight:800;
+    }
+    .mod-btn:hover{border-color:rgba(243,217,147,.56);color:var(--gold-light)}
+    .mod-btn.mod-danger{border-color:rgba(180,65,65,.42);color:#efb0b0}
+    .mod-btn.mod-block{border-color:rgba(180,65,65,.42);color:#efc0a8}
+    .mod-btn.mod-restore{border-color:rgba(92,170,110,.42);color:#bde5c5}
+    .moderated-local{opacity:.48;filter:saturate(.55)}
+    .moderated-local::after{
+      content:"Скрито от OWNER";display:block;margin-top:10px;color:var(--gold-light);
+      font-size:.62rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;
+    }
+
   </style>
 </head>
 <body>
@@ -841,6 +868,7 @@
         <div class="auth-user" id="authUserBox" aria-live="polite">
           <div class="auth-avatar" id="authAvatar">F</div>
           <span class="auth-user-name" id="authUserName">Фен</span>
+          <span class="owner-badge" id="ownerBadge">OWNER</span>
           <button class="auth-logout" id="authLogoutButton" type="button" title="Изход" aria-label="Изход">↗</button>
         </div>
       </div>
@@ -1387,6 +1415,7 @@
 
     fanSupabase.auth.onAuthStateChange((_event, session) => {
       renderAuth(session);
+      setTimeout(() => window.refreshFanModeratorStatus?.(), 0);
     });
 
     const { data: sessionData } = await fanSupabase.auth.getSession();
@@ -1495,6 +1524,54 @@
       });
     }
 
+
+    let fanModerator = { is_moderator:false, role:null };
+
+    function moderationButtons(targetType, targetId, targetUserId){
+      if(!targetId) return "";
+      return `
+        <div class="moderation-actions" data-mod-target="${targetType}" data-mod-id="${targetId}" data-mod-user="${targetUserId || ""}">
+          <button class="mod-btn mod-hide" type="button">Скрий</button>
+          <button class="mod-btn mod-restore" type="button">Възстанови</button>
+          <button class="mod-btn mod-danger mod-delete" type="button">Изтрий</button>
+          ${targetUserId ? '<button class="mod-btn mod-block" type="button">Блокирай потребителя</button>' : ''}
+        </div>`;
+    }
+
+    async function refreshModeratorStatus(){
+      const badge = document.getElementById("ownerBadge");
+      const session = await window.getFanZoneSession?.();
+
+      if(!session?.access_token){
+        fanModerator = {is_moderator:false, role:null};
+        document.body.classList.remove("owner-mode");
+        badge?.classList.remove("show");
+        return;
+      }
+
+      try{
+        const data = await fanApiPost({action:"moderator_status"});
+        fanModerator = data;
+        const active = !!data.is_moderator;
+        document.body.classList.toggle("owner-mode", active);
+        badge?.classList.toggle("show", active);
+        if(badge && active) badge.textContent = String(data.role || "OWNER").toUpperCase();
+      }catch(error){
+        console.error("Moderator status error:", error);
+        fanModerator = {is_moderator:false, role:null};
+        document.body.classList.remove("owner-mode");
+        badge?.classList.remove("show");
+      }
+    }
+
+    function appendModerationControls(node, targetType, targetId, targetUserId){
+      if(!node || !targetId) return;
+      const wrap = document.createElement("div");
+      wrap.innerHTML = moderationButtons(targetType,targetId,targetUserId);
+      const controls = wrap.firstElementChild;
+      if(controls) node.appendChild(controls);
+    }
+
     function createRealCommentNode(comment, childrenMap){
       const node = document.createElement("div");
       node.className = "thread-comment";
@@ -1540,6 +1617,7 @@
       `;
 
       node.append(head,text,actions,replyForm);
+      appendModerationControls(node, "comment", comment.id, comment.user_id || "");
 
       const children = childrenMap.get(comment.id) || [];
       children.forEach(child=>{
@@ -1610,7 +1688,9 @@
         list.appendChild(createRealCommentNode(comment, childrenMap));
       });
 
-      article.append(head,p,actions,details);
+      article.append(head,p,actions);
+      appendModerationControls(article, "post", post.id, post.user_id || "");
+      article.append(details);
       return article;
     }
 
@@ -1978,6 +2058,9 @@
           </details>
         </div>`;
 
+      const releaseBody = article.querySelector(".release-body");
+      appendModerationControls(releaseBody, "post", post.id, post.user_id || "");
+
       const list = article.querySelector(".release-comment-list");
       roots.forEach(comment=>{
         const node = createRealCommentNode(comment, childrenMap);
@@ -2134,6 +2217,13 @@
         if(down) down.textContent = `👎 ${Number(post.thumbs_down || 0)}`;
       }
 
+      const postHost = section === "discussion"
+        ? document.querySelector("#discussion .discussion-post")
+        : document.querySelector("#stories .story-post");
+      if(postHost && !postHost.querySelector(`.moderation-actions[data-mod-id="${post.id}"]`)){
+        appendModerationControls(postHost, "post", post.id, post.user_id || "");
+      }
+
       const comments = Array.isArray(post.comments) ? post.comments : [];
       const roots = comments.filter(comment=>!comment.parent_comment_id);
       const childrenMap = new Map();
@@ -2255,6 +2345,86 @@
       await submitRealSectionComment(form);
     }, true);
 
+
+    document.addEventListener("click", async (event)=>{
+      const btn = event.target.closest(".mod-btn");
+      if(!btn) return;
+      event.preventDefault();
+      event.stopPropagation();
+
+      const controls = btn.closest(".moderation-actions");
+      const targetType = controls?.dataset.modTarget;
+      const targetId = controls?.dataset.modId;
+      const targetUserId = controls?.dataset.modUser || "";
+      if(!fanModerator?.is_moderator || !targetType || !targetId) return;
+
+      let operation = null;
+      if(btn.classList.contains("mod-hide")) operation = "hide";
+      if(btn.classList.contains("mod-restore")) operation = "restore";
+      if(btn.classList.contains("mod-delete")) operation = "delete";
+
+      if(btn.classList.contains("mod-block")){
+        if(!targetUserId){
+          alert("Този запис няма свързан потребителски профил.");
+          return;
+        }
+        if(!confirm("Да блокирам ли този потребител от участие във FAN ZONE?")) return;
+        btn.disabled = true;
+        try{
+          await fanApiPost({
+            action:"block_user",
+            user_id:targetUserId,
+            reason:"Блокиран от OWNER през FAN ZONE"
+          });
+          btn.textContent = "Блокиран ✓";
+        }catch(error){
+          alert(error?.message || "Потребителят не можа да бъде блокиран.");
+        }finally{
+          btn.disabled = false;
+        }
+        return;
+      }
+
+      if(!operation) return;
+      if(operation === "delete" && !confirm("Да изтрия ли това съдържание от публичната FAN ZONE? Записът ще остане в базата като soft-delete.")) return;
+
+      btn.disabled = true;
+      const oldText = btn.textContent;
+      btn.textContent = "Обработка...";
+
+      try{
+        await fanApiPost({
+          action:"moderate_content",
+          target_type:targetType,
+          target_id:targetId,
+          operation,
+          reason:`${operation} от OWNER през FAN ZONE`
+        });
+
+        const host = targetType === "comment"
+          ? controls.closest(".thread-comment")
+          : controls.closest(".fan-post,.release-card,.discussion-post,.story-post");
+
+        if(operation === "hide"){
+          host?.classList.add("moderated-local");
+          btn.textContent = "Скрито ✓";
+        }else if(operation === "restore"){
+          host?.classList.remove("moderated-local");
+          btn.textContent = "Възстановено ✓";
+        }else if(operation === "delete"){
+          host?.remove();
+          return;
+        }
+
+        setTimeout(()=>{ if(btn.isConnected){ btn.textContent = oldText; btn.disabled = false; } },1200);
+      }catch(error){
+        console.error("Moderation error:", error);
+        alert(error?.message || "Модераторското действие не можа да бъде изпълнено.");
+        btn.textContent = oldText;
+        btn.disabled = false;
+      }
+    }, true);
+
     document.getElementById("fanPostForm").addEventListener("submit", async (e)=>{
       e.preventDefault();
       clearFanPostMessage();
@@ -2295,6 +2465,9 @@
         submit.textContent = "Публикувай";
       }
     });
+
+    window.refreshFanModeratorStatus = refreshModeratorStatus;
+    refreshModeratorStatus();
 
     loadRealSectionThread("discussion");
     loadRealSectionThread("story");
