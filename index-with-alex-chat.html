@@ -1126,6 +1126,50 @@
       margin-top: 5px;
     }
 
+
+    /* FAN ZONE card — scoped only to Official Channels section */
+    #platforms .platform-fan-zone {
+      position: relative;
+      overflow: hidden;
+      border-color: rgba(216,182,106,.38);
+      background:
+        radial-gradient(circle at 18% 0%, rgba(142,36,48,.20), transparent 48%),
+        rgba(216,182,106,.055);
+    }
+
+    #platforms .platform-fan-zone::after {
+      content: "LIVE";
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      padding: 5px 8px;
+      border: 1px solid rgba(216,182,106,.30);
+      border-radius: 999px;
+      color: var(--gold-light);
+      background: rgba(8,9,13,.70);
+      font-size: .52rem;
+      font-weight: 900;
+      letter-spacing: .12em;
+      line-height: 1;
+    }
+
+    #platforms .platform-fan-zone .platform-icon {
+      color: #17130a;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      box-shadow: 0 0 0 5px rgba(216,182,106,.08);
+    }
+
+    #platforms .platform-fan-zone strong {
+      color: var(--gold-light);
+    }
+
+    #platforms .platform-fan-zone:hover {
+      border-color: rgba(243,217,147,.68);
+      background:
+        radial-gradient(circle at 18% 0%, rgba(142,36,48,.28), transparent 48%),
+        rgba(216,182,106,.09);
+    }
+
     /* Contact */
     .contact-card {
       display: grid;
@@ -1729,6 +1773,11 @@
         <h2 class="section-title">Последвай Ангел Узунов</h2>
 
         <div class="platforms">
+          <a class="platform platform-fan-zone" href="fan-zone.html">
+            <div class="platform-icon">★</div>
+            <div><strong>FAN ZONE</strong><span>Гласувай • Коментирай • Избирай №1</span></div>
+          </a>
+
           <a class="platform" href="https://www.youtube.com/@angeluzunovuzi" target="_blank" rel="noopener">
             <div class="platform-icon">▶</div>
             <div><strong>YouTube</strong><span>Видеа и премиери</span></div>
