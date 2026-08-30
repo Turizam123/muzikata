@@ -69,9 +69,10 @@
           "name": "ANGEL FAN ZONE секции",
           "itemListElement": [
             {"@type": "ListItem", "position": 1, "name": "Сега се обсъжда"},
-            {"@type": "ListItem", "position": 2, "name": "Месечен избор на феновете"},
-            {"@type": "ListItem", "position": 3, "name": "Музикални истории"},
-            {"@type": "ListItem", "position": 4, "name": "Гласът на феновете"}
+            {"@type": "ListItem", "position": 2, "name": "Нови песни"},
+            {"@type": "ListItem", "position": 3, "name": "Месечен избор на феновете"},
+            {"@type": "ListItem", "position": 4, "name": "Музикални истории"},
+            {"@type": "ListItem", "position": 5, "name": "Гласът на феновете"}
           ]
         }
       }
@@ -531,6 +532,25 @@
       .fan-post-comments > .fan-post-comment-form{max-height:210px}
     }
 
+
+    /* V18: New releases */
+    .release-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:26px;margin-top:38px}
+    .release-card{overflow:hidden;border:1px solid var(--border);border-radius:28px;background:rgba(255,255,255,.035);box-shadow:var(--shadow)}
+    .release-media{position:relative;aspect-ratio:16/9;background:#050609;overflow:hidden}
+    .release-thumb{position:absolute;inset:0;background:linear-gradient(to top,rgba(7,8,11,.92),rgba(7,8,11,.12) 62%),var(--release-thumb) center/cover no-repeat}
+    .release-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:68px;height:68px;border:0;border-radius:50%;display:grid;place-items:center;color:#17130a;background:linear-gradient(135deg,var(--gold-light),var(--gold));box-shadow:0 16px 42px rgba(0,0,0,.4),0 0 0 8px rgba(216,182,106,.12);font-size:1.55rem;cursor:pointer;z-index:2}
+    .release-body{padding:26px}
+    .release-body h3{font-family:"Cormorant Garamond",serif;font-size:2.35rem;line-height:1;margin:10px 0 12px}
+    .release-body p{color:var(--muted);line-height:1.7;font-size:.84rem}
+    .release-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+    .release-comments{margin-top:18px;padding-top:16px;border-top:1px solid var(--border)}
+    .release-comments summary{cursor:pointer;color:var(--gold-light);font-size:.78rem;font-weight:800;list-style:none}
+    .release-comments summary::-webkit-details-marker{display:none}
+    .release-comment-list{display:grid;gap:10px;max-height:340px;overflow-y:auto;margin-top:14px;padding-right:8px;scrollbar-width:thin;scrollbar-color:rgba(216,182,106,.58) rgba(255,255,255,.045)}
+    .release-comment-form{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:12px}
+    .release-comment-form .field{padding:11px 13px}
+    @media(max-width:820px){.release-grid{grid-template-columns:1fr}}
+
     footer{
       padding:28px 0;
       border-top:1px solid rgba(255,255,255,.07);
@@ -802,6 +822,325 @@
       cursor:wait;
     }
 
+    /* V19: OWNER moderation */
+    .owner-badge{
+      display:none;align-items:center;gap:7px;margin-left:2px;padding:6px 10px;
+      border:1px solid rgba(243,217,147,.48);border-radius:999px;
+      background:linear-gradient(135deg,rgba(216,182,106,.16),rgba(142,36,48,.10));
+      color:var(--gold-light);font-size:.62rem;font-weight:900;letter-spacing:.10em;text-transform:uppercase;
+    }
+    .owner-badge.show{display:inline-flex}
+    .moderation-actions{
+      display:none;gap:7px;align-items:center;flex-wrap:wrap;margin-top:10px;padding-top:9px;
+      border-top:1px dashed rgba(216,182,106,.22)
+    }
+    body.owner-mode .moderation-actions{display:flex}
+    .mod-btn{
+      min-height:30px;padding:0 10px;border-radius:999px;border:1px solid rgba(216,182,106,.28);
+      background:rgba(255,255,255,.035);color:#d8d2c8;cursor:pointer;font-size:.64rem;font-weight:800;
+    }
+    .mod-btn:hover{border-color:rgba(243,217,147,.56);color:var(--gold-light)}
+    .mod-btn.mod-danger{border-color:rgba(180,65,65,.42);color:#efb0b0}
+    .mod-btn.mod-block{border-color:rgba(180,65,65,.42);color:#efc0a8}
+    .mod-btn.mod-restore{border-color:rgba(92,170,110,.42);color:#bde5c5}
+    .moderated-local{opacity:.48;filter:saturate(.55)}
+    .moderated-local::after{
+      content:"Скрито от OWNER";display:block;margin-top:10px;color:var(--gold-light);
+      font-size:.62rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;
+    }
+
+    /* V19.1: Custom OWNER modal — replaces browser confirm/alert */
+    .owner-modal-backdrop{
+      position:fixed;
+      inset:0;
+      z-index:9000;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:22px;
+      background:rgba(3,4,7,.82);
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
+    }
+    .owner-modal-backdrop.show{display:flex}
+    .owner-modal{
+      width:min(100%,540px);
+      position:relative;
+      overflow:hidden;
+      padding:30px;
+      border:1px solid rgba(216,182,106,.42);
+      border-radius:28px;
+      background:
+        radial-gradient(circle at 12% 0%,rgba(142,36,48,.18),transparent 40%),
+        radial-gradient(circle at 92% 8%,rgba(216,182,106,.10),transparent 34%),
+        linear-gradient(180deg,#101219 0%,#0a0b10 100%);
+      box-shadow:
+        0 34px 100px rgba(0,0,0,.68),
+        0 0 0 1px rgba(255,255,255,.025) inset;
+    }
+    .owner-modal::before{
+      content:"";
+      position:absolute;
+      left:0;right:0;top:0;
+      height:1px;
+      background:linear-gradient(90deg,transparent,var(--gold-light),transparent);
+      opacity:.8;
+    }
+    .owner-modal-icon{
+      width:58px;height:58px;
+      display:grid;place-items:center;
+      margin:0 auto 16px;
+      border-radius:50%;
+      border:1px solid rgba(216,182,106,.34);
+      background:rgba(216,182,106,.08);
+      color:var(--gold-light);
+      font-size:1.45rem;
+      box-shadow:0 0 0 7px rgba(216,182,106,.04);
+    }
+    .owner-modal-kicker{
+      text-align:center;
+      color:var(--gold-light);
+      font-size:.66rem;
+      font-weight:900;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      margin-bottom:9px;
+    }
+    .owner-modal-title{
+      font-family:"Cormorant Garamond",serif;
+      text-align:center;
+      font-size:clamp(2rem,5vw,2.7rem);
+      line-height:1;
+      margin-bottom:13px;
+      color:var(--text);
+    }
+    .owner-modal-text{
+      max-width:430px;
+      margin:0 auto;
+      text-align:center;
+      color:#c9c4ba;
+      font-size:.82rem;
+      line-height:1.75;
+    }
+    .owner-modal-note{
+      margin-top:14px;
+      padding:11px 13px;
+      text-align:center;
+      border:1px solid rgba(216,182,106,.16);
+      border-radius:14px;
+      background:rgba(216,182,106,.045);
+      color:#9f998f;
+      font-size:.68rem;
+      line-height:1.55;
+    }
+    .owner-modal-actions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:24px;
+    }
+    .owner-modal-btn{
+      min-height:48px;
+      border-radius:999px;
+      border:1px solid rgba(216,182,106,.30);
+      cursor:pointer;
+      font-weight:900;
+      font-size:.76rem;
+      transition:.2s ease;
+    }
+    .owner-modal-btn:hover{transform:translateY(-2px)}
+    .owner-modal-cancel{
+      background:rgba(255,255,255,.035);
+      color:#e9e3d8;
+    }
+    .owner-modal-confirm{
+      background:linear-gradient(135deg,var(--gold-light),var(--gold));
+      color:#17130a;
+      box-shadow:0 10px 28px rgba(216,182,106,.18);
+    }
+    .owner-modal-confirm.danger{
+      color:#fff5ef;
+      border-color:rgba(221,105,105,.45);
+      background:linear-gradient(135deg,#9b2f3d,#641723);
+      box-shadow:0 10px 28px rgba(142,36,48,.28);
+    }
+    .owner-modal-close{
+      position:absolute;
+      right:14px;top:14px;
+      width:36px;height:36px;
+      border-radius:50%;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.035);
+      color:#d9d4cb;
+      cursor:pointer;
+      font-size:.95rem;
+    }
+    .owner-modal.single .owner-modal-actions{
+      grid-template-columns:1fr;
+    }
+    .owner-modal.single .owner-modal-cancel{display:none}
+
+    @media(max-width:560px){
+      .owner-modal{padding:28px 20px 22px;border-radius:22px}
+      .owner-modal-actions{grid-template-columns:1fr}
+    }
+
+    /* V19.2: OWNER controls directly on every real comment */
+    .comment-owner-controls{
+      display:none;
+      gap:7px;
+      align-items:center;
+      flex-wrap:wrap;
+      margin-left:auto;
+    }
+    body.owner-mode .comment-owner-controls{display:flex}
+    .comment-owner-controls .mod-btn{
+      min-height:27px;
+      padding:0 9px;
+      font-size:.60rem;
+    }
+    @media(max-width:640px){
+      .comment-owner-controls{
+        width:100%;
+        margin-left:0;
+        margin-top:3px;
+      }
+    }
+
+    /* V19.4: fixed editorial posts stay protected; OWNER moderates comments only */
+    .owner-comments-label{display:none;color:var(--gold-light);font-size:.62rem;font-weight:800}
+    body.owner-mode .owner-comments-label{display:inline}
+
+    /* V19.5: weekly topic is permanent; OWNER controls comments only */
+    #discussion .discussion-post > .moderation-actions{display:none !important}
+    body.owner-mode #discussion .owner-comments-label{
+      display:inline;
+      color:var(--gold-light);
+      font-size:.60rem;
+      font-weight:900;
+      letter-spacing:.04em;
+    }
+
+    /* V20: MONTHLY FAN CHOICE — section-only upgrade */
+    #monthly .monthly-song{
+      grid-template-columns:48px 190px minmax(0,1fr);
+      align-items:center;
+    }
+    #monthly .monthly-media{
+      position:relative;
+      aspect-ratio:16/9;
+      border-radius:14px;
+      overflow:hidden;
+      background:#050609;
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 10px 28px rgba(0,0,0,.24);
+    }
+    #monthly .monthly-thumb{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      border-radius:0;
+      cursor:pointer;
+      border:0;
+      background:var(--thumb) center/cover no-repeat;
+    }
+    #monthly .monthly-thumb::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(to top,rgba(5,6,9,.70),rgba(5,6,9,.08) 62%);
+    }
+    #monthly .monthly-thumb::after{
+      content:"▶";
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform:translate(-50%,-50%);
+      width:48px;
+      height:48px;
+      display:grid;
+      place-items:center;
+      border-radius:50%;
+      background:linear-gradient(135deg,var(--gold-light),var(--gold));
+      color:#17130a;
+      box-shadow:0 10px 28px rgba(0,0,0,.35),0 0 0 6px rgba(216,182,106,.10);
+      font-size:1rem;
+      font-weight:900;
+    }
+    #monthly .monthly-inline-player{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      border:0;
+      z-index:3;
+      background:#000;
+    }
+    #monthly .monthly-youtube-link{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      margin-top:9px;
+      color:var(--gold-light);
+      font-size:.68rem;
+      font-weight:800;
+      letter-spacing:.02em;
+    }
+    #monthly .monthly-youtube-link:hover{text-decoration:underline}
+    #monthly .monthly-new-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      margin-bottom:8px;
+      padding:6px 10px;
+      border:1px solid rgba(243,217,147,.42);
+      border-radius:999px;
+      background:linear-gradient(135deg,rgba(142,36,48,.26),rgba(216,182,106,.13));
+      color:var(--gold-light);
+      font-size:.60rem;
+      font-weight:900;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      box-shadow:0 0 0 4px rgba(216,182,106,.035);
+    }
+    #monthly .monthly-song.is-new-proposal{
+      border-color:rgba(243,217,147,.42);
+      background:
+        radial-gradient(circle at 0 0,rgba(142,36,48,.18),transparent 32%),
+        rgba(255,255,255,.035);
+    }
+    #monthly .monthly-vote-locked-note{
+      margin-top:8px;
+      color:#8f8a82;
+      font-size:.62rem;
+      line-height:1.45;
+    }
+    #monthly .monthly-vote-locked-note strong{color:var(--gold-light)}
+    #monthly .vote-meter.guest-vote{
+      opacity:.82;
+    }
+    #monthly .monthly-rank{
+      font-size:.86rem;
+    }
+    @media(max-width:760px){
+      #monthly .monthly-song{
+        grid-template-columns:34px minmax(0,1fr);
+        gap:12px;
+      }
+      #monthly .monthly-rank{
+        grid-row:1 / span 2;
+        align-self:start;
+        margin-top:4px;
+      }
+      #monthly .monthly-media{
+        grid-column:2;
+      }
+      #monthly .monthly-vote-area{
+        grid-column:2;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -821,6 +1160,7 @@
         <div class="auth-user" id="authUserBox" aria-live="polite">
           <div class="auth-avatar" id="authAvatar">F</div>
           <span class="auth-user-name" id="authUserName">Фен</span>
+          <span class="owner-badge" id="ownerBadge">OWNER</span>
           <button class="auth-logout" id="authLogoutButton" type="button" title="Изход" aria-label="Изход">↗</button>
         </div>
       </div>
@@ -839,6 +1179,7 @@
           </p>
           <div class="hero-actions">
             <a class="btn btn-primary" href="#discussion">Виж какво се обсъжда</a>
+            <a class="btn btn-outline" href="#releases">Нови песни</a>
             <a class="btn btn-outline" href="#monthly">Гласувай за песен</a>
           </div>
         </div>
@@ -860,7 +1201,7 @@
               <button class="thread-btn vote-down" type="button" data-target-type="post" data-target-id="55dc83c6-1ede-477b-a1ce-dc09c5c8d9f6">👎 0</button>
             </div>
             <details class="topic-comments post-thread">
-              <summary>💬 Коментари · 5</summary>
+              <summary>💬 Коментари · <span class="discussion-comment-count">...</span> <span class="owner-comments-label">· OWNER контрол на коментарите</span></summary>
               <div class="topic-comment-list">
                 <div class="thread-list">
                   <div class="thread-comment">
@@ -917,67 +1258,26 @@
       </div>
     </section>
 
+    <section class="section" id="releases">
+      <div class="container">
+        <span class="eyebrow">Нови песни</span>
+        <h2 class="section-title">Чуйте най-новото</h2>
+        <p class="section-text">Гледайте новите песни, оставете своята реакция и споделете мнение директно във FAN ZONE.</p>
+        <div class="release-grid" id="releaseGrid">
+          <div class="panel"><p class="section-text">Зареждане на новите песни...</p></div>
+        </div>
+      </div>
+    </section>
+
     <section class="section" id="monthly">
       <div class="container">
         <span class="eyebrow">Месечен избор на феновете</span>
         <h2 class="section-title">Вие избирате</h2>
         <p class="section-text">Пет песни. Един месец. Вашият вот определя подредбата – песента с най-много гласове автоматично застава на първо място.</p>
         <div class="monthly-list" id="monthlyList">
-          <article class="monthly-song" data-votes="19">
-            <span class="monthly-rank">1</span>
-            <a class="monthly-thumb" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=uD3WqddlOVg" style="--thumb:url('https://i.ytimg.com/vi/uD3WqddlOVg/hqdefault.jpg')"></a>
-            <div class="monthly-vote-area">
-              <div class="monthly-title">Първо либе<small>Ангел Узунов</small></div>
-              <button class="vote-meter" type="button" aria-label="Гласувай за Първо либе">
-                <span class="vote-meter-fill" style="--vote-width:100.0%"></span>
-                <span class="vote-meter-label"><span>Гласувай</span><strong class="vote-count">19</strong></span>
-              </button>
-            </div>
-          </article>
-          <article class="monthly-song" data-votes="14">
-            <span class="monthly-rank">2</span>
-            <a class="monthly-thumb" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=FmUQEAQ6bFs" style="--thumb:url('https://i.ytimg.com/vi/FmUQEAQ6bFs/hqdefault.jpg')"></a>
-            <div class="monthly-vote-area">
-              <div class="monthly-title">Елено, моме убаво<small>Ангел Узунов</small></div>
-              <button class="vote-meter" type="button" aria-label="Гласувай за Елено, моме убаво">
-                <span class="vote-meter-fill" style="--vote-width:73.7%"></span>
-                <span class="vote-meter-label"><span>Гласувай</span><strong class="vote-count">14</strong></span>
-              </button>
-            </div>
-          </article>
-          <article class="monthly-song" data-votes="11">
-            <span class="monthly-rank">3</span>
-            <a class="monthly-thumb" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=z6I9QPKcCcY" style="--thumb:url('https://i.ytimg.com/vi/z6I9QPKcCcY/hqdefault.jpg')"></a>
-            <div class="monthly-vote-area">
-              <div class="monthly-title">Росна зора<small>Ангел Узунов</small></div>
-              <button class="vote-meter" type="button" aria-label="Гласувай за Росна зора">
-                <span class="vote-meter-fill" style="--vote-width:57.9%"></span>
-                <span class="vote-meter-label"><span>Гласувай</span><strong class="vote-count">11</strong></span>
-              </button>
-            </div>
-          </article>
-          <article class="monthly-song" data-votes="8">
-            <span class="monthly-rank">4</span>
-            <a class="monthly-thumb" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=MLCLaXaSneI" style="--thumb:url('https://i.ytimg.com/vi/MLCLaXaSneI/hqdefault.jpg')"></a>
-            <div class="monthly-vote-area">
-              <div class="monthly-title">Без теб не мога<small>Ангел Узунов</small></div>
-              <button class="vote-meter" type="button" aria-label="Гласувай за Без теб не мога">
-                <span class="vote-meter-fill" style="--vote-width:42.1%"></span>
-                <span class="vote-meter-label"><span>Гласувай</span><strong class="vote-count">8</strong></span>
-              </button>
-            </div>
-          </article>
-          <article class="monthly-song" data-votes="5">
-            <span class="monthly-rank">5</span>
-            <a class="monthly-thumb" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=yOIzCb_R2hw" style="--thumb:url('https://i.ytimg.com/vi/yOIzCb_R2hw/hqdefault.jpg')"></a>
-            <div class="monthly-vote-area">
-              <div class="monthly-title">Сърцето ми гори<small>Ангел Узунов</small></div>
-              <button class="vote-meter" type="button" aria-label="Гласувай за Сърцето ми гори">
-                <span class="vote-meter-fill" style="--vote-width:26.3%"></span>
-                <span class="vote-meter-label"><span>Гласувай</span><strong class="vote-count">5</strong></span>
-              </button>
-            </div>
-          </article>
+          <div class="panel">
+            <p class="section-text">Зареждане на месечната класация...</p>
+          </div>
         </div>
       </div>
     </section>
@@ -1164,6 +1464,23 @@
       <p class="auth-footnote">
         Няма отделна парола за FAN ZONE. Google или Magic Link удостоверяват акаунта чрез Supabase Auth.
       </p>
+    </div>
+  </div>
+
+
+  <!-- OWNER MODERATION MODAL -->
+  <div class="owner-modal-backdrop" id="ownerModalBackdrop" aria-hidden="true">
+    <div class="owner-modal" id="ownerModal" role="dialog" aria-modal="true" aria-labelledby="ownerModalTitle">
+      <button class="owner-modal-close" id="ownerModalClose" type="button" aria-label="Затвори">✕</button>
+      <div class="owner-modal-icon" id="ownerModalIcon">◆</div>
+      <div class="owner-modal-kicker">ANGEL FAN ZONE · OWNER</div>
+      <h3 class="owner-modal-title" id="ownerModalTitle">Потвърждение</h3>
+      <p class="owner-modal-text" id="ownerModalText"></p>
+      <div class="owner-modal-note" id="ownerModalNote" style="display:none"></div>
+      <div class="owner-modal-actions">
+        <button class="owner-modal-btn owner-modal-cancel" id="ownerModalCancel" type="button">Отказ</button>
+        <button class="owner-modal-btn owner-modal-confirm" id="ownerModalConfirm" type="button">Потвърди</button>
+      </div>
     </div>
   </div>
 
@@ -1355,6 +1672,8 @@
 
     fanSupabase.auth.onAuthStateChange((_event, session) => {
       renderAuth(session);
+      setTimeout(() => window.refreshFanModeratorStatus?.(), 0);
+      setTimeout(() => window.refreshMonthlyFanChoice?.(), 0);
     });
 
     const { data: sessionData } = await fanSupabase.auth.getSession();
@@ -1463,6 +1782,54 @@
       });
     }
 
+
+    let fanModerator = { is_moderator:false, role:null };
+
+    function moderationButtons(targetType, targetId, targetUserId){
+      if(!targetId) return "";
+      return `
+        <div class="moderation-actions" data-mod-target="${targetType}" data-mod-id="${targetId}" data-mod-user="${targetUserId || ""}">
+          <button class="mod-btn mod-hide" type="button">Скрий</button>
+          <button class="mod-btn mod-restore" type="button">Възстанови</button>
+          <button class="mod-btn mod-danger mod-delete" type="button">Изтрий</button>
+          ${targetUserId ? '<button class="mod-btn mod-block" type="button">Блокирай потребителя</button>' : ''}
+        </div>`;
+    }
+
+    async function refreshModeratorStatus(){
+      const badge = document.getElementById("ownerBadge");
+      const session = await window.getFanZoneSession?.();
+
+      if(!session?.access_token){
+        fanModerator = {is_moderator:false, role:null};
+        document.body.classList.remove("owner-mode");
+        badge?.classList.remove("show");
+        return;
+      }
+
+      try{
+        const data = await fanApiPost({action:"moderator_status"});
+        fanModerator = data;
+        const active = !!data.is_moderator;
+        document.body.classList.toggle("owner-mode", active);
+        badge?.classList.toggle("show", active);
+        if(badge && active) badge.textContent = String(data.role || "OWNER").toUpperCase();
+      }catch(error){
+        console.error("Moderator status error:", error);
+        fanModerator = {is_moderator:false, role:null};
+        document.body.classList.remove("owner-mode");
+        badge?.classList.remove("show");
+      }
+    }
+
+    function appendModerationControls(node, targetType, targetId, targetUserId){
+      if(!node || !targetId) return;
+      const wrap = document.createElement("div");
+      wrap.innerHTML = moderationButtons(targetType,targetId,targetUserId);
+      const controls = wrap.firstElementChild;
+      if(controls) node.appendChild(controls);
+    }
+
     function createRealCommentNode(comment, childrenMap){
       const node = document.createElement("div");
       node.className = "thread-comment";
@@ -1496,6 +1863,16 @@
           👎 ${Number(comment.thumbs_down || 0)}
         </button>
         <button class="thread-comment-btn reply-toggle" type="button">Отговори</button>
+        <span class="comment-owner-controls moderation-actions"
+              data-mod-target="comment"
+              data-mod-id="${comment.id}"
+              data-mod-user="${comment.user_id || ""}">
+          <strong style="color:var(--gold-light);font-size:.58rem;letter-spacing:.08em;text-transform:uppercase">Коментар</strong>
+          <button class="mod-btn mod-hide" type="button">Скрий</button>
+          <button class="mod-btn mod-restore" type="button">Възстанови</button>
+          <button class="mod-btn mod-danger mod-delete" type="button">Изтрий</button>
+          ${comment.user_id ? '<button class="mod-btn mod-block" type="button">Блокирай</button>' : ''}
+        </span>
       `;
 
       const replyForm = document.createElement("form");
@@ -1578,7 +1955,9 @@
         list.appendChild(createRealCommentNode(comment, childrenMap));
       });
 
-      article.append(head,p,actions,details);
+      article.append(head,p,actions);
+      appendModerationControls(article, "post", post.id, post.user_id || "");
+      article.append(details);
       return article;
     }
 
@@ -1692,7 +2071,36 @@
         : "";
     }
 
-    function renderMonthlyRanking(songs){
+    const MONTHLY_NEW_PROPOSAL_VIDEO_ID = "48yHYWqMiow";
+
+    function escapeMonthlyHtml(value){
+      return String(value ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    async function monthlyUserIsLoggedIn(){
+      const session = await window.getFanZoneSession?.();
+      return !!session?.access_token;
+    }
+
+    function playMonthlyVideo(media, videoId, title){
+      if(!media || !videoId || media.querySelector("iframe")) return;
+
+      const frame = document.createElement("iframe");
+      frame.className = "monthly-inline-player";
+      frame.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
+      frame.title = `${title || "Песен"} – Ангел Узунов`;
+      frame.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+      frame.allowFullscreen = true;
+      frame.referrerPolicy = "strict-origin-when-cross-origin";
+      media.appendChild(frame);
+    }
+
+    async function renderMonthlyRanking(songs){
       if(!list) return;
 
       list.innerHTML = "";
@@ -1706,6 +2114,7 @@
         return;
       }
 
+      const isLoggedIn = await monthlyUserIsLoggedIn();
       const maxVotes = Math.max(...rows.map(song=>Number(song.votes || 0)), 1);
 
       rows.forEach((song,index)=>{
@@ -1719,25 +2128,55 @@
         const width = Math.max(0, Math.min(100, (votes / maxVotes) * 100));
         const videoId = song.youtube_video_id || "";
         const url = song.youtube_url || (videoId ? `https://www.youtube.com/watch?v=${videoId}` : "#");
+        const title = song.title || "Песен";
+        const artist = song.artist_name || "Ангел Узунов";
+        const isNewProposal = videoId === MONTHLY_NEW_PROPOSAL_VIDEO_ID;
+
+        if(isNewProposal) article.classList.add("is-new-proposal");
 
         article.innerHTML = `
           <span class="monthly-rank">${rank}</span>
-          <a class="monthly-thumb" target="_blank" rel="noopener"
-             href="${url}"
-             style="--thumb:url('${youtubeThumb(videoId)}')"></a>
+
+          <div class="monthly-media" data-video-id="${escapeMonthlyHtml(videoId)}">
+            <button class="monthly-thumb monthly-play" type="button"
+                    aria-label="Пусни ${escapeMonthlyHtml(title)}"
+                    style="--thumb:url('${youtubeThumb(videoId)}')"></button>
+          </div>
+
           <div class="monthly-vote-area">
-            <div class="monthly-title">${song.title || "Песен"}<small>${song.artist_name || "Ангел Узунов"}</small></div>
-            <button class="vote-meter real-monthly-vote" type="button"
-                    data-song-id="${song.song_id}"
-                    aria-label="Гласувай за ${song.title || "песента"}">
+            ${isNewProposal ? '<span class="monthly-new-badge">★ Ново предложение</span>' : ''}
+            <div class="monthly-title">
+              ${escapeMonthlyHtml(title)}
+              <small>${escapeMonthlyHtml(artist)}</small>
+            </div>
+
+            <button class="vote-meter real-monthly-vote ${isLoggedIn ? "" : "guest-vote"}"
+                    type="button"
+                    data-song-id="${escapeMonthlyHtml(song.song_id)}"
+                    aria-label="Гласувай за ${escapeMonthlyHtml(title)}">
               <span class="vote-meter-fill" style="--vote-width:${width}%"></span>
               <span class="vote-meter-label">
-                <span>Гласувай</span>
+                <span>${isLoggedIn ? "Гласувай" : "Вход за гласуване"}</span>
                 <strong class="vote-count">${votes}</strong>
               </span>
             </button>
+
+            ${isLoggedIn
+              ? ""
+              : '<div class="monthly-vote-locked-note">Можеш да слушаш свободно. <strong>Само влезли потребители могат да гласуват.</strong></div>'
+            }
+
+            ${videoId
+              ? `<a class="monthly-youtube-link" href="${escapeMonthlyHtml(url)}" target="_blank" rel="noopener">YouTube ↗</a>`
+              : ""
+            }
           </div>
         `;
+
+        const media = article.querySelector(".monthly-media");
+        article.querySelector(".monthly-play")?.addEventListener("click",()=>{
+          playMonthlyVideo(media, videoId, title);
+        });
 
         list.appendChild(article);
       });
@@ -1757,7 +2196,7 @@
         }
 
         activeMonthlyPollId = data.poll?.id || null;
-        renderMonthlyRanking(data.songs || []);
+        await renderMonthlyRanking(data.songs || []);
       }catch(error){
         console.error("FAN ZONE monthly poll load error:", error);
       }
@@ -1791,7 +2230,7 @@
           device_id:getFanDeviceId()
         });
 
-        renderMonthlyRanking(data.songs || []);
+        await renderMonthlyRanking(data.songs || []);
       }catch(error){
         console.error("FAN ZONE monthly vote error:", error);
         if(error?.status === 401 || error?.code === "AUTH_REQUIRED"){
@@ -1888,14 +2327,186 @@
     });
 
 
+    const RELEASE_META = {
+      "46c4bc42-5b3a-4ba8-b6d5-e2253ac121ef": {
+        title: "Песента е любов",
+        videoId: "Cxqqanwtc-g",
+        youtubeUrl: "https://www.youtube.com/watch?v=Cxqqanwtc-g",
+        description: "Нова песен на Ангел Узунов — „Песента е любов“."
+      },
+      "54e59cd0-b68f-4931-a20f-6663bc3f0dfe": {
+        title: "Майко",
+        videoId: "48yHYWqMiow",
+        youtubeUrl: "https://www.youtube.com/watch?v=48yHYWqMiow",
+        description: "Нова песен на Ангел Узунов — „Майко“."
+      }
+    };
+
+    function buildReleaseCard(post){
+      const meta = RELEASE_META[post.id];
+      if(!meta) return null;
+
+      const comments = Array.isArray(post.comments) ? post.comments : [];
+      const roots = comments.filter(comment=>!comment.parent_comment_id);
+      const childrenMap = new Map();
+      comments.filter(comment=>comment.parent_comment_id).forEach(comment=>{
+        const list = childrenMap.get(comment.parent_comment_id) || [];
+        list.push(comment);
+        childrenMap.set(comment.parent_comment_id,list);
+      });
+
+      const article = document.createElement("article");
+      article.className = "release-card";
+      article.dataset.postId = post.id;
+      article.innerHTML = `
+        <div class="release-media" data-video-id="${meta.videoId}">
+          <div class="release-thumb" style="--release-thumb:url('https://i.ytimg.com/vi/${meta.videoId}/hqdefault.jpg')"></div>
+          <button class="release-play" type="button" aria-label="Пусни ${meta.title}">▶</button>
+        </div>
+        <div class="release-body">
+          <span class="topic-badge">Нова песен</span>
+          <h3>${meta.title}</h3>
+          <p>${post.body || meta.description}</p>
+          <div class="release-actions">
+            <a class="btn btn-primary" href="${meta.youtubeUrl}" target="_blank" rel="noopener">Гледай в YouTube</a>
+          </div>
+          <div class="real-post-reactions">
+            <button class="thread-btn vote-up" type="button" data-target-type="post" data-target-id="${post.id}">👍 ${Number(post.thumbs_up || 0)}</button>
+            <button class="thread-btn vote-down" type="button" data-target-type="post" data-target-id="${post.id}">👎 ${Number(post.thumbs_down || 0)}</button>
+          </div>
+          <details class="release-comments post-thread">
+            <summary>💬 Коментари · ${roots.length}</summary>
+            <div class="release-comment-list"></div>
+            <form class="release-comment-form auth-write-form" action="javascript:void(0)" data-post-id="${post.id}">
+              <input class="field" maxlength="500" placeholder="Коментирай песента...">
+              <button class="btn btn-primary small-btn" type="submit">Коментирай</button>
+              <div class="auth-required-note">За да коментираш, влез във FAN ZONE.</div>
+            </form>
+          </details>
+        </div>`;
+
+      const releaseBody = article.querySelector(".release-body");
+      appendModerationControls(releaseBody, "post", post.id, post.user_id || "");
+
+      const list = article.querySelector(".release-comment-list");
+      roots.forEach(comment=>{
+        const node = createRealCommentNode(comment, childrenMap);
+        node.querySelectorAll(".thread-comment-form").forEach(form=>{
+          form.dataset.postId = post.id;
+          form.classList.add("release-reply-form");
+        });
+        list.appendChild(node);
+      });
+
+      const media = article.querySelector(".release-media");
+      media.querySelector(".release-play").addEventListener("click",()=>{
+        if(media.querySelector("iframe")) return;
+        const frame = document.createElement("iframe");
+        frame.className = "inline-player";
+        frame.src = `https://www.youtube-nocookie.com/embed/${meta.videoId}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
+        frame.title = `${meta.title} – Ангел Узунов`;
+        frame.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+        frame.allowFullscreen = true;
+        frame.referrerPolicy = "strict-origin-when-cross-origin";
+        media.appendChild(frame);
+      }, {once:true});
+
+      return article;
+    }
+
+    async function loadRealReleases(){
+      const grid = document.getElementById("releaseGrid");
+      if(!grid) return;
+
+      try{
+        const response = await fetch(`${FAN_ZONE_API}?action=posts&section=release&limit=10`,{
+          method:"GET",
+          headers:{"Accept":"application/json"},
+          cache:"no-store"
+        });
+        const data = await response.json().catch(()=>({}));
+        if(!response.ok || !data?.ok){
+          throw new Error(data?.error || "Неуспешно зареждане на новите песни.");
+        }
+
+        grid.innerHTML = "";
+        const posts = (data.posts || []).filter(post=>RELEASE_META[post.id]);
+        const ordered = Object.keys(RELEASE_META)
+          .map(id=>posts.find(post=>post.id===id))
+          .filter(Boolean);
+
+        if(ordered.length === 0){
+          grid.innerHTML = `<div class="panel"><p class="section-text">В момента няма публикувани нови песни.</p></div>`;
+          return;
+        }
+
+        ordered.forEach(post=>{
+          const card = buildReleaseCard(post);
+          if(card) grid.appendChild(card);
+        });
+      }catch(error){
+        console.error("FAN ZONE releases load error:", error);
+        grid.innerHTML = `<div class="panel"><p class="section-text">Новите песни не можаха да бъдат заредени.</p></div>`;
+      }
+    }
+
+    async function submitReleaseComment(form){
+      const session = await requireFanAuthForWriting(form);
+      if(!session) return;
+
+      const postId = form.dataset.postId;
+      const parentCommentId = form.dataset.commentId || null;
+      const input = form.querySelector("input, textarea");
+      const text = input?.value.trim();
+      if(!postId || !text) return;
+
+      const submit = form.querySelector('button[type="submit"]');
+      const originalText = submit?.textContent || "Изпрати";
+      if(submit){ submit.disabled = true; submit.textContent = "Публикуване..."; }
+
+      try{
+        await fanApiPost({
+          action:"create_comment",
+          post_id:postId,
+          parent_comment_id:parentCommentId || undefined,
+          body:text,
+          device_id:getFanDeviceId()
+        });
+        input.value = "";
+        const scrollYBefore = window.scrollY;
+        await loadRealReleases();
+        requestAnimationFrame(()=>window.scrollTo({top:scrollYBefore,left:0,behavior:"auto"}));
+      }catch(error){
+        console.error("FAN ZONE release comment error:", error);
+        if(error?.code === "AUTH_REQUIRED" || error?.status === 401){
+          window.openFanZoneAuth?.();
+        }else{
+          alert(error?.message || "Коментарът не можа да бъде публикуван.");
+        }
+      }finally{
+        if(submit){ submit.disabled = false; submit.textContent = originalText; }
+      }
+    }
+
+    document.addEventListener("submit", async (event)=>{
+      const form = event.target.closest("#releases .release-comment-form, #releases .release-reply-form");
+      if(!form) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      await submitReleaseComment(form);
+    }, true);
+
     const REAL_SECTION_POSTS = {
       discussion: "55dc83c6-1ede-477b-a1ce-dc09c5c8d9f6",
       story: "c51995da-bde7-47fc-852a-fb27a464c956"
     };
 
     async function fetchRealSectionPost(section){
+      const expectedId = REAL_SECTION_POSTS[section];
+      if(!expectedId) return null;
+
       const response = await fetch(
-        `${FAN_ZONE_API}?action=posts&section=${encodeURIComponent(section)}&limit=10`,
+        `${FAN_ZONE_API}?action=editorial_thread&post_id=${encodeURIComponent(expectedId)}`,
         {
           method:"GET",
           headers:{"Accept":"application/json"},
@@ -1905,11 +2516,13 @@
 
       const data = await response.json().catch(()=>({}));
       if(!response.ok || !data?.ok){
-        throw new Error(data?.error || "Неуспешно зареждане на публикацията.");
+        throw new Error(data?.error || "Неуспешно зареждане на коментарите.");
       }
 
-      const expectedId = REAL_SECTION_POSTS[section];
-      return (data.posts || []).find(post=>post.id === expectedId) || null;
+      return {
+        id: expectedId,
+        comments: Array.isArray(data.comments) ? data.comments : []
+      };
     }
 
     function renderRealSectionThread(section, post){
@@ -1963,16 +2576,45 @@
 
       const summary = details.querySelector("summary");
       if(summary){
-        summary.textContent = `💬 Коментари · ${roots.length}`;
+        if(section === "discussion"){
+          let count = summary.querySelector(".discussion-comment-count");
+          if(!count){
+            summary.innerHTML = `💬 Коментари · <span class="discussion-comment-count">${roots.length}</span> <span class="owner-comments-label">· OWNER контрол на коментарите</span>`;
+          }else{
+            count.textContent = String(roots.length);
+          }
+        }else{
+          summary.textContent = `💬 Коментари · ${roots.length}`;
+        }
       }
     }
 
     async function loadRealSectionThread(section){
+      const list = section === "discussion"
+        ? document.querySelector("#discussion .topic-comment-list .thread-list")
+        : document.querySelector("#stories .story-thread-scroll .thread-list");
+
+      if(list){
+        list.innerHTML = `<div class="thread-comment"><p>Зареждане на реалните коментари...</p></div>`;
+      }
+
       try{
         const post = await fetchRealSectionPost(section);
+
+        if(!post){
+          if(list){
+            list.innerHTML = `<div class="thread-comment"><p>В момента няма налични коментари.</p></div>`;
+          }
+          return;
+        }
+
         renderRealSectionThread(section, post);
+
       }catch(error){
         console.error(`FAN ZONE ${section} load error:`, error);
+        if(list){
+          list.innerHTML = `<div class="thread-comment"><p>Коментарите не можаха да бъдат заредени от сървъра.</p></div>`;
+        }
       }
     }
 
@@ -2057,6 +2699,228 @@
       await submitRealSectionComment(form);
     }, true);
 
+
+
+    const ownerModalBackdrop = document.getElementById("ownerModalBackdrop");
+    const ownerModal = document.getElementById("ownerModal");
+    const ownerModalTitle = document.getElementById("ownerModalTitle");
+    const ownerModalText = document.getElementById("ownerModalText");
+    const ownerModalNote = document.getElementById("ownerModalNote");
+    const ownerModalIcon = document.getElementById("ownerModalIcon");
+    const ownerModalConfirm = document.getElementById("ownerModalConfirm");
+    const ownerModalCancel = document.getElementById("ownerModalCancel");
+    const ownerModalClose = document.getElementById("ownerModalClose");
+
+    let ownerModalResolver = null;
+
+    function closeOwnerModal(result=false){
+      ownerModalBackdrop?.classList.remove("show");
+      ownerModalBackdrop?.setAttribute("aria-hidden","true");
+      document.body.style.overflow = "";
+      const resolver = ownerModalResolver;
+      ownerModalResolver = null;
+      resolver?.(result);
+    }
+
+    function ownerConfirm({
+      title="Потвърждение",
+      text="Сигурни ли сте?",
+      note="",
+      confirmText="Потвърди",
+      cancelText="Отказ",
+      danger=false,
+      icon="◆"
+    }={}){
+      if(!ownerModalBackdrop) return Promise.resolve(false);
+
+      ownerModal.classList.remove("single");
+      ownerModalTitle.textContent = title;
+      ownerModalText.textContent = text;
+      ownerModalIcon.textContent = icon;
+      ownerModalConfirm.textContent = confirmText;
+      ownerModalCancel.textContent = cancelText;
+      ownerModalConfirm.classList.toggle("danger", !!danger);
+
+      if(note){
+        ownerModalNote.style.display = "block";
+        ownerModalNote.textContent = note;
+      }else{
+        ownerModalNote.style.display = "none";
+        ownerModalNote.textContent = "";
+      }
+
+      ownerModalBackdrop.classList.add("show");
+      ownerModalBackdrop.setAttribute("aria-hidden","false");
+      document.body.style.overflow = "hidden";
+
+      setTimeout(()=>ownerModalConfirm.focus(), 30);
+
+      return new Promise(resolve=>{
+        ownerModalResolver = resolve;
+      });
+    }
+
+    function ownerNotice({
+      title="ANGEL FAN ZONE",
+      text="",
+      note="",
+      buttonText="Разбрах",
+      danger=false,
+      icon="◆"
+    }={}){
+      if(!ownerModalBackdrop) return Promise.resolve(true);
+
+      ownerModal.classList.add("single");
+      ownerModalTitle.textContent = title;
+      ownerModalText.textContent = text;
+      ownerModalIcon.textContent = icon;
+      ownerModalConfirm.textContent = buttonText;
+      ownerModalConfirm.classList.toggle("danger", !!danger);
+
+      if(note){
+        ownerModalNote.style.display = "block";
+        ownerModalNote.textContent = note;
+      }else{
+        ownerModalNote.style.display = "none";
+        ownerModalNote.textContent = "";
+      }
+
+      ownerModalBackdrop.classList.add("show");
+      ownerModalBackdrop.setAttribute("aria-hidden","false");
+      document.body.style.overflow = "hidden";
+
+      setTimeout(()=>ownerModalConfirm.focus(), 30);
+
+      return new Promise(resolve=>{
+        ownerModalResolver = resolve;
+      });
+    }
+
+    ownerModalConfirm?.addEventListener("click",()=>closeOwnerModal(true));
+    ownerModalCancel?.addEventListener("click",()=>closeOwnerModal(false));
+    ownerModalClose?.addEventListener("click",()=>closeOwnerModal(false));
+    ownerModalBackdrop?.addEventListener("click",(event)=>{
+      if(event.target === ownerModalBackdrop) closeOwnerModal(false);
+    });
+    document.addEventListener("keydown",(event)=>{
+      if(event.key === "Escape" && ownerModalBackdrop?.classList.contains("show")){
+        closeOwnerModal(false);
+      }
+    });
+
+    document.addEventListener("click", async (event)=>{
+      const btn = event.target.closest(".mod-btn");
+      if(!btn) return;
+      event.preventDefault();
+      event.stopPropagation();
+
+      const controls = btn.closest(".moderation-actions");
+      const targetType = controls?.dataset.modTarget;
+      const targetId = controls?.dataset.modId;
+      const targetUserId = controls?.dataset.modUser || "";
+      if(!fanModerator?.is_moderator || !targetType || !targetId) return;
+
+      let operation = null;
+      if(btn.classList.contains("mod-hide")) operation = "hide";
+      if(btn.classList.contains("mod-restore")) operation = "restore";
+      if(btn.classList.contains("mod-delete")) operation = "delete";
+
+      if(btn.classList.contains("mod-block")){
+        if(!targetUserId){
+          await ownerNotice({
+            title:"Няма свързан профил",
+            text:"Този запис няма свързан потребителски профил и не може да бъде блокиран.",
+            icon:"!"
+          });
+          return;
+        }
+        const blockApproved = await ownerConfirm({
+          title:"Блокиране на потребител",
+          text:"Потребителят няма да може да публикува, коментира, реагира или гласува във FAN ZONE.",
+          note:"Действието се записва в журнала на модерацията.",
+          confirmText:"Да, блокирай",
+          cancelText:"Отказ",
+          danger:true,
+          icon:"⛔"
+        });
+        if(!blockApproved) return;
+        btn.disabled = true;
+        try{
+          await fanApiPost({
+            action:"block_user",
+            user_id:targetUserId,
+            reason:"Блокиран от OWNER през FAN ZONE"
+          });
+          btn.textContent = "Блокиран ✓";
+        }catch(error){
+          await ownerNotice({
+            title:"Неуспешно блокиране",
+            text:error?.message || "Потребителят не можа да бъде блокиран.",
+            danger:true,
+            icon:"!"
+          });
+        }finally{
+          btn.disabled = false;
+        }
+        return;
+      }
+
+      if(!operation) return;
+      if(operation === "delete"){
+        const deleteApproved = await ownerConfirm({
+          title:"Изтриване на съдържание",
+          text:"Да изтрия ли това съдържание от публичната FAN ZONE?",
+          note:"Записът ще остане в базата като soft-delete и действието ще бъде записано в журнала на модерацията.",
+          confirmText:"Да, изтрий",
+          cancelText:"Отказ",
+          danger:true,
+          icon:"✦"
+        });
+        if(!deleteApproved) return;
+      }
+
+      btn.disabled = true;
+      const oldText = btn.textContent;
+      btn.textContent = "Обработка...";
+
+      try{
+        await fanApiPost({
+          action:"moderate_content",
+          target_type:targetType,
+          target_id:targetId,
+          operation,
+          reason:`${operation} от OWNER през FAN ZONE`
+        });
+
+        const host = targetType === "comment"
+          ? controls.closest(".thread-comment")
+          : controls.closest(".fan-post,.release-card,.discussion-post,.story-post");
+
+        if(operation === "hide"){
+          host?.classList.add("moderated-local");
+          btn.textContent = "Скрито ✓";
+        }else if(operation === "restore"){
+          host?.classList.remove("moderated-local");
+          btn.textContent = "Възстановено ✓";
+        }else if(operation === "delete"){
+          host?.remove();
+          return;
+        }
+
+        setTimeout(()=>{ if(btn.isConnected){ btn.textContent = oldText; btn.disabled = false; } },1200);
+      }catch(error){
+        console.error("Moderation error:", error);
+        await ownerNotice({
+          title:"Грешка при модерация",
+          text:error?.message || "Модераторското действие не можа да бъде изпълнено.",
+          danger:true,
+          icon:"!"
+        });
+        btn.textContent = oldText;
+        btn.disabled = false;
+      }
+    }, true);
+
     document.getElementById("fanPostForm").addEventListener("submit", async (e)=>{
       e.preventDefault();
       clearFanPostMessage();
@@ -2098,8 +2962,13 @@
       }
     });
 
+    window.refreshFanModeratorStatus = refreshModeratorStatus;
+    window.refreshMonthlyFanChoice = loadRealMonthlyPoll;
+    refreshModeratorStatus();
+
     loadRealSectionThread("discussion");
     loadRealSectionThread("story");
+    loadRealReleases();
     loadRealMonthlyPoll();
     loadRealFanPosts();
 
