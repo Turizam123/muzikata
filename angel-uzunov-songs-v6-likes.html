@@ -1021,6 +1021,126 @@
       letter-spacing:.04em;
     }
 
+    /* V20: MONTHLY FAN CHOICE — section-only upgrade */
+    #monthly .monthly-song{
+      grid-template-columns:48px 190px minmax(0,1fr);
+      align-items:center;
+    }
+    #monthly .monthly-media{
+      position:relative;
+      aspect-ratio:16/9;
+      border-radius:14px;
+      overflow:hidden;
+      background:#050609;
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 10px 28px rgba(0,0,0,.24);
+    }
+    #monthly .monthly-thumb{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      border-radius:0;
+      cursor:pointer;
+      border:0;
+      background:var(--thumb) center/cover no-repeat;
+    }
+    #monthly .monthly-thumb::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(to top,rgba(5,6,9,.70),rgba(5,6,9,.08) 62%);
+    }
+    #monthly .monthly-thumb::after{
+      content:"▶";
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform:translate(-50%,-50%);
+      width:48px;
+      height:48px;
+      display:grid;
+      place-items:center;
+      border-radius:50%;
+      background:linear-gradient(135deg,var(--gold-light),var(--gold));
+      color:#17130a;
+      box-shadow:0 10px 28px rgba(0,0,0,.35),0 0 0 6px rgba(216,182,106,.10);
+      font-size:1rem;
+      font-weight:900;
+    }
+    #monthly .monthly-inline-player{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      border:0;
+      z-index:3;
+      background:#000;
+    }
+    #monthly .monthly-youtube-link{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      margin-top:9px;
+      color:var(--gold-light);
+      font-size:.68rem;
+      font-weight:800;
+      letter-spacing:.02em;
+    }
+    #monthly .monthly-youtube-link:hover{text-decoration:underline}
+    #monthly .monthly-new-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      margin-bottom:8px;
+      padding:6px 10px;
+      border:1px solid rgba(243,217,147,.42);
+      border-radius:999px;
+      background:linear-gradient(135deg,rgba(142,36,48,.26),rgba(216,182,106,.13));
+      color:var(--gold-light);
+      font-size:.60rem;
+      font-weight:900;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      box-shadow:0 0 0 4px rgba(216,182,106,.035);
+    }
+    #monthly .monthly-song.is-new-proposal{
+      border-color:rgba(243,217,147,.42);
+      background:
+        radial-gradient(circle at 0 0,rgba(142,36,48,.18),transparent 32%),
+        rgba(255,255,255,.035);
+    }
+    #monthly .monthly-vote-locked-note{
+      margin-top:8px;
+      color:#8f8a82;
+      font-size:.62rem;
+      line-height:1.45;
+    }
+    #monthly .monthly-vote-locked-note strong{color:var(--gold-light)}
+    #monthly .vote-meter.guest-vote{
+      opacity:.82;
+    }
+    #monthly .monthly-rank{
+      font-size:.86rem;
+    }
+    @media(max-width:760px){
+      #monthly .monthly-song{
+        grid-template-columns:34px minmax(0,1fr);
+        gap:12px;
+      }
+      #monthly .monthly-rank{
+        grid-row:1 / span 2;
+        align-self:start;
+        margin-top:4px;
+      }
+      #monthly .monthly-media{
+        grid-column:2;
+      }
+      #monthly .monthly-vote-area{
+        grid-column:2;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -1155,61 +1275,9 @@
         <h2 class="section-title">Вие избирате</h2>
         <p class="section-text">Пет песни. Един месец. Вашият вот определя подредбата – песента с най-много гласове автоматично застава на първо място.</p>
         <div class="monthly-list" id="monthlyList">
-          <article class="monthly-song" data-votes="19">
-            <span class="monthly-rank">1</span>
-            <a class="monthly-thumb" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=uD3WqddlOVg" style="--thumb:url('https://i.ytimg.com/vi/uD3WqddlOVg/hqdefault.jpg')"></a>
-            <div class="monthly-vote-area">
-              <div class="monthly-title">Първо либе<small>Ангел Узунов</small></div>
-              <button class="vote-meter" type="button" aria-label="Гласувай за Първо либе">
-                <span class="vote-meter-fill" style="--vote-width:100.0%"></span>
-                <span class="vote-meter-label"><span>Гласувай</span><strong class="vote-count">19</strong></span>
-              </button>
-            </div>
-          </article>
-          <article class="monthly-song" data-votes="14">
-            <span class="monthly-rank">2</span>
-            <a class="monthly-thumb" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=FmUQEAQ6bFs" style="--thumb:url('https://i.ytimg.com/vi/FmUQEAQ6bFs/hqdefault.jpg')"></a>
-            <div class="monthly-vote-area">
-              <div class="monthly-title">Елено, моме убаво<small>Ангел Узунов</small></div>
-              <button class="vote-meter" type="button" aria-label="Гласувай за Елено, моме убаво">
-                <span class="vote-meter-fill" style="--vote-width:73.7%"></span>
-                <span class="vote-meter-label"><span>Гласувай</span><strong class="vote-count">14</strong></span>
-              </button>
-            </div>
-          </article>
-          <article class="monthly-song" data-votes="11">
-            <span class="monthly-rank">3</span>
-            <a class="monthly-thumb" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=z6I9QPKcCcY" style="--thumb:url('https://i.ytimg.com/vi/z6I9QPKcCcY/hqdefault.jpg')"></a>
-            <div class="monthly-vote-area">
-              <div class="monthly-title">Росна зора<small>Ангел Узунов</small></div>
-              <button class="vote-meter" type="button" aria-label="Гласувай за Росна зора">
-                <span class="vote-meter-fill" style="--vote-width:57.9%"></span>
-                <span class="vote-meter-label"><span>Гласувай</span><strong class="vote-count">11</strong></span>
-              </button>
-            </div>
-          </article>
-          <article class="monthly-song" data-votes="8">
-            <span class="monthly-rank">4</span>
-            <a class="monthly-thumb" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=MLCLaXaSneI" style="--thumb:url('https://i.ytimg.com/vi/MLCLaXaSneI/hqdefault.jpg')"></a>
-            <div class="monthly-vote-area">
-              <div class="monthly-title">Без теб не мога<small>Ангел Узунов</small></div>
-              <button class="vote-meter" type="button" aria-label="Гласувай за Без теб не мога">
-                <span class="vote-meter-fill" style="--vote-width:42.1%"></span>
-                <span class="vote-meter-label"><span>Гласувай</span><strong class="vote-count">8</strong></span>
-              </button>
-            </div>
-          </article>
-          <article class="monthly-song" data-votes="5">
-            <span class="monthly-rank">5</span>
-            <a class="monthly-thumb" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=yOIzCb_R2hw" style="--thumb:url('https://i.ytimg.com/vi/yOIzCb_R2hw/hqdefault.jpg')"></a>
-            <div class="monthly-vote-area">
-              <div class="monthly-title">Сърцето ми гори<small>Ангел Узунов</small></div>
-              <button class="vote-meter" type="button" aria-label="Гласувай за Сърцето ми гори">
-                <span class="vote-meter-fill" style="--vote-width:26.3%"></span>
-                <span class="vote-meter-label"><span>Гласувай</span><strong class="vote-count">5</strong></span>
-              </button>
-            </div>
-          </article>
+          <div class="panel">
+            <p class="section-text">Зареждане на месечната класация...</p>
+          </div>
         </div>
       </div>
     </section>
@@ -1605,6 +1673,7 @@
     fanSupabase.auth.onAuthStateChange((_event, session) => {
       renderAuth(session);
       setTimeout(() => window.refreshFanModeratorStatus?.(), 0);
+      setTimeout(() => window.refreshMonthlyFanChoice?.(), 0);
     });
 
     const { data: sessionData } = await fanSupabase.auth.getSession();
@@ -2002,7 +2071,36 @@
         : "";
     }
 
-    function renderMonthlyRanking(songs){
+    const MONTHLY_NEW_PROPOSAL_VIDEO_ID = "48yHYWqMiow";
+
+    function escapeMonthlyHtml(value){
+      return String(value ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    async function monthlyUserIsLoggedIn(){
+      const session = await window.getFanZoneSession?.();
+      return !!session?.access_token;
+    }
+
+    function playMonthlyVideo(media, videoId, title){
+      if(!media || !videoId || media.querySelector("iframe")) return;
+
+      const frame = document.createElement("iframe");
+      frame.className = "monthly-inline-player";
+      frame.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
+      frame.title = `${title || "Песен"} – Ангел Узунов`;
+      frame.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+      frame.allowFullscreen = true;
+      frame.referrerPolicy = "strict-origin-when-cross-origin";
+      media.appendChild(frame);
+    }
+
+    async function renderMonthlyRanking(songs){
       if(!list) return;
 
       list.innerHTML = "";
@@ -2016,6 +2114,7 @@
         return;
       }
 
+      const isLoggedIn = await monthlyUserIsLoggedIn();
       const maxVotes = Math.max(...rows.map(song=>Number(song.votes || 0)), 1);
 
       rows.forEach((song,index)=>{
@@ -2029,25 +2128,55 @@
         const width = Math.max(0, Math.min(100, (votes / maxVotes) * 100));
         const videoId = song.youtube_video_id || "";
         const url = song.youtube_url || (videoId ? `https://www.youtube.com/watch?v=${videoId}` : "#");
+        const title = song.title || "Песен";
+        const artist = song.artist_name || "Ангел Узунов";
+        const isNewProposal = videoId === MONTHLY_NEW_PROPOSAL_VIDEO_ID;
+
+        if(isNewProposal) article.classList.add("is-new-proposal");
 
         article.innerHTML = `
           <span class="monthly-rank">${rank}</span>
-          <a class="monthly-thumb" target="_blank" rel="noopener"
-             href="${url}"
-             style="--thumb:url('${youtubeThumb(videoId)}')"></a>
+
+          <div class="monthly-media" data-video-id="${escapeMonthlyHtml(videoId)}">
+            <button class="monthly-thumb monthly-play" type="button"
+                    aria-label="Пусни ${escapeMonthlyHtml(title)}"
+                    style="--thumb:url('${youtubeThumb(videoId)}')"></button>
+          </div>
+
           <div class="monthly-vote-area">
-            <div class="monthly-title">${song.title || "Песен"}<small>${song.artist_name || "Ангел Узунов"}</small></div>
-            <button class="vote-meter real-monthly-vote" type="button"
-                    data-song-id="${song.song_id}"
-                    aria-label="Гласувай за ${song.title || "песента"}">
+            ${isNewProposal ? '<span class="monthly-new-badge">★ Ново предложение</span>' : ''}
+            <div class="monthly-title">
+              ${escapeMonthlyHtml(title)}
+              <small>${escapeMonthlyHtml(artist)}</small>
+            </div>
+
+            <button class="vote-meter real-monthly-vote ${isLoggedIn ? "" : "guest-vote"}"
+                    type="button"
+                    data-song-id="${escapeMonthlyHtml(song.song_id)}"
+                    aria-label="Гласувай за ${escapeMonthlyHtml(title)}">
               <span class="vote-meter-fill" style="--vote-width:${width}%"></span>
               <span class="vote-meter-label">
-                <span>Гласувай</span>
+                <span>${isLoggedIn ? "Гласувай" : "Вход за гласуване"}</span>
                 <strong class="vote-count">${votes}</strong>
               </span>
             </button>
+
+            ${isLoggedIn
+              ? ""
+              : '<div class="monthly-vote-locked-note">Можеш да слушаш свободно. <strong>Само влезли потребители могат да гласуват.</strong></div>'
+            }
+
+            ${videoId
+              ? `<a class="monthly-youtube-link" href="${escapeMonthlyHtml(url)}" target="_blank" rel="noopener">YouTube ↗</a>`
+              : ""
+            }
           </div>
         `;
+
+        const media = article.querySelector(".monthly-media");
+        article.querySelector(".monthly-play")?.addEventListener("click",()=>{
+          playMonthlyVideo(media, videoId, title);
+        });
 
         list.appendChild(article);
       });
@@ -2067,7 +2196,7 @@
         }
 
         activeMonthlyPollId = data.poll?.id || null;
-        renderMonthlyRanking(data.songs || []);
+        await renderMonthlyRanking(data.songs || []);
       }catch(error){
         console.error("FAN ZONE monthly poll load error:", error);
       }
@@ -2101,7 +2230,7 @@
           device_id:getFanDeviceId()
         });
 
-        renderMonthlyRanking(data.songs || []);
+        await renderMonthlyRanking(data.songs || []);
       }catch(error){
         console.error("FAN ZONE monthly vote error:", error);
         if(error?.status === 401 || error?.code === "AUTH_REQUIRED"){
@@ -2834,6 +2963,7 @@
     });
 
     window.refreshFanModeratorStatus = refreshModeratorStatus;
+    window.refreshMonthlyFanChoice = loadRealMonthlyPoll;
     refreshModeratorStatus();
 
     loadRealSectionThread("discussion");
