@@ -815,6 +815,20 @@
     .real-post-reactions .thread-btn{
       padding:0;
     }
+
+    /* V20.2: share publications */
+    .share-post-btn{
+      border:0;
+      background:transparent;
+      color:var(--gold-light);
+      cursor:pointer;
+      font-size:.75rem;
+      font-weight:800;
+      padding:0;
+      transition:.2s ease;
+    }
+    .share-post-btn:hover{color:#fff;transform:translateY(-1px)}
+    .share-post-btn.copied{color:#bde5c5}
     .vote-meter[disabled],
     .thread-btn[disabled],
     .thread-comment-btn[disabled]{
@@ -1192,13 +1206,14 @@
         <h2 class="section-title">Музиката продължава и след песента</h2>
         <p class="section-text">Актуална тема, музика и разговор с хората, които я слушат.</p>
         <div class="discussion-layout">
-          <article class="topic-card discussion-post" data-post-id="55dc83c6-1ede-477b-a1ce-dc09c5c8d9f6">
+          <article class="topic-card discussion-post" id="post-55dc83c6-1ede-477b-a1ce-dc09c5c8d9f6" data-post-id="55dc83c6-1ede-477b-a1ce-dc09c5c8d9f6">
             <span class="topic-badge">Тема на седмицата</span>
             <h3>Трябва ли съвременният фолклор да запазва традиционното си звучене?</h3>
             <p>Фолклорът живее, когато се предава нататък. Но докъде може да стигне модерното звучене, без да изгубим корена?</p>
             <div class="real-post-reactions" id="discussionPostReactions">
               <button class="thread-btn vote-up" type="button" data-target-type="post" data-target-id="55dc83c6-1ede-477b-a1ce-dc09c5c8d9f6">👍 0</button>
               <button class="thread-btn vote-down" type="button" data-target-type="post" data-target-id="55dc83c6-1ede-477b-a1ce-dc09c5c8d9f6">👎 0</button>
+              <button class="share-post-btn" type="button" aria-label="Сподели публикацията">↗ Сподели</button>
             </div>
             <details class="topic-comments post-thread">
               <summary>💬 Коментари · <span class="discussion-comment-count">...</span> <span class="owner-comments-label">· OWNER контрол на коментарите</span></summary>
@@ -1293,15 +1308,16 @@
             <button class="play-btn" type="button" aria-label="Пусни Първо либе">▶</button>
             <div class="video-caption"><small>Музикална история</small><h3>Първо либе – Ангел Узунов</h3></div>
           </article>
-          <article class="story-post" data-post-id="c51995da-bde7-47fc-852a-fb27a464c956">
+          <article class="story-post" id="post-c51995da-bde7-47fc-852a-fb27a464c956" data-post-id="c51995da-bde7-47fc-852a-fb27a464c956">
             <span class="topic-badge">Нова публикация</span>
             <h3>„Първо либе“ – песен за първата обич</h3>
-            <p>Тук може да стои кратката история на песента, идеята зад текста и това, което искаш да споделиш с хората.</p>
+            <p>„Първо либе“ е песен за първата любов — онази, която остава някъде в човека, дори когато пътищата се разделят.</p>
             <div class="lyrics-preview">Погледни ме, първо либе,<br>погледни ме ти...<br>Днеска съм ти близо, либе,<br>утре кой ли знай.</div>
             <div class="story-actions"><a class="btn btn-primary" href="https://www.youtube.com/watch?v=uD3WqddlOVg" target="_blank" rel="noopener">Гледай в YouTube</a></div>
             <div class="real-post-reactions" id="storyPostReactions">
               <button class="thread-btn vote-up" type="button" data-target-type="post" data-target-id="c51995da-bde7-47fc-852a-fb27a464c956">👍 0</button>
               <button class="thread-btn vote-down" type="button" data-target-type="post" data-target-id="c51995da-bde7-47fc-852a-fb27a464c956">👎 0</button>
+              <button class="share-post-btn" type="button" aria-label="Сподели публикацията">↗ Сподели</button>
             </div>
             <details class="story-comments post-thread">
               <summary>💬 Коментари · 7</summary>
@@ -1691,6 +1707,7 @@
 
   <script>
     const FAN_ZONE_API = "https://cmiylzpmpwqbacjoqtkx.supabase.co/functions/v1/fan-zone-api";
+    const FAN_ZONE_FRONTEND_VERSION = "20.2-share-publications";
 
     function getFanDeviceId(){
       const key = "angel_fan_zone_device_id";
@@ -1782,6 +1799,99 @@
       });
     }
 
+
+    function getSharePublicationData(button){
+      const host = button?.closest(".fan-post,.release-card,.discussion-post,.story-post");
+      const postId = host?.dataset?.postId || "";
+      if(!host || !postId) return null;
+
+      let title = host.querySelector("h3")?.textContent?.trim() || "";
+      if(!title){
+        const author = host.querySelector(".fan-post-author")?.textContent?.trim() || "Фен";
+        title = `Публикация от ${author} | ANGEL FAN ZONE`;
+      }else if(!title.includes("ANGEL FAN ZONE")){
+        title = `${title} | ANGEL FAN ZONE`;
+      }
+
+      const textNode = host.querySelector(
+        ":scope > p, .release-body > p"
+      );
+      const text = textNode?.textContent?.trim() || "Виж публикацията в ANGEL FAN ZONE.";
+      const url = `${window.location.origin}${window.location.pathname}#post-${postId}`;
+
+      return { title, text, url };
+    }
+
+    function fallbackCopyShareUrl(url){
+      const area = document.createElement("textarea");
+      area.value = url;
+      area.setAttribute("readonly", "");
+      area.style.position = "fixed";
+      area.style.opacity = "0";
+      area.style.pointerEvents = "none";
+      document.body.appendChild(area);
+      area.select();
+      const copied = document.execCommand("copy");
+      area.remove();
+      return copied;
+    }
+
+    async function shareFanPublication(button){
+      const data = getSharePublicationData(button);
+      if(!data) return;
+
+      const originalText = button.textContent;
+
+      try{
+        if(navigator.share){
+          await navigator.share(data);
+          return;
+        }
+
+        if(navigator.clipboard?.writeText){
+          await navigator.clipboard.writeText(data.url);
+        }else if(!fallbackCopyShareUrl(data.url)){
+          throw new Error("COPY_FAILED");
+        }
+
+        button.textContent = "Линкът е копиран ✓";
+        button.classList.add("copied");
+        setTimeout(()=>{
+          if(button.isConnected){
+            button.textContent = originalText;
+            button.classList.remove("copied");
+          }
+        },1800);
+      }catch(error){
+        if(error?.name === "AbortError") return;
+        console.error("FAN ZONE share error:", error);
+        button.textContent = "Копирай линка";
+        setTimeout(()=>{
+          if(button.isConnected) button.textContent = originalText;
+        },1800);
+      }
+    }
+
+    function scrollToSharedPublication(){
+      const hash = decodeURIComponent(window.location.hash || "");
+      if(!hash.startsWith("#post-")) return false;
+      const target = document.getElementById(hash.slice(1));
+      if(!target) return false;
+      requestAnimationFrame(()=>{
+        target.scrollIntoView({behavior:"smooth", block:"center"});
+      });
+      return true;
+    }
+
+    document.addEventListener("click", async (event)=>{
+      const shareButton = event.target.closest(".share-post-btn");
+      if(!shareButton) return;
+      event.preventDefault();
+      event.stopPropagation();
+      await shareFanPublication(shareButton);
+    });
+
+    window.addEventListener("hashchange", scrollToSharedPublication);
 
     let fanModerator = { is_moderator:false, role:null };
 
@@ -1898,6 +2008,7 @@
       const article = document.createElement("article");
       article.className = "fan-post";
       article.dataset.postId = post.id;
+      article.id = `post-${post.id}`;
 
       const head = document.createElement("div");
       head.className = "fan-post-head";
@@ -1926,6 +2037,7 @@
           data-target-type="post" data-target-id="${post.id}">
           👎 ${Number(post.thumbs_down || 0)}
         </button>
+        <button class="share-post-btn" type="button" aria-label="Сподели публикацията">↗ Сподели</button>
       `;
 
       const comments = Array.isArray(post.comments) ? post.comments : [];
@@ -1991,6 +2103,7 @@
         data.posts.forEach(post=>{
           feed.appendChild(createRealFanPostCard(post));
         });
+        scrollToSharedPublication();
       }catch(error){
         console.error("FAN ZONE posts load error:", error);
         showFanPostMessage("Не успяхме да заредим публикациите от сървъра.", true);
@@ -2358,6 +2471,7 @@
       const article = document.createElement("article");
       article.className = "release-card";
       article.dataset.postId = post.id;
+      article.id = `post-${post.id}`;
       article.innerHTML = `
         <div class="release-media" data-video-id="${meta.videoId}">
           <div class="release-thumb" style="--release-thumb:url('https://i.ytimg.com/vi/${meta.videoId}/hqdefault.jpg')"></div>
@@ -2373,6 +2487,7 @@
           <div class="real-post-reactions">
             <button class="thread-btn vote-up" type="button" data-target-type="post" data-target-id="${post.id}">👍 ${Number(post.thumbs_up || 0)}</button>
             <button class="thread-btn vote-down" type="button" data-target-type="post" data-target-id="${post.id}">👎 ${Number(post.thumbs_down || 0)}</button>
+            <button class="share-post-btn" type="button" aria-label="Сподели публикацията">↗ Сподели</button>
           </div>
           <details class="release-comments post-thread">
             <summary>💬 Коментари · ${roots.length}</summary>
@@ -2444,6 +2559,7 @@
           const card = buildReleaseCard(post);
           if(card) grid.appendChild(card);
         });
+        scrollToSharedPublication();
       }catch(error){
         console.error("FAN ZONE releases load error:", error);
         grid.innerHTML = `<div class="panel"><p class="section-text">Новите песни не можаха да бъдат заредени.</p></div>`;
@@ -2519,8 +2635,36 @@
         throw new Error(data?.error || "Неуспешно зареждане на коментарите.");
       }
 
+      /*
+       * V20.1 FIX:
+       * editorial_thread зарежда реалните коментари.
+       * За броячите на реакциите на основната публикация зареждаме
+       * и самия реален post чрез post_by_id.
+       */
+      let postData = null;
+
+      try{
+        const postResponse = await fetch(
+          `${FAN_ZONE_API}?action=post_by_id&post_id=${encodeURIComponent(expectedId)}`,
+          {
+            method:"GET",
+            headers:{"Accept":"application/json"},
+            cache:"no-store"
+          }
+        );
+
+        const postPayload = await postResponse.json().catch(()=>({}));
+        if(postResponse.ok && postPayload?.ok){
+          postData = postPayload.post || null;
+        }
+      }catch(error){
+        console.error(`FAN ZONE ${section} post reaction load error:`, error);
+      }
+
       return {
         id: expectedId,
+        thumbs_up: Number(postData?.thumbs_up || 0),
+        thumbs_down: Number(postData?.thumbs_down || 0),
         comments: Array.isArray(data.comments) ? data.comments : []
       };
     }
