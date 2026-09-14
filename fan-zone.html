@@ -1177,25 +1177,30 @@
       min-height:0;
       overflow:hidden;
       background:#090a0e;
+      display:flex;
+      align-items:center;
+      justify-content:center;
     }
     .interview-promo-media::after{
       content:"";
       position:absolute;
       inset:0;
       background:
-        linear-gradient(90deg,transparent 52%,rgba(10,11,15,.34) 100%),
-        linear-gradient(to top,rgba(7,8,11,.48),transparent 46%);
+        linear-gradient(90deg,transparent 58%,rgba(10,11,15,.24) 100%),
+        linear-gradient(to top,rgba(7,8,11,.24),transparent 52%);
       pointer-events:none;
+      z-index:2;
     }
     .interview-promo-media img{
-      position:absolute;
-      inset:0;
+      position:relative;
+      z-index:1;
       width:100%;
       height:100%;
       display:block;
-      object-fit:cover;
+      object-fit:contain;
       object-position:center;
-      transform:scale(1.01);
+      transform:none;
+      background:#090a0e;
     }
     .interview-promo-copy{
       display:flex;
@@ -1986,7 +1991,7 @@
 
   <script>
     const FAN_ZONE_API = "https://cmiylzpmpwqbacjoqtkx.supabase.co/functions/v1/fan-zone-api";
-    const FAN_ZONE_FRONTEND_VERSION = "20.6-interview-full-invisible-scroll";
+    const FAN_ZONE_FRONTEND_VERSION = "20.8-interview-no-crop";
 
     function getFanDeviceId(){
       const key = "angel_fan_zone_device_id";
