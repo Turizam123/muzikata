@@ -1236,9 +1236,12 @@
     .interview-modal-backdrop.show{display:flex}
     .interview-modal{
       width:min(100%,980px);
-      max-height:min(90vh,920px);
+      height:min(94vh,980px);
+      max-height:94vh;
       position:relative;
       overflow:hidden;
+      display:flex;
+      flex-direction:column;
       border:1px solid rgba(216,182,106,.34);
       border-radius:28px;
       background:
@@ -1290,17 +1293,19 @@
       line-height:.98;
     }
     .interview-modal-scroll{
-      max-height:calc(min(90vh,920px) - 190px);
+      flex:1 1 auto;
+      min-height:0;
       overflow-y:auto;
       overscroll-behavior:contain;
-      padding:4px 34px 34px;
-      scrollbar-gutter:stable;
-      scrollbar-width:thin;
-      scrollbar-color:rgba(216,182,106,.58) rgba(255,255,255,.04);
+      padding:4px 34px 40px;
+      scrollbar-width:none;
+      -ms-overflow-style:none;
     }
-    .interview-modal-scroll::-webkit-scrollbar{width:8px}
-    .interview-modal-scroll::-webkit-scrollbar-track{background:rgba(255,255,255,.04)}
-    .interview-modal-scroll::-webkit-scrollbar-thumb{background:rgba(216,182,106,.58);border-radius:20px}
+    .interview-modal-scroll::-webkit-scrollbar{
+      width:0;
+      height:0;
+      display:none;
+    }
 
     .interview-body{display:grid;gap:26px;margin-top:24px}
     .interview-qa{padding-top:24px;border-top:1px solid rgba(216,182,106,.18)}
@@ -1348,15 +1353,24 @@
       .interview-modal-backdrop{padding:0}
       .interview-modal{
         width:100%;
-        height:100%;
+        height:100svh;
         max-height:100svh;
         border:0;
         border-radius:0;
       }
       .interview-modal-header{padding:28px 58px 20px 20px}
       .interview-modal-scroll{
-        max-height:calc(100svh - 180px);
-        padding:0 20px 28px;
+        flex:1 1 auto;
+        min-height:0;
+        max-height:none;
+        padding:0 20px 32px;
+        scrollbar-width:none;
+        -ms-overflow-style:none;
+      }
+      .interview-modal-scroll::-webkit-scrollbar{
+        width:0;
+        height:0;
+        display:none;
       }
       .interview-promo-media{min-height:230px}
       .interview-promo-copy{padding:24px}
@@ -1967,7 +1981,7 @@
 
   <script>
     const FAN_ZONE_API = "https://cmiylzpmpwqbacjoqtkx.supabase.co/functions/v1/fan-zone-api";
-    const FAN_ZONE_FRONTEND_VERSION = "20.5-interview-promo-modal";
+    const FAN_ZONE_FRONTEND_VERSION = "20.6-interview-full-invisible-scroll";
 
     function getFanDeviceId(){
       const key = "angel_fan_zone_device_id";
