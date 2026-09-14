@@ -1381,7 +1381,13 @@
         height:0;
         display:none;
       }
-      .interview-promo-media{height:230px;min-height:0}
+      .interview-promo-media{
+        height:clamp(320px,74vw,420px);
+        min-height:320px;
+      }
+      .interview-promo-media img{
+        object-position:center 20%;
+      }
       .interview-promo-copy{padding:24px}
       .interview-promo-copy h3{font-size:2.2rem}
       .interview-promo-actions{gap:14px}
@@ -1990,7 +1996,7 @@
 
   <script>
     const FAN_ZONE_API = "https://cmiylzpmpwqbacjoqtkx.supabase.co/functions/v1/fan-zone-api";
-    const FAN_ZONE_FRONTEND_VERSION = "20.9-interview-compact-centered";
+    const FAN_ZONE_FRONTEND_VERSION = "20.10-mobile-interview-image-fixed";
 
     function getFanDeviceId(){
       const key = "angel_fan_zone_device_id";
