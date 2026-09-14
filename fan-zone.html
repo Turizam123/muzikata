@@ -815,6 +815,20 @@
     .real-post-reactions .thread-btn{
       padding:0;
     }
+
+    /* V20.2: share publications */
+    .share-post-btn{
+      border:0;
+      background:transparent;
+      color:var(--gold-light);
+      cursor:pointer;
+      font-size:.75rem;
+      font-weight:800;
+      padding:0;
+      transition:.2s ease;
+    }
+    .share-post-btn:hover{color:#fff;transform:translateY(-1px)}
+    .share-post-btn.copied{color:#bde5c5}
     .vote-meter[disabled],
     .thread-btn[disabled],
     .thread-comment-btn[disabled]{
@@ -1141,6 +1155,21 @@
       }
     }
 
+    /* V20.3: Editorial interview */
+    .interview-card{margin-top:38px;padding:clamp(24px,4vw,42px);border:1px solid var(--border);border-radius:28px;background:radial-gradient(circle at 0 0,rgba(142,36,48,.16),transparent 34%),radial-gradient(circle at 100% 0,rgba(216,182,106,.09),transparent 30%),rgba(255,255,255,.035);box-shadow:var(--shadow)}
+    .interview-card h3{max-width:900px;font-family:"Cormorant Garamond",serif;font-size:clamp(2.35rem,5vw,4rem);line-height:.98;margin:12px 0}
+    .interview-lead{max-width:850px;color:#d6d0c5;line-height:1.8;font-size:.9rem}
+    .interview-body{display:grid;gap:26px;margin-top:30px}
+    .interview-qa{padding-top:24px;border-top:1px solid rgba(216,182,106,.18)}
+    .interview-question{color:var(--gold-light);font-family:"Cormorant Garamond",serif;font-size:1.45rem;line-height:1.25;font-weight:700;margin-bottom:12px}
+    .interview-answer{color:var(--muted);line-height:1.82;font-size:.86rem}
+    .interview-answer p+p{margin-top:12px}
+    .interview-closing{margin-top:32px;padding:26px;border:1px solid rgba(216,182,106,.20);border-radius:20px;background:rgba(216,182,106,.045)}
+    .interview-closing h4{font-family:"Cormorant Garamond",serif;color:var(--gold-light);font-size:2rem;margin-bottom:12px}
+    .interview-closing p{color:#d4cec3;line-height:1.82;font-size:.86rem}
+    .interview-closing p+p{margin-top:12px}
+    .interview-signature{margin-top:18px;color:var(--gold-light)!important;font-family:"Cormorant Garamond",serif;font-size:1.35rem!important;font-weight:700}
+
   </style>
 </head>
 <body>
@@ -1192,13 +1221,14 @@
         <h2 class="section-title">Музиката продължава и след песента</h2>
         <p class="section-text">Актуална тема, музика и разговор с хората, които я слушат.</p>
         <div class="discussion-layout">
-          <article class="topic-card discussion-post" data-post-id="55dc83c6-1ede-477b-a1ce-dc09c5c8d9f6">
+          <article class="topic-card discussion-post" id="post-55dc83c6-1ede-477b-a1ce-dc09c5c8d9f6" data-post-id="55dc83c6-1ede-477b-a1ce-dc09c5c8d9f6">
             <span class="topic-badge">Тема на седмицата</span>
             <h3>Трябва ли съвременният фолклор да запазва традиционното си звучене?</h3>
             <p>Фолклорът живее, когато се предава нататък. Но докъде може да стигне модерното звучене, без да изгубим корена?</p>
             <div class="real-post-reactions" id="discussionPostReactions">
               <button class="thread-btn vote-up" type="button" data-target-type="post" data-target-id="55dc83c6-1ede-477b-a1ce-dc09c5c8d9f6">👍 0</button>
               <button class="thread-btn vote-down" type="button" data-target-type="post" data-target-id="55dc83c6-1ede-477b-a1ce-dc09c5c8d9f6">👎 0</button>
+              <button class="share-post-btn" type="button" aria-label="Сподели публикацията">↗ Сподели</button>
             </div>
             <details class="topic-comments post-thread">
               <summary>💬 Коментари · <span class="discussion-comment-count">...</span> <span class="owner-comments-label">· OWNER контрол на коментарите</span></summary>
@@ -1293,7 +1323,7 @@
             <button class="play-btn" type="button" aria-label="Пусни Първо либе">▶</button>
             <div class="video-caption"><small>Музикална история</small><h3>Първо либе – Ангел Узунов</h3></div>
           </article>
-          <article class="story-post" data-post-id="c51995da-bde7-47fc-852a-fb27a464c956">
+          <article class="story-post" id="post-c51995da-bde7-47fc-852a-fb27a464c956" data-post-id="c51995da-bde7-47fc-852a-fb27a464c956">
             <span class="topic-badge">Нова публикация</span>
             <h3>„Първо либе“ – песен за първата обич</h3>
             <p>„Първо либе“ е песен за първата любов — онази, която остава някъде в човека, дори когато пътищата се разделят.</p>
@@ -1302,6 +1332,7 @@
             <div class="real-post-reactions" id="storyPostReactions">
               <button class="thread-btn vote-up" type="button" data-target-type="post" data-target-id="c51995da-bde7-47fc-852a-fb27a464c956">👍 0</button>
               <button class="thread-btn vote-down" type="button" data-target-type="post" data-target-id="c51995da-bde7-47fc-852a-fb27a464c956">👎 0</button>
+              <button class="share-post-btn" type="button" aria-label="Сподели публикацията">↗ Сподели</button>
             </div>
             <details class="story-comments post-thread">
               <summary>💬 Коментари · 7</summary>
@@ -1335,6 +1366,32 @@
             </details>
           </article>
         </div>
+      </div>
+    </section>
+
+
+    <section class="section" id="interview">
+      <div class="container">
+        <span class="eyebrow">Интервю</span>
+        <h2 class="section-title">Лице в лице с Ангел Узунов</h2>
+        <p class="section-text">Разговор за песните, историите зад тях, българския фолклор, новите технологии и връзката с хората, които слушат музиката.</p>
+        <article class="interview-card" id="article-angel-uzunov-interview">
+          <span class="topic-badge">ANGEL FAN ZONE · Интервю</span>
+          <h3>Ангел Узунов: „За мен песента трябва първо да има душа“</h3>
+          <p class="interview-lead">Седем въпроса за творческия път, различните музикални посоки и онова, което остава след последния акорд.</p>
+          <div class="post-actions" style="margin-top:18px">
+            <button class="share-post-btn" id="shareInterviewButton" type="button" aria-label="Сподели интервюто">↗ Сподели</button>
+          </div>
+          <div class="interview-body"><div class="interview-qa"><div class="interview-question">Въпрос 1: Ангел, в песните ти има любов, раздяла, семейство, майка, баща, първа обич, България. Когато започваш нова песен, откъде идва първата искра?</div><div class="interview-answer"><p>При мен рядко започва с мисълта: „Сега трябва да напиша песен“. Обикновено идва една фраза, някакъв спомен или човешка история, която ме кара да се замисля. Понякога е нещо, което съм преживял, друг път е нещо, което съм видял в живота на хората около мен. Записвам няколко думи и постепенно започвам да виждам цялата история.</p><p>Не смятам, че всяка песен трябва непременно да бъде автобиографична, за да бъде истинска. Авторът трябва да може да влезе в чувството на друг човек. Но във всяка моя песен със сигурност има нещо от мен — начинът, по който разбирам любовта, семейството, раздялата, приятелството, България. Затова дори когато историята не е моята собствена, отношението към нея е мое.</p></div></div><div class="interview-qa"><div class="interview-question">Въпрос 2: Прави впечатление, че не се затваряш в един жанр. Имаш фолклорни песни, поп-фолк, кафана, естрадни и много лирични балади. Не се ли страхуваш, че за един артист това е прекалено широко?</div><div class="interview-answer"><p>Не, защото не искам музиката ми да бъде поставена в една кутия. Ако една история изисква пиано, цигулка и много интимно звучене, няма смисъл да я превръщам насила във фолклорна песен. И обратното — когато текстът носи български дух, планина, хора, традиция, тогава искам да чуя гайдата, кавала, гъдулката, кларинета, тъпана.</p><p>За мен жанрът е средството, а песента е целта. Има моменти, в които искам човек да стане и да играе хоро. Има други, в които искам просто да остане сам с една балада и да се замисли. Ако успея да предизвикам и двете състояния, не виждам защо трябва да избирам само едното.</p></div></div><div class="interview-qa"><div class="interview-question">Въпрос 3: В творчеството ти все по-силно присъства българският фолклор. Какво искаш да запазиш от традицията и какво си позволяваш да променяш?</div><div class="interview-answer"><p>Фолклорът за мен не е музейна витрина. Той трябва да се пази, но трябва и да продължава да живее. Имаме невероятни ритми, диалекти, инструменти и начин на пеене. Това е огромно богатство и когато създавам авторска народна песен, искам човек да усети откъде идва тя.</p><p>В същото време живеем днес. Не мисля, че уважението към традицията означава да копираме безкрайно миналото. Може да се създаде нова мелодия и нов текст, които да носят същия дух. За мен важната граница е да не превърнем фолклора в евтин ефект. Когато използвам гайда, кавал, гъдулка или народен диалект, те трябва да имат причина да бъдат там.</p></div></div><div class="interview-qa"><div class="interview-question">Въпрос 4: При теб има и нещо необичайно — ти си авторът, но използваш изкуствен интелект при създаването на вокалното изпълнение. Защо избра този подход?</div><div class="interview-answer"><p>За мен изкуственият интелект е инструмент. Авторската идея, текстът, музикалната посока, структурата, характерът на изпълнението и решенията как трябва да звучи една песен започват от човека. Аз не натискам един бутон и не приемам първото, което получа. Работя върху песента, променям, търся тембър, темпо, инструменти, начин на изпяване, докато се доближа до това, което съм чул вътрешно.</p><p>И държа да бъда открит за това. Не искам да представям един AI вокал като реален певец, който не съществува. Технологията се развива и според мен въпросът вече не е дали ще бъде използвана в музиката, а как ще бъде използвана. За мен тя трябва да служи на творческата идея, а не да я замества.</p></div></div><div class="interview-qa"><div class="interview-question">Въпрос 5: Сред песните ти има много силни теми за семейството — майката, бащата, дъщерята. Защо толкова често се връщаш към тях?</div><div class="interview-answer"><p>Защото това са отношения, които човек разбира по различен начин с годините. Когато си млад, приемаш много неща за даденост. После започваш да разбираш колко пъти някой те е чакал, колко неща е премълчал и колко любов е имало в действия, които тогава дори не си забелязвал.</p><p>Затова такива песни не искам да бъдат просто сантиментални. Искам човек да чуе някой стих и да си спомни за своята майка, за баща си, за детето си. Може би дори да вземе телефона и да се обади на някого. Ако една песен успее да направи това, за мен тя вече е постигнала много повече от определен брой гледания.</p></div></div><div class="interview-qa"><div class="interview-question">Въпрос 6: Днес музиката много често се измерва с гледания, последователи и алгоритми. Колко важни са тези числа за теб?</div><div class="interview-answer"><p>Важни са, защото без публика музиката трудно достига до хората. Няма смисъл да се преструваме, че YouTube, TikTok, Spotify и останалите платформи нямат значение. Те са част от начина, по който музиката живее днес.</p><p>Но има опасност човек да започне да създава за алгоритъма, вместо за хората. Аз предпочитам зад едно гледане да стои човек, който е чул песента и тя е останала в него. Затова създадох и FAN ZONE. Искам връзката с хората да не приключва с „харесай“ и „абонирай се“. Искам да чуя какво мислят, коя песен предпочитат, с какво са съгласни и с какво не са. Публиката не трябва да бъде само статистика.</p></div></div><div class="interview-qa"><div class="interview-question">Въпрос 7: Ако след години някой попадне случайно на песен с името Ангел Узунов, какво би искал да открие в нея?</div><div class="interview-answer"><p>Не бих искал първата му мисъл да бъде колко модерно е направена или колко гледания е имала. Искам да усети, че някой е имал какво да каже.</p><p>Модата се променя. Технологиите също. Това, което днес ни изглежда ново, след няколко години вероятно ще бъде обикновено. Но любовта, загубата, семейството, споменът, родината — тези неща не остаряват.</p><p>Ако някоя моя песен остане при хората и след време някой я пусне отново, защото му напомня за определен човек или момент от живота му, това за мен би било най-голямото признание. Не искам просто да създавам песни. Искам да оставям истории.</p></div></div></div>
+          <div class="interview-closing">
+            <h4>След последния въпрос</h4>
+            <p>Разговорът с Ангел Узунов очертава автор, който трудно може да бъде поставен под един жанров етикет. Между народната песен и съвременната балада, между живия звук на традиционните инструменти и новите възможности на изкуствения интелект стои една постоянна линия — историята.</p>
+            <p>За Узунов технологията не е самоличност, а средство. Жанрът не е ограничение, а език. А публиката не е число в статистиката, а човекът от другата страна на песента.</p>
+            <p>Може би именно затова в творчеството му толкова често се появяват първата любов, майката, бащата, раздялата, България и онези думи, които понякога оставяме неизречени в ежедневието.</p>
+            <p>Във време, когато една песен може да бъде създадена, публикувана и забравена за дни, Ангел Узунов поставя пред себе си по-трудна задача — <strong>да създава песни, към които човек да има причина да се върне.</strong></p>
+            <p class="interview-signature">„Музиката е любов!“</p>
+          </div>
+        </article>
       </div>
     </section>
 
@@ -1691,7 +1748,7 @@
 
   <script>
     const FAN_ZONE_API = "https://cmiylzpmpwqbacjoqtkx.supabase.co/functions/v1/fan-zone-api";
-    const FAN_ZONE_FRONTEND_VERSION = "20.1-editorial-reactions-fixed";
+    const FAN_ZONE_FRONTEND_VERSION = "20.4-interview-share";
 
     function getFanDeviceId(){
       const key = "angel_fan_zone_device_id";
@@ -1783,6 +1840,152 @@
       });
     }
 
+
+    function getSharePublicationData(button){
+      const host = button?.closest(".fan-post,.release-card,.discussion-post,.story-post");
+      const postId = host?.dataset?.postId || "";
+      if(!host || !postId) return null;
+
+      let title = host.querySelector("h3")?.textContent?.trim() || "";
+      if(!title){
+        const author = host.querySelector(".fan-post-author")?.textContent?.trim() || "Фен";
+        title = `Публикация от ${author} | ANGEL FAN ZONE`;
+      }else if(!title.includes("ANGEL FAN ZONE")){
+        title = `${title} | ANGEL FAN ZONE`;
+      }
+
+      const textNode = host.querySelector(
+        ":scope > p, .release-body > p"
+      );
+      const text = textNode?.textContent?.trim() || "Виж публикацията в ANGEL FAN ZONE.";
+      const url = `${window.location.origin}${window.location.pathname}#post-${postId}`;
+
+      return { title, text, url };
+    }
+
+    function fallbackCopyShareUrl(url){
+      const area = document.createElement("textarea");
+      area.value = url;
+      area.setAttribute("readonly", "");
+      area.style.position = "fixed";
+      area.style.opacity = "0";
+      area.style.pointerEvents = "none";
+      document.body.appendChild(area);
+      area.select();
+      const copied = document.execCommand("copy");
+      area.remove();
+      return copied;
+    }
+
+    async function shareFanPublication(button){
+      const data = getSharePublicationData(button);
+      if(!data) return;
+
+      const originalText = button.textContent;
+
+      try{
+        if(navigator.share){
+          await navigator.share(data);
+          return;
+        }
+
+        if(navigator.clipboard?.writeText){
+          await navigator.clipboard.writeText(data.url);
+        }else if(!fallbackCopyShareUrl(data.url)){
+          throw new Error("COPY_FAILED");
+        }
+
+        button.textContent = "Линкът е копиран ✓";
+        button.classList.add("copied");
+        setTimeout(()=>{
+          if(button.isConnected){
+            button.textContent = originalText;
+            button.classList.remove("copied");
+          }
+        },1800);
+      }catch(error){
+        if(error?.name === "AbortError") return;
+        console.error("FAN ZONE share error:", error);
+        button.textContent = "Копирай линка";
+        setTimeout(()=>{
+          if(button.isConnected) button.textContent = originalText;
+        },1800);
+      }
+    }
+
+    function scrollToSharedPublication(){
+      const hash = decodeURIComponent(window.location.hash || "");
+      if(!hash.startsWith("#post-")) return false;
+      const target = document.getElementById(hash.slice(1));
+      if(!target) return false;
+      requestAnimationFrame(()=>{
+        target.scrollIntoView({behavior:"smooth", block:"center"});
+      });
+      return true;
+    }
+
+    document.addEventListener("click", async (event)=>{
+      const shareButton = event.target.closest(".share-post-btn");
+      if(!shareButton) return;
+      event.preventDefault();
+      event.stopPropagation();
+      await shareFanPublication(shareButton);
+    });
+
+    window.addEventListener("hashchange", scrollToSharedPublication);
+
+    async function shareInterviewArticle(){
+      const button = document.getElementById("shareInterviewButton");
+      if(!button) return;
+
+      const data = {
+        title: 'Ангел Узунов: „За мен песента трябва първо да има душа“ | ANGEL FAN ZONE',
+        text: 'Интервю с Ангел Узунов за песните, българския фолклор, творческия процес, новите технологии и връзката с публиката.',
+        url: `${window.location.origin}${window.location.pathname}#article-angel-uzunov-interview`
+      };
+
+      const originalText = button.textContent;
+
+      try{
+        if(navigator.share){
+          await navigator.share(data);
+          return;
+        }
+
+        if(navigator.clipboard?.writeText){
+          await navigator.clipboard.writeText(data.url);
+        }else if(!fallbackCopyShareUrl(data.url)){
+          throw new Error("COPY_FAILED");
+        }
+
+        button.textContent = "Линкът е копиран ✓";
+        setTimeout(()=>{
+          if(button.isConnected) button.textContent = originalText;
+        },1800);
+      }catch(error){
+        if(error?.name === "AbortError") return;
+        console.error("Interview share error:", error);
+        button.textContent = "Копирай линка";
+        setTimeout(()=>{
+          if(button.isConnected) button.textContent = originalText;
+        },1800);
+      }
+    }
+
+    document.getElementById("shareInterviewButton")?.addEventListener("click", shareInterviewArticle);
+
+    function scrollToInterviewArticle(){
+      if(window.location.hash !== "#article-angel-uzunov-interview") return;
+      document.getElementById("article-angel-uzunov-interview")?.scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+      });
+    }
+
+    window.addEventListener("hashchange", scrollToInterviewArticle);
+    if(window.location.hash === "#article-angel-uzunov-interview"){
+      setTimeout(scrollToInterviewArticle, 150);
+    }
 
     let fanModerator = { is_moderator:false, role:null };
 
@@ -1899,6 +2102,7 @@
       const article = document.createElement("article");
       article.className = "fan-post";
       article.dataset.postId = post.id;
+      article.id = `post-${post.id}`;
 
       const head = document.createElement("div");
       head.className = "fan-post-head";
@@ -1927,6 +2131,7 @@
           data-target-type="post" data-target-id="${post.id}">
           👎 ${Number(post.thumbs_down || 0)}
         </button>
+        <button class="share-post-btn" type="button" aria-label="Сподели публикацията">↗ Сподели</button>
       `;
 
       const comments = Array.isArray(post.comments) ? post.comments : [];
@@ -1992,6 +2197,7 @@
         data.posts.forEach(post=>{
           feed.appendChild(createRealFanPostCard(post));
         });
+        scrollToSharedPublication();
       }catch(error){
         console.error("FAN ZONE posts load error:", error);
         showFanPostMessage("Не успяхме да заредим публикациите от сървъра.", true);
@@ -2359,6 +2565,7 @@
       const article = document.createElement("article");
       article.className = "release-card";
       article.dataset.postId = post.id;
+      article.id = `post-${post.id}`;
       article.innerHTML = `
         <div class="release-media" data-video-id="${meta.videoId}">
           <div class="release-thumb" style="--release-thumb:url('https://i.ytimg.com/vi/${meta.videoId}/hqdefault.jpg')"></div>
@@ -2374,6 +2581,7 @@
           <div class="real-post-reactions">
             <button class="thread-btn vote-up" type="button" data-target-type="post" data-target-id="${post.id}">👍 ${Number(post.thumbs_up || 0)}</button>
             <button class="thread-btn vote-down" type="button" data-target-type="post" data-target-id="${post.id}">👎 ${Number(post.thumbs_down || 0)}</button>
+            <button class="share-post-btn" type="button" aria-label="Сподели публикацията">↗ Сподели</button>
           </div>
           <details class="release-comments post-thread">
             <summary>💬 Коментари · ${roots.length}</summary>
@@ -2445,6 +2653,7 @@
           const card = buildReleaseCard(post);
           if(card) grid.appendChild(card);
         });
+        scrollToSharedPublication();
       }catch(error){
         console.error("FAN ZONE releases load error:", error);
         grid.innerHTML = `<div class="panel"><p class="section-text">Новите песни не можаха да бъдат заредени.</p></div>`;
