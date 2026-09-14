@@ -1159,8 +1159,8 @@
     .interview-promo-card{
       display:grid;
       grid-template-columns:minmax(300px,.88fr) minmax(0,1.12fr);
-      height:420px;
-      min-height:0;
+      height:auto;
+      min-height:480px;
       overflow:hidden;
       margin-top:38px;
       border:1px solid var(--border);
@@ -1174,7 +1174,7 @@
       position:relative;
       width:100%;
       height:100%;
-      min-height:0;
+      min-height:480px;
       overflow:hidden;
       background:#090a0e;
       display:flex;
@@ -1197,7 +1197,7 @@
       width:100%;
       height:100%;
       display:block;
-      object-fit:contain;
+      object-fit:cover;
       object-position:center;
       transform:none;
       background:#090a0e;
@@ -1354,7 +1354,7 @@
 
     @media(max-width:860px){
       .interview-promo-card{grid-template-columns:1fr;height:auto;min-height:0}
-      .interview-promo-media{height:300px;min-height:0;aspect-ratio:auto}
+      .interview-promo-media{height:300px;min-height:300px;aspect-ratio:auto}
       .interview-promo-media::after{
         background:linear-gradient(to top,rgba(7,8,11,.68),transparent 62%);
       }
