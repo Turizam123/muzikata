@@ -1159,7 +1159,8 @@
     .interview-promo-card{
       display:grid;
       grid-template-columns:minmax(300px,.88fr) minmax(0,1.12fr);
-      min-height:390px;
+      height:420px;
+      min-height:0;
       overflow:hidden;
       margin-top:38px;
       border:1px solid var(--border);
@@ -1171,7 +1172,9 @@
     }
     .interview-promo-media{
       position:relative;
-      min-height:390px;
+      width:100%;
+      height:100%;
+      min-height:0;
       overflow:hidden;
       background:#090a0e;
     }
@@ -1185,6 +1188,8 @@
       pointer-events:none;
     }
     .interview-promo-media img{
+      position:absolute;
+      inset:0;
       width:100%;
       height:100%;
       display:block;
@@ -1343,8 +1348,8 @@
     }
 
     @media(max-width:860px){
-      .interview-promo-card{grid-template-columns:1fr}
-      .interview-promo-media{min-height:300px;aspect-ratio:16/9}
+      .interview-promo-card{grid-template-columns:1fr;height:auto;min-height:0}
+      .interview-promo-media{height:300px;min-height:0;aspect-ratio:auto}
       .interview-promo-media::after{
         background:linear-gradient(to top,rgba(7,8,11,.68),transparent 62%);
       }
@@ -1372,7 +1377,7 @@
         height:0;
         display:none;
       }
-      .interview-promo-media{min-height:230px}
+      .interview-promo-media{height:230px;min-height:0}
       .interview-promo-copy{padding:24px}
       .interview-promo-copy h3{font-size:2.45rem}
       .interview-promo-actions{gap:14px}
