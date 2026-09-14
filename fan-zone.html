@@ -1155,20 +1155,215 @@
       }
     }
 
-    /* V20.3: Editorial interview */
-    .interview-card{margin-top:38px;padding:clamp(24px,4vw,42px);border:1px solid var(--border);border-radius:28px;background:radial-gradient(circle at 0 0,rgba(142,36,48,.16),transparent 34%),radial-gradient(circle at 100% 0,rgba(216,182,106,.09),transparent 30%),rgba(255,255,255,.035);box-shadow:var(--shadow)}
-    .interview-card h3{max-width:900px;font-family:"Cormorant Garamond",serif;font-size:clamp(2.35rem,5vw,4rem);line-height:.98;margin:12px 0}
-    .interview-lead{max-width:850px;color:#d6d0c5;line-height:1.8;font-size:.9rem}
-    .interview-body{display:grid;gap:26px;margin-top:30px}
+    /* V20.5: Editorial interview — promo card + modal */
+    .interview-promo-card{
+      display:grid;
+      grid-template-columns:minmax(300px,.88fr) minmax(0,1.12fr);
+      min-height:390px;
+      overflow:hidden;
+      margin-top:38px;
+      border:1px solid var(--border);
+      border-radius:28px;
+      background:
+        radial-gradient(circle at 100% 0,rgba(216,182,106,.10),transparent 34%),
+        rgba(255,255,255,.035);
+      box-shadow:var(--shadow);
+    }
+    .interview-promo-media{
+      position:relative;
+      min-height:390px;
+      overflow:hidden;
+      background:#090a0e;
+    }
+    .interview-promo-media::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(90deg,transparent 52%,rgba(10,11,15,.34) 100%),
+        linear-gradient(to top,rgba(7,8,11,.48),transparent 46%);
+      pointer-events:none;
+    }
+    .interview-promo-media img{
+      width:100%;
+      height:100%;
+      display:block;
+      object-fit:cover;
+      object-position:center;
+      transform:scale(1.01);
+    }
+    .interview-promo-copy{
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      padding:clamp(28px,4vw,48px);
+      min-width:0;
+    }
+    .interview-promo-copy h3{
+      max-width:760px;
+      margin:15px 0 14px;
+      font-family:"Cormorant Garamond",serif;
+      font-size:clamp(2.4rem,5vw,4.15rem);
+      line-height:.96;
+      letter-spacing:-.025em;
+    }
+    .interview-lead{
+      max-width:760px;
+      color:#d6d0c5;
+      line-height:1.82;
+      font-size:.9rem;
+    }
+    .interview-promo-actions{
+      display:flex;
+      align-items:center;
+      gap:18px;
+      flex-wrap:wrap;
+      margin-top:24px;
+    }
+
+    .interview-modal-backdrop{
+      position:fixed;
+      inset:0;
+      z-index:8500;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      background:rgba(3,4,7,.84);
+      backdrop-filter:blur(16px);
+      -webkit-backdrop-filter:blur(16px);
+    }
+    .interview-modal-backdrop.show{display:flex}
+    .interview-modal{
+      width:min(100%,980px);
+      max-height:min(90vh,920px);
+      position:relative;
+      overflow:hidden;
+      border:1px solid rgba(216,182,106,.34);
+      border-radius:28px;
+      background:
+        radial-gradient(circle at 8% 0%,rgba(142,36,48,.18),transparent 36%),
+        radial-gradient(circle at 94% 4%,rgba(216,182,106,.10),transparent 32%),
+        linear-gradient(180deg,#11131a 0%,#0a0b10 100%);
+      box-shadow:0 34px 110px rgba(0,0,0,.72);
+    }
+    .interview-modal::before{
+      content:"";
+      position:absolute;
+      left:0;right:0;top:0;
+      height:1px;
+      background:linear-gradient(90deg,transparent,var(--gold-light),transparent);
+      opacity:.82;
+      z-index:2;
+    }
+    .interview-modal-close{
+      position:absolute;
+      top:16px;
+      right:16px;
+      z-index:5;
+      width:42px;
+      height:42px;
+      display:grid;
+      place-items:center;
+      border:1px solid rgba(255,255,255,.13);
+      border-radius:50%;
+      background:rgba(7,8,11,.72);
+      color:#fff;
+      cursor:pointer;
+      font-size:1rem;
+      backdrop-filter:blur(10px);
+    }
+    .interview-modal-close:hover{
+      border-color:rgba(216,182,106,.52);
+      color:var(--gold-light);
+    }
+    .interview-modal-header{
+      padding:34px 72px 24px 34px;
+      border-bottom:1px solid rgba(216,182,106,.14);
+      background:rgba(255,255,255,.018);
+    }
+    .interview-modal-header h3{
+      max-width:820px;
+      margin:13px 0 12px;
+      font-family:"Cormorant Garamond",serif;
+      font-size:clamp(2.25rem,5vw,3.8rem);
+      line-height:.98;
+    }
+    .interview-modal-scroll{
+      max-height:calc(min(90vh,920px) - 190px);
+      overflow-y:auto;
+      overscroll-behavior:contain;
+      padding:4px 34px 34px;
+      scrollbar-gutter:stable;
+      scrollbar-width:thin;
+      scrollbar-color:rgba(216,182,106,.58) rgba(255,255,255,.04);
+    }
+    .interview-modal-scroll::-webkit-scrollbar{width:8px}
+    .interview-modal-scroll::-webkit-scrollbar-track{background:rgba(255,255,255,.04)}
+    .interview-modal-scroll::-webkit-scrollbar-thumb{background:rgba(216,182,106,.58);border-radius:20px}
+
+    .interview-body{display:grid;gap:26px;margin-top:24px}
     .interview-qa{padding-top:24px;border-top:1px solid rgba(216,182,106,.18)}
-    .interview-question{color:var(--gold-light);font-family:"Cormorant Garamond",serif;font-size:1.45rem;line-height:1.25;font-weight:700;margin-bottom:12px}
+    .interview-question{
+      color:var(--gold-light);
+      font-family:"Cormorant Garamond",serif;
+      font-size:1.45rem;
+      line-height:1.25;
+      font-weight:700;
+      margin-bottom:12px;
+    }
     .interview-answer{color:var(--muted);line-height:1.82;font-size:.86rem}
     .interview-answer p+p{margin-top:12px}
-    .interview-closing{margin-top:32px;padding:26px;border:1px solid rgba(216,182,106,.20);border-radius:20px;background:rgba(216,182,106,.045)}
-    .interview-closing h4{font-family:"Cormorant Garamond",serif;color:var(--gold-light);font-size:2rem;margin-bottom:12px}
+    .interview-closing{
+      margin-top:32px;
+      padding:26px;
+      border:1px solid rgba(216,182,106,.20);
+      border-radius:20px;
+      background:rgba(216,182,106,.045);
+    }
+    .interview-closing h4{
+      font-family:"Cormorant Garamond",serif;
+      color:var(--gold-light);
+      font-size:2rem;
+      margin-bottom:12px;
+    }
     .interview-closing p{color:#d4cec3;line-height:1.82;font-size:.86rem}
     .interview-closing p+p{margin-top:12px}
-    .interview-signature{margin-top:18px;color:var(--gold-light)!important;font-family:"Cormorant Garamond",serif;font-size:1.35rem!important;font-weight:700}
+    .interview-signature{
+      margin-top:18px;
+      color:var(--gold-light)!important;
+      font-family:"Cormorant Garamond",serif;
+      font-size:1.35rem!important;
+      font-weight:700;
+    }
+
+    @media(max-width:860px){
+      .interview-promo-card{grid-template-columns:1fr}
+      .interview-promo-media{min-height:300px;aspect-ratio:16/9}
+      .interview-promo-media::after{
+        background:linear-gradient(to top,rgba(7,8,11,.68),transparent 62%);
+      }
+    }
+    @media(max-width:640px){
+      .interview-modal-backdrop{padding:0}
+      .interview-modal{
+        width:100%;
+        height:100%;
+        max-height:100svh;
+        border:0;
+        border-radius:0;
+      }
+      .interview-modal-header{padding:28px 58px 20px 20px}
+      .interview-modal-scroll{
+        max-height:calc(100svh - 180px);
+        padding:0 20px 28px;
+      }
+      .interview-promo-media{min-height:230px}
+      .interview-promo-copy{padding:24px}
+      .interview-promo-copy h3{font-size:2.45rem}
+      .interview-promo-actions{gap:14px}
+    }
+
 
   </style>
 </head>
@@ -1375,13 +1570,37 @@
         <span class="eyebrow">Интервю</span>
         <h2 class="section-title">Лице в лице с Ангел Узунов</h2>
         <p class="section-text">Разговор за песните, историите зад тях, българския фолклор, новите технологии и връзката с хората, които слушат музиката.</p>
-        <article class="interview-card" id="article-angel-uzunov-interview">
-          <span class="topic-badge">ANGEL FAN ZONE · Интервю</span>
-          <h3>Ангел Узунов: „За мен песента трябва първо да има душа“</h3>
-          <p class="interview-lead">Седем въпроса за творческия път, различните музикални посоки и онова, което остава след последния акорд.</p>
-          <div class="post-actions" style="margin-top:18px">
-            <button class="share-post-btn" id="shareInterviewButton" type="button" aria-label="Сподели интервюто">↗ Сподели</button>
+
+        <article class="interview-promo-card" id="article-angel-uzunov-interview">
+          <div class="interview-promo-media" aria-hidden="true">
+            <img src="Angel_Uzunov_Deezer_hero.png" alt="">
           </div>
+
+          <div class="interview-promo-copy">
+            <span class="topic-badge">ANGEL FAN ZONE · Интервю</span>
+            <h3>Ангел Узунов: „За мен песента трябва първо да има душа“</h3>
+            <p class="interview-lead">Седем въпроса за творческия път, различните музикални посоки и онова, което остава след последния акорд.</p>
+
+            <div class="interview-promo-actions">
+              <button class="btn btn-primary" id="openInterviewButton" type="button">Прочети интервюто</button>
+              <button class="share-post-btn" id="shareInterviewButton" type="button" aria-label="Сподели интервюто">↗ Сподели</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <div class="interview-modal-backdrop" id="interviewModalBackdrop" aria-hidden="true">
+      <article class="interview-modal" id="interviewModal" role="dialog" aria-modal="true" aria-labelledby="interviewModalTitle">
+        <button class="interview-modal-close" id="interviewModalClose" type="button" aria-label="Затвори интервюто">✕</button>
+
+        <header class="interview-modal-header">
+          <span class="topic-badge">ANGEL FAN ZONE · Интервю</span>
+          <h3 id="interviewModalTitle">Ангел Узунов: „За мен песента трябва първо да има душа“</h3>
+          <p class="interview-lead">Седем въпроса за творческия път, различните музикални посоки и онова, което остава след последния акорд.</p>
+        </header>
+
+        <div class="interview-modal-scroll">
           <div class="interview-body"><div class="interview-qa"><div class="interview-question">Въпрос 1: Ангел, в песните ти има любов, раздяла, семейство, майка, баща, първа обич, България. Когато започваш нова песен, откъде идва първата искра?</div><div class="interview-answer"><p>При мен рядко започва с мисълта: „Сега трябва да напиша песен“. Обикновено идва една фраза, някакъв спомен или човешка история, която ме кара да се замисля. Понякога е нещо, което съм преживял, друг път е нещо, което съм видял в живота на хората около мен. Записвам няколко думи и постепенно започвам да виждам цялата история.</p><p>Не смятам, че всяка песен трябва непременно да бъде автобиографична, за да бъде истинска. Авторът трябва да може да влезе в чувството на друг човек. Но във всяка моя песен със сигурност има нещо от мен — начинът, по който разбирам любовта, семейството, раздялата, приятелството, България. Затова дори когато историята не е моята собствена, отношението към нея е мое.</p></div></div><div class="interview-qa"><div class="interview-question">Въпрос 2: Прави впечатление, че не се затваряш в един жанр. Имаш фолклорни песни, поп-фолк, кафана, естрадни и много лирични балади. Не се ли страхуваш, че за един артист това е прекалено широко?</div><div class="interview-answer"><p>Не, защото не искам музиката ми да бъде поставена в една кутия. Ако една история изисква пиано, цигулка и много интимно звучене, няма смисъл да я превръщам насила във фолклорна песен. И обратното — когато текстът носи български дух, планина, хора, традиция, тогава искам да чуя гайдата, кавала, гъдулката, кларинета, тъпана.</p><p>За мен жанрът е средството, а песента е целта. Има моменти, в които искам човек да стане и да играе хоро. Има други, в които искам просто да остане сам с една балада и да се замисли. Ако успея да предизвикам и двете състояния, не виждам защо трябва да избирам само едното.</p></div></div><div class="interview-qa"><div class="interview-question">Въпрос 3: В творчеството ти все по-силно присъства българският фолклор. Какво искаш да запазиш от традицията и какво си позволяваш да променяш?</div><div class="interview-answer"><p>Фолклорът за мен не е музейна витрина. Той трябва да се пази, но трябва и да продължава да живее. Имаме невероятни ритми, диалекти, инструменти и начин на пеене. Това е огромно богатство и когато създавам авторска народна песен, искам човек да усети откъде идва тя.</p><p>В същото време живеем днес. Не мисля, че уважението към традицията означава да копираме безкрайно миналото. Може да се създаде нова мелодия и нов текст, които да носят същия дух. За мен важната граница е да не превърнем фолклора в евтин ефект. Когато използвам гайда, кавал, гъдулка или народен диалект, те трябва да имат причина да бъдат там.</p></div></div><div class="interview-qa"><div class="interview-question">Въпрос 4: При теб има и нещо необичайно — ти си авторът, но използваш изкуствен интелект при създаването на вокалното изпълнение. Защо избра този подход?</div><div class="interview-answer"><p>За мен изкуственият интелект е инструмент. Авторската идея, текстът, музикалната посока, структурата, характерът на изпълнението и решенията как трябва да звучи една песен започват от човека. Аз не натискам един бутон и не приемам първото, което получа. Работя върху песента, променям, търся тембър, темпо, инструменти, начин на изпяване, докато се доближа до това, което съм чул вътрешно.</p><p>И държа да бъда открит за това. Не искам да представям един AI вокал като реален певец, който не съществува. Технологията се развива и според мен въпросът вече не е дали ще бъде използвана в музиката, а как ще бъде използвана. За мен тя трябва да служи на творческата идея, а не да я замества.</p></div></div><div class="interview-qa"><div class="interview-question">Въпрос 5: Сред песните ти има много силни теми за семейството — майката, бащата, дъщерята. Защо толкова често се връщаш към тях?</div><div class="interview-answer"><p>Защото това са отношения, които човек разбира по различен начин с годините. Когато си млад, приемаш много неща за даденост. После започваш да разбираш колко пъти някой те е чакал, колко неща е премълчал и колко любов е имало в действия, които тогава дори не си забелязвал.</p><p>Затова такива песни не искам да бъдат просто сантиментални. Искам човек да чуе някой стих и да си спомни за своята майка, за баща си, за детето си. Може би дори да вземе телефона и да се обади на някого. Ако една песен успее да направи това, за мен тя вече е постигнала много повече от определен брой гледания.</p></div></div><div class="interview-qa"><div class="interview-question">Въпрос 6: Днес музиката много често се измерва с гледания, последователи и алгоритми. Колко важни са тези числа за теб?</div><div class="interview-answer"><p>Важни са, защото без публика музиката трудно достига до хората. Няма смисъл да се преструваме, че YouTube, TikTok, Spotify и останалите платформи нямат значение. Те са част от начина, по който музиката живее днес.</p><p>Но има опасност човек да започне да създава за алгоритъма, вместо за хората. Аз предпочитам зад едно гледане да стои човек, който е чул песента и тя е останала в него. Затова създадох и FAN ZONE. Искам връзката с хората да не приключва с „харесай“ и „абонирай се“. Искам да чуя какво мислят, коя песен предпочитат, с какво са съгласни и с какво не са. Публиката не трябва да бъде само статистика.</p></div></div><div class="interview-qa"><div class="interview-question">Въпрос 7: Ако след години някой попадне случайно на песен с името Ангел Узунов, какво би искал да открие в нея?</div><div class="interview-answer"><p>Не бих искал първата му мисъл да бъде колко модерно е направена или колко гледания е имала. Искам да усети, че някой е имал какво да каже.</p><p>Модата се променя. Технологиите също. Това, което днес ни изглежда ново, след няколко години вероятно ще бъде обикновено. Но любовта, загубата, семейството, споменът, родината — тези неща не остаряват.</p><p>Ако някоя моя песен остане при хората и след време някой я пусне отново, защото му напомня за определен човек или момент от живота му, това за мен би било най-голямото признание. Не искам просто да създавам песни. Искам да оставям истории.</p></div></div></div>
           <div class="interview-closing">
             <h4>След последния въпрос</h4>
@@ -1391,9 +1610,9 @@
             <p>Във време, когато една песен може да бъде създадена, публикувана и забравена за дни, Ангел Узунов поставя пред себе си по-трудна задача — <strong>да създава песни, към които човек да има причина да се върне.</strong></p>
             <p class="interview-signature">„Музиката е любов!“</p>
           </div>
-        </article>
-      </div>
-    </section>
+        </div>
+      </article>
+    </div>
 
     <section class="section" id="community">
       <div class="container">
@@ -1748,7 +1967,7 @@
 
   <script>
     const FAN_ZONE_API = "https://cmiylzpmpwqbacjoqtkx.supabase.co/functions/v1/fan-zone-api";
-    const FAN_ZONE_FRONTEND_VERSION = "20.4-interview-share";
+    const FAN_ZONE_FRONTEND_VERSION = "20.5-interview-promo-modal";
 
     function getFanDeviceId(){
       const key = "angel_fan_zone_device_id";
@@ -1934,6 +2153,38 @@
 
     window.addEventListener("hashchange", scrollToSharedPublication);
 
+
+    const interviewModalBackdrop = document.getElementById("interviewModalBackdrop");
+    const interviewModal = document.getElementById("interviewModal");
+    const openInterviewButton = document.getElementById("openInterviewButton");
+    const interviewModalClose = document.getElementById("interviewModalClose");
+
+    function openInterviewModal(){
+      if(!interviewModalBackdrop) return;
+      interviewModalBackdrop.classList.add("show");
+      interviewModalBackdrop.setAttribute("aria-hidden","false");
+      document.body.style.overflow = "hidden";
+      setTimeout(()=>interviewModalClose?.focus(),30);
+    }
+
+    function closeInterviewModal(){
+      if(!interviewModalBackdrop) return;
+      interviewModalBackdrop.classList.remove("show");
+      interviewModalBackdrop.setAttribute("aria-hidden","true");
+      document.body.style.overflow = "";
+    }
+
+    openInterviewButton?.addEventListener("click",openInterviewModal);
+    interviewModalClose?.addEventListener("click",closeInterviewModal);
+    interviewModalBackdrop?.addEventListener("click",(event)=>{
+      if(event.target === interviewModalBackdrop) closeInterviewModal();
+    });
+    document.addEventListener("keydown",(event)=>{
+      if(event.key === "Escape" && interviewModalBackdrop?.classList.contains("show")){
+        closeInterviewModal();
+      }
+    });
+
     async function shareInterviewArticle(){
       const button = document.getElementById("shareInterviewButton");
       if(!button) return;
@@ -1978,8 +2229,9 @@
       if(window.location.hash !== "#article-angel-uzunov-interview") return;
       document.getElementById("article-angel-uzunov-interview")?.scrollIntoView({
         behavior:"smooth",
-        block:"start"
+        block:"center"
       });
+      setTimeout(openInterviewModal, 320);
     }
 
     window.addEventListener("hashchange", scrollToInterviewArticle);
