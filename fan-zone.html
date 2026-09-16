@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ANGEL FAN ZONE | Ангел Узунов – музика, истории, класации и фенове</title>
-  <meta name="description" content="ANGEL FAN ZONE на Ангел Узунов – музикални истории, фен публикации, дискусии, коментари, месечни класации и гласуване за любими песни.">
-  <meta name="keywords" content="Ангел Узунов, Angel Uzunov, ANGEL FAN ZONE, българска музика, народна музика, поп фолк, музикални истории, фен зона, фен публикации, музикални класации, гласуване за песни">
+  <meta name="description" content="ANGEL FAN ZONE на Ангел Узунов – музикални истории, фен публикации, дискусии, коментари, месечни класации по реални YouTube гледания.">
+  <meta name="keywords" content="Ангел Узунов, Angel Uzunov, ANGEL FAN ZONE, българска музика, народна музика, поп фолк, музикални истории, фен зона, фен публикации, музикални класации, YouTube гледания">
   <meta name="author" content="Ангел Узунов">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta name="googlebot" content="index, follow">
@@ -29,7 +29,7 @@
   <!-- Twitter / X -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="ANGEL FAN ZONE | Ангел Узунов">
-  <meta name="twitter:description" content="Музикални истории, фен публикации, дискусии, коментари, класации и гласуване за песни.">
+  <meta name="twitter:description" content="Музикални истории, фен публикации, дискусии, коментари, класации по реални YouTube гледания.">
   <meta name="twitter:image" content="https://angeluzunov.site/Spotify_Header_2660x1140.png">
 
   <!-- Structured data -->
@@ -56,7 +56,7 @@
         "@id": "https://angeluzunov.site/fan-zone.html#webpage",
         "url": "https://angeluzunov.site/fan-zone.html",
         "name": "ANGEL FAN ZONE | Ангел Узунов",
-        "description": "Интерактивна фен зона с музикални истории, дискусии, фен публикации, коментари, месечни класации и гласуване за песни.",
+        "description": "Интерактивна фен зона с музикални истории, дискусии, фен публикации, коментари, месечни класации по реални YouTube гледания.",
         "inLanguage": "bg",
         "isPartOf": {
           "@id": "https://angeluzunov.site/#website"
@@ -1527,7 +1527,7 @@
       <div class="container">
         <span class="eyebrow">Месечен избор на феновете</span>
         <h2 class="section-title">Вие избирате</h2>
-        <p class="section-text">Пет песни. Един месец. Вашият вот определя подредбата – песента с най-много гласове автоматично застава на първо място.</p>
+        <p class="section-text">Пет песни. Един месец. Подредбата се определя автоматично според реалните гледания на песните в YouTube – песента с най-много гледания застава на първо място.</p>
         <div class="monthly-list" id="monthlyList">
           <div class="panel">
             <p class="section-text">Зареждане на месечната класация...</p>
@@ -2588,6 +2588,10 @@
       media.appendChild(frame);
     }
 
+    function formatMonthlyViews(value){
+      return new Intl.NumberFormat("bg-BG").format(Number(value || 0));
+    }
+
     async function renderMonthlyRanking(songs){
       if(!list) return;
 
@@ -2602,18 +2606,17 @@
         return;
       }
 
-      const isLoggedIn = await monthlyUserIsLoggedIn();
-      const maxVotes = Math.max(...rows.map(song=>Number(song.votes || 0)), 1);
+      const maxViews = Math.max(...rows.map(song=>Number(song.views || 0)), 1);
 
       rows.forEach((song,index)=>{
         const article = document.createElement("article");
         article.className = "monthly-song";
         article.dataset.songId = song.song_id;
-        article.dataset.votes = Number(song.votes || 0);
+        article.dataset.views = Number(song.views || 0);
 
         const rank = Number(song.rank || (index + 1));
-        const votes = Number(song.votes || 0);
-        const width = Math.max(0, Math.min(100, (votes / maxVotes) * 100));
+        const views = Number(song.views || 0);
+        const width = Math.max(0, Math.min(100, (views / maxViews) * 100));
         const videoId = song.youtube_video_id || "";
         const url = song.youtube_url || (videoId ? `https://www.youtube.com/watch?v=${videoId}` : "#");
         const title = song.title || "Песен";
@@ -2638,21 +2641,13 @@
               <small>${escapeMonthlyHtml(artist)}</small>
             </div>
 
-            <button class="vote-meter real-monthly-vote ${isLoggedIn ? "" : "guest-vote"}"
-                    type="button"
-                    data-song-id="${escapeMonthlyHtml(song.song_id)}"
-                    aria-label="Гласувай за ${escapeMonthlyHtml(title)}">
+            <div class="vote-meter monthly-views-meter" aria-label="${formatMonthlyViews(views)} гледания в YouTube">
               <span class="vote-meter-fill" style="--vote-width:${width}%"></span>
               <span class="vote-meter-label">
-                <span>${isLoggedIn ? "Гласувай" : "Вход за гласуване"}</span>
-                <strong class="vote-count">${votes}</strong>
+                <span>Гледания в YouTube</span>
+                <strong class="vote-count">${formatMonthlyViews(views)}</strong>
               </span>
-            </button>
-
-            ${isLoggedIn
-              ? ""
-              : '<div class="monthly-vote-locked-note">Можеш да слушаш свободно. <strong>Само влезли потребители могат да гласуват.</strong></div>'
-            }
+            </div>
 
             ${videoId
               ? `<a class="monthly-youtube-link" href="${escapeMonthlyHtml(url)}" target="_blank" rel="noopener">YouTube ↗</a>`
@@ -2689,48 +2684,6 @@
         console.error("FAN ZONE monthly poll load error:", error);
       }
     }
-
-    document.addEventListener("click", async (event)=>{
-      const button = event.target.closest(".real-monthly-vote");
-      if(!button) return;
-
-      event.preventDefault();
-
-      const session = await window.getFanZoneSession?.();
-      if(!session?.access_token){
-        window.openFanZoneAuth?.();
-        return;
-      }
-
-      const songId = button.dataset.songId;
-      if(!activeMonthlyPollId || !songId) return;
-
-      button.disabled = true;
-      const label = button.querySelector(".vote-meter-label > span");
-      const oldLabel = label?.textContent || "Гласувай";
-      if(label) label.textContent = "Записване...";
-
-      try{
-        const data = await fanApiPost({
-          action:"vote_monthly",
-          poll_id:activeMonthlyPollId,
-          song_id:songId,
-          device_id:getFanDeviceId()
-        });
-
-        await renderMonthlyRanking(data.songs || []);
-      }catch(error){
-        console.error("FAN ZONE monthly vote error:", error);
-        if(error?.status === 401 || error?.code === "AUTH_REQUIRED"){
-          window.openFanZoneAuth?.();
-        }else{
-          alert(error?.message || "Вотът не можа да бъде записан.");
-        }
-        if(label) label.textContent = oldLabel;
-      }finally{
-        button.disabled = false;
-      }
-    });
 
     const storyVideo=document.getElementById("storyVideo");
     storyVideo.querySelector(".play-btn").addEventListener("click",()=>{
