@@ -1526,8 +1526,12 @@
   height:0;
   display:none;
 }
+.fan-chat-bubble.fan-chat-bubble-video{
+  max-width:90%;
+}
 .fan-chat-youtube{
-  width:min(300px,100%);
+  width:360px;
+  max-width:100%;
   margin-top:7px;
   overflow:hidden;
   border:1px solid rgba(216,182,106,.28);
@@ -3749,9 +3753,10 @@
         const mine = row.user_id === uid;
         const name = row.display_name || "Фен";
         const initial = (name.trim()[0] || "F").toUpperCase();
+        const hasYouTube = !!fanChatYouTubeId(row.message);
         return `<div class="fan-chat-msg${mine ? " mine" : ""}" data-chat-id="${fanChatEscape(row.id)}">
           <div class="fan-chat-avatar">${fanChatEscape(initial)}</div>
-          <div class="fan-chat-bubble">
+          <div class="fan-chat-bubble${hasYouTube ? " fan-chat-bubble-video" : ""}">
             <div class="fan-chat-meta">${fanChatEscape(name)} · ${fanChatTime(row.created_at)}</div>
             <div class="fan-chat-text">${fanChatMessageHtml(row.message)}</div>
           </div>
