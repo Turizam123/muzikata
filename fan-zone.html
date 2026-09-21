@@ -1397,22 +1397,24 @@
   
   /* ===== FAN CHAT — isolated floating module ===== */
   .fan-chat-launcher{
-    position:fixed;right:22px;bottom:22px;z-index:9996;
-    width:58px;height:58px;border-radius:50%;
+    position:fixed;right:22px;bottom:22px;z-index:2147483000;
+    width:auto;min-width:132px;height:56px;border-radius:28px;
     border:1px solid rgba(216,182,106,.55);
     background:linear-gradient(145deg,#17120d,#090807);
-    color:#f3d993;display:grid;place-items:center;
+    color:#f3d993;display:none;align-items:center;justify-content:center;gap:9px;padding:0 18px;
     box-shadow:0 14px 38px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.025) inset;
     cursor:pointer;transition:.22s ease;
   }
+  .fan-chat-launcher.is-authenticated{display:flex !important}
   .fan-chat-launcher:hover{transform:translateY(-2px);border-color:#f3d993}
+  .fan-chat-launcher-label{font-size:12px;font-weight:900;letter-spacing:.08em;white-space:nowrap}
   .fan-chat-launcher svg{width:25px;height:25px}
   .fan-chat-dot{
     position:absolute;right:2px;top:3px;width:10px;height:10px;border-radius:50%;
     background:#41d67a;border:2px solid #0b0908;box-shadow:0 0 10px rgba(65,214,122,.65)
   }
   .fan-chat-panel{
-    position:fixed;right:22px;bottom:92px;z-index:9997;
+    position:fixed;right:22px;bottom:90px;z-index:2147483001;
     width:min(390px,calc(100vw - 24px));height:min(610px,calc(100vh - 125px));
     display:none;grid-template-rows:auto 1fr auto;
     overflow:hidden;border-radius:22px;
@@ -1491,7 +1493,7 @@
   .fan-chat-send:disabled{opacity:.4;cursor:not-allowed}
   .fan-chat-error{display:none;padding:8px 11px 0;color:#dca0a0;font-size:11px}
   @media(max-width:600px){
-    .fan-chat-launcher{right:14px;bottom:16px;width:54px;height:54px}
+    .fan-chat-launcher{right:14px;bottom:16px;min-width:124px;width:auto;height:52px}
     .fan-chat-panel{right:8px;bottom:78px;width:calc(100vw - 16px);height:min(70vh,620px);border-radius:20px}
   }
 
@@ -1905,6 +1907,7 @@
       <path d="M7 18.5 3.5 21v-5.1A8.4 8.4 0 0 1 3 13C3 8.58 7.03 5 12 5s9 3.58 9 8-4.03 8-9 8a10 10 0 0 1-5-1.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
       <path d="M8 13h.01M12 13h.01M16 13h.01" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/>
     </svg>
+    <span class="fan-chat-launcher-label">FAN CHAT</span>
   </button>
 
   <aside class="fan-chat-panel" id="fanChatPanel" aria-label="FAN CHAT" aria-hidden="true">
@@ -3662,6 +3665,13 @@
     async function fanChatRefreshAuth(){
       const session = await fanChatSession();
       const logged = !!session?.user;
+
+      fanChatLauncher?.classList.toggle("is-authenticated", logged);
+
+      if(!logged){
+        closeFanChat();
+      }
+
       fanChatInput.disabled = !logged || !fanChatReady;
       fanChatSend.disabled = !logged || !fanChatReady;
       fanChatLoginNote.style.display = logged ? "none" : "block";
@@ -3693,6 +3703,13 @@
 
     async function loadFanChat(){
       fanChatError.style.display = "none";
+      const session = await fanChatSession();
+      if(!session?.user){
+        fanChatReady = false;
+        await fanChatRefreshAuth();
+        return;
+      }
+
       const { data, error } = await fanSupabase
         .from("fan_chat_messages")
         .select("id,user_id,display_name,message,created_at")
@@ -3782,7 +3799,10 @@
       fanChatInput.style.height = Math.min(fanChatInput.scrollHeight,90) + "px";
     });
 
-    fanSupabase.auth.onAuthStateChange(()=>{ fanChatRefreshAuth(); });
+    fanSupabase.auth.onAuthStateChange(async (_event, session)=>{
+      await fanChatRefreshAuth();
+      if(session?.user) await loadFanChat();
+    });
 
     try{
       fanChatChannel = fanSupabase
