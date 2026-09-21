@@ -1462,6 +1462,13 @@
   .fan-chat-bubble{max-width:78%;min-width:70px}
   .fan-chat-meta{font-size:10px;color:#81796f;margin:0 4px 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .fan-chat-msg.mine .fan-chat-meta{text-align:right}
+  .fan-chat-owner-delete{
+    display:none;margin-left:7px;padding:2px 7px;border-radius:999px;
+    border:1px solid rgba(190,72,72,.38);background:rgba(142,36,48,.10);
+    color:#e8aaa8;font:inherit;font-size:9px;font-weight:800;cursor:pointer;vertical-align:middle
+  }
+  body.owner-role-owner .fan-chat-owner-delete{display:inline-flex}
+  .fan-chat-owner-delete:hover{border-color:rgba(230,110,110,.72);color:#ffd0cd;background:rgba(142,36,48,.20)}
   .fan-chat-text{
     padding:10px 12px;border-radius:15px 15px 15px 5px;
     background:#171513;border:1px solid rgba(255,255,255,.055);
@@ -2501,6 +2508,7 @@
       if(!session?.access_token){
         fanModerator = {is_moderator:false, role:null};
         document.body.classList.remove("owner-mode");
+        document.body.classList.remove("owner-role-owner");
         badge?.classList.remove("show");
         return;
       }
@@ -2510,12 +2518,14 @@
         fanModerator = data;
         const active = !!data.is_moderator;
         document.body.classList.toggle("owner-mode", active);
+        document.body.classList.toggle("owner-role-owner", active && String(data.role || "").toLowerCase() === "owner");
         badge?.classList.toggle("show", active);
         if(badge && active) badge.textContent = String(data.role || "OWNER").toUpperCase();
       }catch(error){
         console.error("Moderator status error:", error);
         fanModerator = {is_moderator:false, role:null};
         document.body.classList.remove("owner-mode");
+        document.body.classList.remove("owner-role-owner");
         badge?.classList.remove("show");
       }
     }
@@ -3757,13 +3767,56 @@
         return `<div class="fan-chat-msg${mine ? " mine" : ""}" data-chat-id="${fanChatEscape(row.id)}">
           <div class="fan-chat-avatar">${fanChatEscape(initial)}</div>
           <div class="fan-chat-bubble${hasYouTube ? " fan-chat-bubble-video" : ""}">
-            <div class="fan-chat-meta">${fanChatEscape(name)} · ${fanChatTime(row.created_at)}</div>
+            <div class="fan-chat-meta">${fanChatEscape(name)} · ${fanChatTime(row.created_at)} <button class="fan-chat-owner-delete" type="button" data-chat-delete="${fanChatEscape(row.id)}" title="Изтрий окончателно от чата и базата">Изтрий</button></div>
             <div class="fan-chat-text">${fanChatMessageHtml(row.message)}</div>
           </div>
         </div>`;
       }).join("");
       fanChatMessages.scrollTop = fanChatMessages.scrollHeight;
     }
+
+    async function deleteFanChatMessage(messageId){
+      if(!messageId) return;
+      if(String(fanModerator?.role || "").toLowerCase() !== "owner"){
+        await ownerNotice({title:"Няма OWNER права",text:"Окончателното изтриване на съобщения е достъпно само за OWNER.",danger:true,icon:"!"});
+        return;
+      }
+
+      const confirmed = await ownerConfirm({
+        title:"Изтриване на съобщение",
+        text:"Съобщението ще бъде изтрито окончателно от FAN CHAT и от базата данни.",
+        note:"Това действие не може да бъде отменено.",
+        confirmText:"Изтрий окончателно",
+        cancelText:"Отказ",
+        danger:true,
+        icon:"✕"
+      });
+      if(!confirmed) return;
+
+      const { error } = await fanSupabase
+        .from("fan_chat_messages")
+        .delete()
+        .eq("id", messageId);
+
+      if(error){
+        await ownerNotice({title:"Изтриването не е разрешено",text:error.message || "Supabase отказа изтриването.",note:"Провери OWNER DELETE policy за fan_chat_messages.",danger:true,icon:"!"});
+        return;
+      }
+      await loadFanChat();
+    }
+
+    fanChatMessages?.addEventListener("click", async (event)=>{
+      const button = event.target.closest("[data-chat-delete]");
+      if(!button) return;
+      event.preventDefault();
+      event.stopPropagation();
+      button.disabled = true;
+      try{
+        await deleteFanChatMessage(button.dataset.chatDelete);
+      }finally{
+        button.disabled = false;
+      }
+    });
 
     async function loadFanChat(){
       fanChatError.style.display = "none";
