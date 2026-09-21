@@ -1513,6 +1513,57 @@
     .fan-chat-guest-bubble{right:12px;bottom:82px;width:min(270px,calc(100vw - 24px))}
   }
 
+
+/* FAN CHAT — invisible scrollbars + embedded YouTube */
+#fanChatMessages,
+#fanChatInput{
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+}
+#fanChatMessages::-webkit-scrollbar,
+#fanChatInput::-webkit-scrollbar{
+  width:0;
+  height:0;
+  display:none;
+}
+.fan-chat-youtube{
+  width:min(300px,100%);
+  margin-top:7px;
+  overflow:hidden;
+  border:1px solid rgba(216,182,106,.28);
+  border-radius:12px;
+  background:#090807;
+}
+.fan-chat-youtube-frame{
+  position:relative;
+  width:100%;
+  aspect-ratio:16/9;
+  background:#000;
+}
+.fan-chat-youtube-frame iframe{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  border:0;
+}
+.fan-chat-youtube-link{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:9px 11px;
+  color:#f3d993;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.04em;
+  text-decoration:none;
+  border-top:1px solid rgba(216,182,106,.18);
+}
+.fan-chat-youtube-link:hover{
+  background:rgba(216,182,106,.08);
+  color:#fff1bf;
+}
+
 </style>
 </head>
 <body>
@@ -3646,6 +3697,47 @@
       return session;
     }
 
+    function fanChatYouTubeId(text){
+      const value = String(text || "");
+      const patterns = [
+        /(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?:[^\s#]*&)?v=([A-Za-z0-9_-]{11})/i,
+        /(?:https?:\/\/)?(?:www\.)?youtu\.be\/([A-Za-z0-9_-]{11})/i,
+        /(?:https?:\/\/)?(?:www\.)?youtube\.com\/shorts\/([A-Za-z0-9_-]{11})/i,
+        /(?:https?:\/\/)?(?:www\.)?youtube\.com\/embed\/([A-Za-z0-9_-]{11})/i
+      ];
+      for(const pattern of patterns){
+        const match = value.match(pattern);
+        if(match) return match[1];
+      }
+      return "";
+    }
+
+    function fanChatMessageHtml(message){
+      const raw = String(message || "");
+      const videoId = fanChatYouTubeId(raw);
+      if(!videoId) return fanChatEscape(raw).replace(/\n/g,"<br>");
+
+      const youtubeUrl = `https://www.youtube.com/watch?v=${videoId}`;
+      const cleanText = raw
+        .replace(/https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?[^\s]+|youtu\.be\/[^\s]+|youtube\.com\/shorts\/[^\s]+|youtube\.com\/embed\/[^\s]+)/ig,"")
+        .trim();
+
+      return `
+        ${cleanText ? `<div>${fanChatEscape(cleanText).replace(/\n/g,"<br>")}</div>` : ""}
+        <div class="fan-chat-youtube">
+          <div class="fan-chat-youtube-frame">
+            <iframe
+              src="https://www.youtube-nocookie.com/embed/${videoId}"
+              title="YouTube видео"
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen></iframe>
+          </div>
+          <a class="fan-chat-youtube-link" href="${youtubeUrl}" target="_blank" rel="noopener noreferrer">Отвори в YouTube ↗</a>
+        </div>`;
+    }
+
     async function fanChatRender(rows){
       const session = await fanChatSession();
       const uid = session?.user?.id || "";
@@ -3661,7 +3753,7 @@
           <div class="fan-chat-avatar">${fanChatEscape(initial)}</div>
           <div class="fan-chat-bubble">
             <div class="fan-chat-meta">${fanChatEscape(name)} · ${fanChatTime(row.created_at)}</div>
-            <div class="fan-chat-text">${fanChatEscape(row.message)}</div>
+            <div class="fan-chat-text">${fanChatMessageHtml(row.message)}</div>
           </div>
         </div>`;
       }).join("");
