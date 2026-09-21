@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ANGEL FAN ZONE | Ангел Узунов – музика, истории, класации и фенове</title>
-  <meta name="description" content="ANGEL FAN ZONE на Ангел Узунов – музикални истории, фен публикации, дискусии, коментари, месечни класации по реални YouTube гледания.">
-  <meta name="keywords" content="Ангел Узунов, Angel Uzunov, ANGEL FAN ZONE, българска музика, народна музика, поп фолк, музикални истории, фен зона, фен публикации, музикални класации, YouTube гледания">
+  <meta name="description" content="ANGEL FAN ZONE на Ангел Узунов – музикални истории, фен публикации, дискусии, коментари, месечни класации и гласуване за любими песни.">
+  <meta name="keywords" content="Ангел Узунов, Angel Uzunov, ANGEL FAN ZONE, българска музика, народна музика, поп фолк, музикални истории, фен зона, фен публикации, музикални класации, гласуване за песни">
   <meta name="author" content="Ангел Узунов">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta name="googlebot" content="index, follow">
@@ -29,7 +29,7 @@
   <!-- Twitter / X -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="ANGEL FAN ZONE | Ангел Узунов">
-  <meta name="twitter:description" content="Музикални истории, фен публикации, дискусии, коментари, класации по реални YouTube гледания.">
+  <meta name="twitter:description" content="Музикални истории, фен публикации, дискусии, коментари, класации и гласуване за песни.">
   <meta name="twitter:image" content="https://angeluzunov.site/Spotify_Header_2660x1140.png">
 
   <!-- Structured data -->
@@ -56,7 +56,7 @@
         "@id": "https://angeluzunov.site/fan-zone.html#webpage",
         "url": "https://angeluzunov.site/fan-zone.html",
         "name": "ANGEL FAN ZONE | Ангел Узунов",
-        "description": "Интерактивна фен зона с музикални истории, дискусии, фен публикации, коментари, месечни класации по реални YouTube гледания.",
+        "description": "Интерактивна фен зона с музикални истории, дискусии, фен публикации, коментари, месечни класации и гласуване за песни.",
         "inLanguage": "bg",
         "isPartOf": {
           "@id": "https://angeluzunov.site/#website"
@@ -1394,7 +1394,108 @@
     }
 
 
-  </style>
+  
+  /* ===== FAN CHAT — isolated floating module ===== */
+  .fan-chat-launcher{
+    position:fixed;right:22px;bottom:22px;z-index:9996;
+    width:58px;height:58px;border-radius:50%;
+    border:1px solid rgba(216,182,106,.55);
+    background:linear-gradient(145deg,#17120d,#090807);
+    color:#f3d993;display:grid;place-items:center;
+    box-shadow:0 14px 38px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.025) inset;
+    cursor:pointer;transition:.22s ease;
+  }
+  .fan-chat-launcher:hover{transform:translateY(-2px);border-color:#f3d993}
+  .fan-chat-launcher svg{width:25px;height:25px}
+  .fan-chat-dot{
+    position:absolute;right:2px;top:3px;width:10px;height:10px;border-radius:50%;
+    background:#41d67a;border:2px solid #0b0908;box-shadow:0 0 10px rgba(65,214,122,.65)
+  }
+  .fan-chat-panel{
+    position:fixed;right:22px;bottom:92px;z-index:9997;
+    width:min(390px,calc(100vw - 24px));height:min(610px,calc(100vh - 125px));
+    display:none;grid-template-rows:auto 1fr auto;
+    overflow:hidden;border-radius:22px;
+    border:1px solid rgba(216,182,106,.34);
+    background:rgba(10,9,8,.985);
+    box-shadow:0 26px 80px rgba(0,0,0,.68);
+    backdrop-filter:blur(18px);
+  }
+  .fan-chat-panel.is-open{display:grid;animation:fanChatIn .18s ease-out}
+  @keyframes fanChatIn{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:none}}
+  .fan-chat-head{
+    padding:15px 16px;border-bottom:1px solid rgba(216,182,106,.18);
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    background:linear-gradient(180deg,rgba(216,182,106,.09),transparent)
+  }
+  .fan-chat-brand{display:flex;align-items:center;gap:11px;min-width:0}
+  .fan-chat-mark{
+    width:38px;height:38px;border-radius:50%;display:grid;place-items:center;
+    border:1px solid rgba(216,182,106,.45);color:#f3d993;
+    font-family:"Cormorant Garamond",serif;font-weight:700;font-size:17px
+  }
+  .fan-chat-title{font-weight:800;letter-spacing:.04em;color:#f5ead1;font-size:14px}
+  .fan-chat-status{font-size:11px;color:#a89f91;margin-top:2px}
+  .fan-chat-close{
+    width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.1);
+    background:rgba(255,255,255,.035);color:#d9d2c7;cursor:pointer;font-size:20px;line-height:1
+  }
+  .fan-chat-messages{
+    overflow-y:auto;padding:16px 14px 18px;scrollbar-width:none;
+    background:
+      radial-gradient(circle at 100% 0%,rgba(216,182,106,.055),transparent 35%),
+      #0b0a09
+  }
+  .fan-chat-messages::-webkit-scrollbar{display:none}
+  .fan-chat-empty{
+    height:100%;display:grid;place-items:center;text-align:center;
+    color:#8f877d;font-size:13px;line-height:1.55;padding:30px
+  }
+  .fan-chat-msg{display:flex;gap:9px;margin:0 0 13px;align-items:flex-end}
+  .fan-chat-msg.mine{justify-content:flex-end}
+  .fan-chat-avatar{
+    flex:0 0 30px;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;
+    background:#17130e;border:1px solid rgba(216,182,106,.22);
+    color:#d8b66a;font-size:11px;font-weight:800
+  }
+  .fan-chat-msg.mine .fan-chat-avatar{display:none}
+  .fan-chat-bubble{max-width:78%;min-width:70px}
+  .fan-chat-meta{font-size:10px;color:#81796f;margin:0 4px 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .fan-chat-msg.mine .fan-chat-meta{text-align:right}
+  .fan-chat-text{
+    padding:10px 12px;border-radius:15px 15px 15px 5px;
+    background:#171513;border:1px solid rgba(255,255,255,.055);
+    color:#eee6db;font-size:13px;line-height:1.45;overflow-wrap:anywhere
+  }
+  .fan-chat-msg.mine .fan-chat-text{
+    border-radius:15px 15px 5px 15px;
+    background:linear-gradient(145deg,#3a2d18,#21190f);
+    border-color:rgba(216,182,106,.3);color:#fff2d2
+  }
+  .fan-chat-compose{
+    padding:11px;border-top:1px solid rgba(216,182,106,.16);
+    background:#0e0c0b
+  }
+  .fan-chat-login-note{display:none;color:#b7aa98;font-size:11px;text-align:center;margin:0 0 8px}
+  .fan-chat-compose-row{display:flex;align-items:flex-end;gap:8px}
+  .fan-chat-input{
+    flex:1;resize:none;max-height:90px;min-height:42px;padding:11px 13px;
+    border-radius:15px;border:1px solid rgba(216,182,106,.2);
+    outline:none;background:#151311;color:#f3ede4;font:inherit;font-size:13px
+  }
+  .fan-chat-input:focus{border-color:rgba(216,182,106,.55)}
+  .fan-chat-send{
+    flex:0 0 42px;width:42px;height:42px;border-radius:50%;border:0;
+    background:#d8b66a;color:#171109;cursor:pointer;font-weight:900;font-size:17px
+  }
+  .fan-chat-send:disabled{opacity:.4;cursor:not-allowed}
+  .fan-chat-error{display:none;padding:8px 11px 0;color:#dca0a0;font-size:11px}
+  @media(max-width:600px){
+    .fan-chat-launcher{right:14px;bottom:16px;width:54px;height:54px}
+    .fan-chat-panel{right:8px;bottom:78px;width:calc(100vw - 16px);height:min(70vh,620px);border-radius:20px}
+  }
+
+</style>
 </head>
 <body>
 
@@ -1527,7 +1628,7 @@
       <div class="container">
         <span class="eyebrow">Месечен избор на феновете</span>
         <h2 class="section-title">Вие избирате</h2>
-        <p class="section-text">Пет песни. Един месец. Подредбата се определя автоматично според реалните гледания на песните в YouTube – песента с най-много гледания застава на първо място.</p>
+        <p class="section-text">Пет песни. Един месец. Вашият вот определя подредбата – песента с най-много гласове автоматично застава на първо място.</p>
         <div class="monthly-list" id="monthlyList">
           <div class="panel">
             <p class="section-text">Зареждане на месечната класация...</p>
@@ -1795,6 +1896,41 @@
       <a href="https://angeluzunov.site/">Обратно към основния сайт</a>
     </div>
   </footer>
+
+
+  <!-- FAN CHAT — floating, isolated from the existing FAN ZONE sections -->
+  <button class="fan-chat-launcher" id="fanChatLauncher" type="button" aria-label="Отвори FAN CHAT" aria-expanded="false">
+    <span class="fan-chat-dot" aria-hidden="true"></span>
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M7 18.5 3.5 21v-5.1A8.4 8.4 0 0 1 3 13C3 8.58 7.03 5 12 5s9 3.58 9 8-4.03 8-9 8a10 10 0 0 1-5-1.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+      <path d="M8 13h.01M12 13h.01M16 13h.01" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/>
+    </svg>
+  </button>
+
+  <aside class="fan-chat-panel" id="fanChatPanel" aria-label="FAN CHAT" aria-hidden="true">
+    <div class="fan-chat-head">
+      <div class="fan-chat-brand">
+        <div class="fan-chat-mark">AU</div>
+        <div>
+          <div class="fan-chat-title">FAN CHAT</div>
+          <div class="fan-chat-status" id="fanChatStatus">Общ чат на ANGEL FAN ZONE</div>
+        </div>
+      </div>
+      <button class="fan-chat-close" id="fanChatClose" type="button" aria-label="Затвори">×</button>
+    </div>
+    <div class="fan-chat-messages" id="fanChatMessages">
+      <div class="fan-chat-empty">Зареждане на чата…</div>
+    </div>
+    <div class="fan-chat-compose">
+      <div class="fan-chat-login-note" id="fanChatLoginNote">За да пишеш в чата, влез във FAN ZONE.</div>
+      <div class="fan-chat-compose-row">
+        <textarea class="fan-chat-input" id="fanChatInput" maxlength="500" rows="1" placeholder="Напиши съобщение…"></textarea>
+        <button class="fan-chat-send" id="fanChatSend" type="button" aria-label="Изпрати">➤</button>
+      </div>
+      <div class="fan-chat-error" id="fanChatError"></div>
+    </div>
+  </aside>
+
 
   <script type="module">
     import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
@@ -2588,10 +2724,6 @@
       media.appendChild(frame);
     }
 
-    function formatMonthlyViews(value){
-      return new Intl.NumberFormat("bg-BG").format(Number(value || 0));
-    }
-
     async function renderMonthlyRanking(songs){
       if(!list) return;
 
@@ -2606,17 +2738,18 @@
         return;
       }
 
-      const maxViews = Math.max(...rows.map(song=>Number(song.views || 0)), 1);
+      const isLoggedIn = await monthlyUserIsLoggedIn();
+      const maxVotes = Math.max(...rows.map(song=>Number(song.votes || 0)), 1);
 
       rows.forEach((song,index)=>{
         const article = document.createElement("article");
         article.className = "monthly-song";
         article.dataset.songId = song.song_id;
-        article.dataset.views = Number(song.views || 0);
+        article.dataset.votes = Number(song.votes || 0);
 
         const rank = Number(song.rank || (index + 1));
-        const views = Number(song.views || 0);
-        const width = Math.max(0, Math.min(100, (views / maxViews) * 100));
+        const votes = Number(song.votes || 0);
+        const width = Math.max(0, Math.min(100, (votes / maxVotes) * 100));
         const videoId = song.youtube_video_id || "";
         const url = song.youtube_url || (videoId ? `https://www.youtube.com/watch?v=${videoId}` : "#");
         const title = song.title || "Песен";
@@ -2641,13 +2774,21 @@
               <small>${escapeMonthlyHtml(artist)}</small>
             </div>
 
-            <div class="vote-meter monthly-views-meter" aria-label="${formatMonthlyViews(views)} гледания в YouTube">
+            <button class="vote-meter real-monthly-vote ${isLoggedIn ? "" : "guest-vote"}"
+                    type="button"
+                    data-song-id="${escapeMonthlyHtml(song.song_id)}"
+                    aria-label="Гласувай за ${escapeMonthlyHtml(title)}">
               <span class="vote-meter-fill" style="--vote-width:${width}%"></span>
               <span class="vote-meter-label">
-                <span>Гледания в YouTube</span>
-                <strong class="vote-count">${formatMonthlyViews(views)}</strong>
+                <span>${isLoggedIn ? "Гласувай" : "Вход за гласуване"}</span>
+                <strong class="vote-count">${votes}</strong>
               </span>
-            </div>
+            </button>
+
+            ${isLoggedIn
+              ? ""
+              : '<div class="monthly-vote-locked-note">Можеш да слушаш свободно. <strong>Само влезли потребители могат да гласуват.</strong></div>'
+            }
 
             ${videoId
               ? `<a class="monthly-youtube-link" href="${escapeMonthlyHtml(url)}" target="_blank" rel="noopener">YouTube ↗</a>`
@@ -2684,6 +2825,48 @@
         console.error("FAN ZONE monthly poll load error:", error);
       }
     }
+
+    document.addEventListener("click", async (event)=>{
+      const button = event.target.closest(".real-monthly-vote");
+      if(!button) return;
+
+      event.preventDefault();
+
+      const session = await window.getFanZoneSession?.();
+      if(!session?.access_token){
+        window.openFanZoneAuth?.();
+        return;
+      }
+
+      const songId = button.dataset.songId;
+      if(!activeMonthlyPollId || !songId) return;
+
+      button.disabled = true;
+      const label = button.querySelector(".vote-meter-label > span");
+      const oldLabel = label?.textContent || "Гласувай";
+      if(label) label.textContent = "Записване...";
+
+      try{
+        const data = await fanApiPost({
+          action:"vote_monthly",
+          poll_id:activeMonthlyPollId,
+          song_id:songId,
+          device_id:getFanDeviceId()
+        });
+
+        await renderMonthlyRanking(data.songs || []);
+      }catch(error){
+        console.error("FAN ZONE monthly vote error:", error);
+        if(error?.status === 401 || error?.code === "AUTH_REQUIRED"){
+          window.openFanZoneAuth?.();
+        }else{
+          alert(error?.message || "Вотът не можа да бъде записан.");
+        }
+        if(label) label.textContent = oldLabel;
+      }finally{
+        button.disabled = false;
+      }
+    });
 
     const storyVideo=document.getElementById("storyVideo");
     storyVideo.querySelector(".play-btn").addEventListener("click",()=>{
@@ -3443,6 +3626,178 @@
     loadRealReleases();
     loadRealMonthlyPoll();
     loadRealFanPosts();
+
+
+
+    /* ===== FAN CHAT — isolated Supabase Realtime module ===== */
+    const fanChatLauncher = document.getElementById("fanChatLauncher");
+    const fanChatPanel = document.getElementById("fanChatPanel");
+    const fanChatClose = document.getElementById("fanChatClose");
+    const fanChatMessages = document.getElementById("fanChatMessages");
+    const fanChatInput = document.getElementById("fanChatInput");
+    const fanChatSend = document.getElementById("fanChatSend");
+    const fanChatLoginNote = document.getElementById("fanChatLoginNote");
+    const fanChatError = document.getElementById("fanChatError");
+    const fanChatStatus = document.getElementById("fanChatStatus");
+    let fanChatChannel = null;
+    let fanChatReady = false;
+
+    function fanChatEscape(value=""){
+      return String(value).replace(/[&<>"']/g, ch => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+      })[ch]);
+    }
+
+    function fanChatTime(value){
+      try{
+        return new Intl.DateTimeFormat("bg-BG",{hour:"2-digit",minute:"2-digit"}).format(new Date(value));
+      }catch(_){ return ""; }
+    }
+
+    async function fanChatSession(){
+      const { data } = await fanSupabase.auth.getSession();
+      return data.session || null;
+    }
+
+    async function fanChatRefreshAuth(){
+      const session = await fanChatSession();
+      const logged = !!session?.user;
+      fanChatInput.disabled = !logged || !fanChatReady;
+      fanChatSend.disabled = !logged || !fanChatReady;
+      fanChatLoginNote.style.display = logged ? "none" : "block";
+      fanChatInput.placeholder = logged ? "Напиши съобщение…" : "Влез във FAN ZONE, за да пишеш…";
+      return session;
+    }
+
+    async function fanChatRender(rows){
+      const session = await fanChatSession();
+      const uid = session?.user?.id || "";
+      if(!rows?.length){
+        fanChatMessages.innerHTML = '<div class="fan-chat-empty">Все още няма съобщения.<br>Бъди първият, който ще напише нещо.</div>';
+        return;
+      }
+      fanChatMessages.innerHTML = rows.map(row=>{
+        const mine = row.user_id === uid;
+        const name = row.display_name || "Фен";
+        const initial = (name.trim()[0] || "F").toUpperCase();
+        return `<div class="fan-chat-msg${mine ? " mine" : ""}" data-chat-id="${fanChatEscape(row.id)}">
+          <div class="fan-chat-avatar">${fanChatEscape(initial)}</div>
+          <div class="fan-chat-bubble">
+            <div class="fan-chat-meta">${fanChatEscape(name)} · ${fanChatTime(row.created_at)}</div>
+            <div class="fan-chat-text">${fanChatEscape(row.message)}</div>
+          </div>
+        </div>`;
+      }).join("");
+      fanChatMessages.scrollTop = fanChatMessages.scrollHeight;
+    }
+
+    async function loadFanChat(){
+      fanChatError.style.display = "none";
+      const { data, error } = await fanSupabase
+        .from("fan_chat_messages")
+        .select("id,user_id,display_name,message,created_at")
+        .eq("is_hidden", false)
+        .order("created_at",{ascending:false})
+        .limit(80);
+
+      if(error){
+        console.warn("FAN CHAT is not available yet:", error.message);
+        fanChatReady = false;
+        fanChatStatus.textContent = "Чатът очаква активиране";
+        fanChatMessages.innerHTML = '<div class="fan-chat-empty">FAN CHAT е добавен към страницата.<br>Необходимо е еднократно активиране на таблицата в Supabase.</div>';
+        await fanChatRefreshAuth();
+        return;
+      }
+
+      fanChatReady = true;
+      fanChatStatus.textContent = "Общ чат на ANGEL FAN ZONE";
+      await fanChatRender([...data].reverse());
+      await fanChatRefreshAuth();
+    }
+
+    async function sendFanChat(){
+      const message = fanChatInput.value.trim();
+      if(!message || !fanChatReady) return;
+
+      const session = await fanChatSession();
+      if(!session?.user){
+        fanChatLoginNote.style.display = "block";
+        window.openFanZoneAuth?.();
+        return;
+      }
+
+      const meta = session.user.user_metadata || {};
+      const displayName =
+        meta.full_name ||
+        meta.name ||
+        session.user.email?.split("@")[0] ||
+        "Фен";
+
+      fanChatSend.disabled = true;
+      fanChatError.style.display = "none";
+
+      const { error } = await fanSupabase.from("fan_chat_messages").insert({
+        user_id: session.user.id,
+        display_name: String(displayName).slice(0,80),
+        message: message.slice(0,500)
+      });
+
+      if(error){
+        fanChatError.textContent = error.message || "Съобщението не можа да бъде изпратено.";
+        fanChatError.style.display = "block";
+      }else{
+        fanChatInput.value = "";
+        fanChatInput.style.height = "";
+      }
+      fanChatSend.disabled = false;
+    }
+
+    function openFanChat(){
+      fanChatPanel.classList.add("is-open");
+      fanChatPanel.setAttribute("aria-hidden","false");
+      fanChatLauncher.setAttribute("aria-expanded","true");
+      loadFanChat();
+      setTimeout(()=>fanChatInput?.focus(),120);
+    }
+
+    function closeFanChat(){
+      fanChatPanel.classList.remove("is-open");
+      fanChatPanel.setAttribute("aria-hidden","true");
+      fanChatLauncher.setAttribute("aria-expanded","false");
+    }
+
+    fanChatLauncher?.addEventListener("click",()=>{
+      fanChatPanel.classList.contains("is-open") ? closeFanChat() : openFanChat();
+    });
+    fanChatClose?.addEventListener("click",closeFanChat);
+    fanChatSend?.addEventListener("click",sendFanChat);
+    fanChatInput?.addEventListener("keydown",(e)=>{
+      if(e.key === "Enter" && !e.shiftKey){
+        e.preventDefault();
+        sendFanChat();
+      }
+    });
+    fanChatInput?.addEventListener("input",()=>{
+      fanChatInput.style.height = "auto";
+      fanChatInput.style.height = Math.min(fanChatInput.scrollHeight,90) + "px";
+    });
+
+    fanSupabase.auth.onAuthStateChange(()=>{ fanChatRefreshAuth(); });
+
+    try{
+      fanChatChannel = fanSupabase
+        .channel("fan-chat-live")
+        .on("postgres_changes",{
+          event:"*",
+          schema:"public",
+          table:"fan_chat_messages"
+        },()=>loadFanChat())
+        .subscribe();
+    }catch(error){
+      console.warn("FAN CHAT realtime:", error);
+    }
+
+    loadFanChat();
 
 </script>
 </body>
