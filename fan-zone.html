@@ -1644,9 +1644,9 @@
 
     <section class="section" id="monthly">
       <div class="container">
-        <span class="eyebrow">Месечен избор на феновете</span>
-        <h2 class="section-title">Вие избирате</h2>
-        <p class="section-text">Пет песни. Един месец. Вашият вот определя подредбата – песента с най-много гласове автоматично застава на първо място.</p>
+        <span class="eyebrow">YouTube класация</span>
+        <h2 class="section-title">Вие избирате да гледате</h2>
+        <p class="section-text">Гледанията определят класацията. Гледайте любимите си песни и следете как позициите се променят според реалните гледания в YouTube.</p>
         <div class="monthly-list" id="monthlyList">
           <div class="panel">
             <p class="section-text">Зареждане на месечната класация...</p>
@@ -2755,23 +2755,23 @@
       if(rows.length === 0){
         const empty = document.createElement("div");
         empty.className = "panel";
-        empty.innerHTML = "<p class='section-text'>В момента няма активна месечна класация.</p>";
+        empty.innerHTML = "<p class='section-text'>В момента няма данни за YouTube класацията.</p>";
         list.appendChild(empty);
         return;
       }
 
-      const isLoggedIn = await monthlyUserIsLoggedIn();
-      const maxVotes = Math.max(...rows.map(song=>Number(song.votes || 0)), 1);
+      const maxViews = Math.max(...rows.map(song=>Number(song.views || 0)), 1);
+      const formatViews = value => new Intl.NumberFormat("bg-BG").format(Number(value || 0));
 
       rows.forEach((song,index)=>{
         const article = document.createElement("article");
         article.className = "monthly-song";
         article.dataset.songId = song.song_id;
-        article.dataset.votes = Number(song.votes || 0);
+        article.dataset.views = Number(song.views || 0);
 
         const rank = Number(song.rank || (index + 1));
-        const votes = Number(song.votes || 0);
-        const width = Math.max(0, Math.min(100, (votes / maxVotes) * 100));
+        const views = Number(song.views || 0);
+        const width = Math.max(0, Math.min(100, (views / maxViews) * 100));
         const videoId = song.youtube_video_id || "";
         const url = song.youtube_url || (videoId ? `https://www.youtube.com/watch?v=${videoId}` : "#");
         const title = song.title || "Песен";
@@ -2796,21 +2796,13 @@
               <small>${escapeMonthlyHtml(artist)}</small>
             </div>
 
-            <button class="vote-meter real-monthly-vote ${isLoggedIn ? "" : "guest-vote"}"
-                    type="button"
-                    data-song-id="${escapeMonthlyHtml(song.song_id)}"
-                    aria-label="Гласувай за ${escapeMonthlyHtml(title)}">
+            <div class="vote-meter" aria-label="${formatViews(views)} гледания в YouTube">
               <span class="vote-meter-fill" style="--vote-width:${width}%"></span>
               <span class="vote-meter-label">
-                <span>${isLoggedIn ? "Гласувай" : "Вход за гласуване"}</span>
-                <strong class="vote-count">${votes}</strong>
+                <span>YouTube гледания</span>
+                <strong class="vote-count">${formatViews(views)}</strong>
               </span>
-            </button>
-
-            ${isLoggedIn
-              ? ""
-              : '<div class="monthly-vote-locked-note">Можеш да слушаш свободно. <strong>Само влезли потребители могат да гласуват.</strong></div>'
-            }
+            </div>
 
             ${videoId
               ? `<a class="monthly-youtube-link" href="${escapeMonthlyHtml(url)}" target="_blank" rel="noopener">YouTube ↗</a>`
@@ -2848,47 +2840,7 @@
       }
     }
 
-    document.addEventListener("click", async (event)=>{
-      const button = event.target.closest(".real-monthly-vote");
-      if(!button) return;
 
-      event.preventDefault();
-
-      const session = await window.getFanZoneSession?.();
-      if(!session?.access_token){
-        window.openFanZoneAuth?.();
-        return;
-      }
-
-      const songId = button.dataset.songId;
-      if(!activeMonthlyPollId || !songId) return;
-
-      button.disabled = true;
-      const label = button.querySelector(".vote-meter-label > span");
-      const oldLabel = label?.textContent || "Гласувай";
-      if(label) label.textContent = "Записване...";
-
-      try{
-        const data = await fanApiPost({
-          action:"vote_monthly",
-          poll_id:activeMonthlyPollId,
-          song_id:songId,
-          device_id:getFanDeviceId()
-        });
-
-        await renderMonthlyRanking(data.songs || []);
-      }catch(error){
-        console.error("FAN ZONE monthly vote error:", error);
-        if(error?.status === 401 || error?.code === "AUTH_REQUIRED"){
-          window.openFanZoneAuth?.();
-        }else{
-          alert(error?.message || "Вотът не можа да бъде записан.");
-        }
-        if(label) label.textContent = oldLabel;
-      }finally{
-        button.disabled = false;
-      }
-    });
 
     const storyVideo=document.getElementById("storyVideo");
     storyVideo.querySelector(".play-btn").addEventListener("click",()=>{
@@ -3773,6 +3725,7 @@
       }else{
         fanChatInput.value = "";
         fanChatInput.style.height = "";
+        await loadFanChat();
       }
       fanChatSend.disabled = false;
     }
@@ -3825,7 +3778,14 @@
       fanChatInput.style.height = Math.min(fanChatInput.scrollHeight,90) + "px";
     });
 
-    fanSupabase.auth.onAuthStateChange(()=>{ fanChatRefreshAuth(); });
+    fanSupabase.auth.onAuthStateChange(async (_event, session)=>{
+      await fanChatRefreshAuth();
+      if(session?.user){
+        await loadFanChat();
+      }else{
+        fanChatMessages.innerHTML = '<div class="fan-chat-empty">Влез във FAN ZONE, за да използваш FAN CHAT.</div>';
+      }
+    });
 
     try{
       fanChatChannel = fanSupabase
@@ -3840,7 +3800,10 @@
       console.warn("FAN CHAT realtime:", error);
     }
 
-    loadFanChat();
+    (async ()=>{
+      const session = await fanChatRefreshAuth();
+      if(session?.user) await loadFanChat();
+    })();
 
 </script>
 </body>
