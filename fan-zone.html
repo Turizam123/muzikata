@@ -1490,9 +1490,27 @@
   }
   .fan-chat-send:disabled{opacity:.4;cursor:not-allowed}
   .fan-chat-error{display:none;padding:8px 11px 0;color:#dca0a0;font-size:11px}
+  .fan-chat-guest-bubble{
+    position:fixed;right:22px;bottom:91px;z-index:9995;
+    width:min(286px,calc(100vw - 28px));padding:12px 14px 13px;
+    border-radius:16px;border:1px solid rgba(216,182,106,.38);
+    background:linear-gradient(145deg,rgba(24,19,13,.98),rgba(9,8,7,.98));
+    box-shadow:0 16px 44px rgba(0,0,0,.5);color:#d9d0c2;
+    cursor:pointer;transition:.2s ease;backdrop-filter:blur(14px);
+  }
+  .fan-chat-guest-bubble:hover{transform:translateY(-2px);border-color:rgba(243,217,147,.7)}
+  .fan-chat-guest-bubble::after{
+    content:"";position:absolute;right:22px;bottom:-7px;width:13px;height:13px;
+    background:#0d0b09;border-right:1px solid rgba(216,182,106,.38);
+    border-bottom:1px solid rgba(216,182,106,.38);transform:rotate(45deg)
+  }
+  .fan-chat-guest-kicker{color:#f3d993;font-size:11px;font-weight:800;letter-spacing:.08em;margin-bottom:4px}
+  .fan-chat-guest-text{font-size:12px;line-height:1.45;color:#bdb3a5}
+  .fan-chat-guest-text strong{color:#f0e4cf;font-weight:700}
   @media(max-width:600px){
     .fan-chat-launcher{right:14px;bottom:16px;width:54px;height:54px}
     .fan-chat-panel{right:8px;bottom:78px;width:calc(100vw - 16px);height:min(70vh,620px);border-radius:20px}
+    .fan-chat-guest-bubble{right:12px;bottom:82px;width:min(270px,calc(100vw - 24px))}
   }
 
 </style>
@@ -1899,6 +1917,10 @@
 
 
   <!-- FAN CHAT — floating, isolated from the existing FAN ZONE sections -->
+  <div class="fan-chat-guest-bubble" id="fanChatGuestBubble" role="button" tabindex="0" aria-label="Влез във FAN ZONE, за да използваш FAN CHAT">
+    <div class="fan-chat-guest-kicker">FAN CHAT</div>
+    <div class="fan-chat-guest-text">Имаме чат за феновете. <strong>Влез във FAN ZONE</strong>, за да четеш и пишеш в него.</div>
+  </div>
   <button class="fan-chat-launcher" id="fanChatLauncher" type="button" aria-label="Отвори FAN CHAT" aria-expanded="false">
     <span class="fan-chat-dot" aria-hidden="true"></span>
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -3631,6 +3653,7 @@
 
     /* ===== FAN CHAT — isolated Supabase Realtime module ===== */
     const fanChatLauncher = document.getElementById("fanChatLauncher");
+    const fanChatGuestBubble = document.getElementById("fanChatGuestBubble");
     const fanChatPanel = document.getElementById("fanChatPanel");
     const fanChatClose = document.getElementById("fanChatClose");
     const fanChatMessages = document.getElementById("fanChatMessages");
@@ -3666,6 +3689,8 @@
       fanChatSend.disabled = !logged || !fanChatReady;
       fanChatLoginNote.style.display = logged ? "none" : "block";
       fanChatInput.placeholder = logged ? "Напиши съобщение…" : "Влез във FAN ZONE, за да пишеш…";
+      if(fanChatGuestBubble) fanChatGuestBubble.style.display = logged ? "none" : "block";
+      if(!logged && fanChatPanel.classList.contains("is-open")) closeFanChat();
       return session;
     }
 
@@ -3766,8 +3791,26 @@
       fanChatLauncher.setAttribute("aria-expanded","false");
     }
 
-    fanChatLauncher?.addEventListener("click",()=>{
+    async function fanChatGuestLogin(){
+      const session = await fanChatSession();
+      if(session?.user){
+        openFanChat();
+      }else{
+        window.openFanZoneAuth?.();
+      }
+    }
+
+    fanChatLauncher?.addEventListener("click", async ()=>{
+      const session = await fanChatSession();
+      if(!session?.user){
+        window.openFanZoneAuth?.();
+        return;
+      }
       fanChatPanel.classList.contains("is-open") ? closeFanChat() : openFanChat();
+    });
+    fanChatGuestBubble?.addEventListener("click",fanChatGuestLogin);
+    fanChatGuestBubble?.addEventListener("keydown",(e)=>{
+      if(e.key === "Enter" || e.key === " "){ e.preventDefault(); fanChatGuestLogin(); }
     });
     fanChatClose?.addEventListener("click",closeFanChat);
     fanChatSend?.addEventListener("click",sendFanChat);
