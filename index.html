@@ -1753,11 +1753,12 @@
 
         <div
           class="video-wrap youtube-inline"
-          data-video-id="XLxeUWlf2nI"
-          data-video-title="Да останеш – Ангел Узунов"
+          data-video-id="H_Ry5JCuhsg"
+          data-video-start="87"
+          data-video-title="YouTube видео – Ангел Узунов"
           style="position:relative;background:
             linear-gradient(145deg,rgba(8,9,13,.18),rgba(8,9,13,.24)),
-            url('https://i.ytimg.com/vi/XLxeUWlf2nI/maxresdefault.jpg') center/cover no-repeat;"
+            url('https://i.ytimg.com/vi/H_Ry5JCuhsg/maxresdefault.jpg') center/cover no-repeat;"
         >
           <button class="video-preview-button" type="button" aria-label="Пусни видеото Да останеш">
             <span class="video-play" aria-hidden="true">▶</span>
@@ -2241,7 +2242,8 @@
         iframe.src =
           "https://www.youtube-nocookie.com/embed/" +
           encodeURIComponent(videoId) +
-          "?autoplay=1&rel=0&modestbranding=1&playsinline=1";
+          "?autoplay=1&rel=0&modestbranding=1&playsinline=1" +
+          (container.dataset.videoStart ? "&start=" + encodeURIComponent(container.dataset.videoStart) : "");
         iframe.title = videoTitle;
         iframe.allow =
           "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
