@@ -2,7 +2,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
 
-  <!-- Основна страница -->
+  <!-- Официална начална страница -->
   <url>
     <loc>https://angeluzunov.site/</loc>
     <lastmod>2026-08-04</lastmod>
@@ -18,10 +18,16 @@
     <priority>0.9</priority>
   </url>
 
+  <!-- FAN ZONE -->
+  <url>
+    <loc>https://angeluzunov.site/fan-zone.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
   <!-- ANGEL SMART -->
   <url>
     <loc>https://angeluzunov.site/Smart-v1.html</loc>
-    <lastmod>2026-11-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
