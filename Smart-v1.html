@@ -237,10 +237,46 @@ header::before,header::after{content:none!important;display:none!important}
 @media(max-width:850px){.hero{min-height:550px!important}.hero:before{background:linear-gradient(90deg,#08090de8 0%,#08090d88 62%,#08090d22 100%),linear-gradient(0deg,#08090d,transparent 38%),url("Spotify_Header_2660x1140.png") 64% center/cover no-repeat!important}.hero-content{width:85%;padding-top:50px!important}.hero h1{font-size:clamp(43px,8vw,74px)!important}}
 @media(max-width:560px){.hero:before{background:linear-gradient(0deg,#08090df8 0%,#08090d88 62%,#08090d44 100%),url("Spotify_Header_2660x1140.png") 68% top/auto 100% no-repeat!important}.hero-content{width:100%;align-self:flex-end;padding-bottom:40px!important}.hero-kicker{letter-spacing:.12em}.hero h1{font-size:45px!important}.hero p{font-size:19px}}
 
+
+/* V2.3 — borderless cinematic coverflow; keep existing catalog and TV controls. */
+#featured{margin-top:clamp(18px,2.6vw,52px);margin-bottom:clamp(34px,4vw,80px)}
+#featured .v2-head{display:none!important}
+#featured .flow-stage{
+  border:0!important;border-radius:0!important;box-shadow:none!important;
+  background:transparent!important;overflow:visible!important;
+  min-height:clamp(270px,25vw,485px);perspective:1450px;
+  isolation:isolate;
+}
+#featured .flow-stage:after{display:none!important;content:none!important}
+#featured .flow-stage:before{
+  content:"";position:absolute;z-index:-1;left:14%;right:14%;top:13%;bottom:5%;
+  background:radial-gradient(ellipse at 50% 55%,rgba(193,141,61,.12),transparent 67%);
+  pointer-events:none;
+}
+#featured .flow-card{
+  top:49%;width:clamp(160px,24vw,435px);
+  border:1px solid rgba(226,190,114,.28);border-radius:15px;
+  box-shadow:0 18px 48px rgba(0,0,0,.56);
+  transition:transform .8s cubic-bezier(.16,.82,.2,1),opacity .65s ease,filter .65s ease,box-shadow .35s ease,border-color .35s ease;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+}
+#featured .flow-card.is-center{
+  border:2px solid #efd28e;box-shadow:0 0 0 3px rgba(216,182,106,.12),0 25px 70px #000b,0 0 40px rgba(216,182,106,.13);
+}
+#featured .flow-card:hover,#featured .flow-card:focus-visible{border-color:#ffe4a3;box-shadow:0 0 0 3px rgba(243,217,147,.26),0 25px 70px #000b}
+#featured .flow-card img{filter:saturate(.96);transition:filter .3s ease}
+#featured .flow-card.is-center img{filter:saturate(1.12) contrast(1.04)}
+#featured .flow-card span{background:linear-gradient(100deg,#322a25,#171820);text-align:center}
+#featured .flow-actions{margin-top:0;gap:clamp(18px,3vw,58px)}
+#featured .flow-actions button{width:52px;height:52px;padding:0;border-radius:50%;background:#17171c;border-color:rgba(216,182,106,.45);transition:background .2s,transform .2s}
+#featured .flow-actions button:hover,#featured .flow-actions button:focus-visible{background:#4b3822;transform:scale(1.09)}
+#featured .flow-caption{font-size:clamp(16px,1.2vw,24px);color:#ecd19a;min-width:clamp(180px,22vw,390px)}
+@media(max-width:700px){#featured .flow-stage{min-height:255px}#featured .flow-card{width:clamp(155px,43vw,290px)}#featured .flow-actions button{width:42px;height:42px}}
+@media(prefers-reduced-motion:reduce){#featured .flow-card{transition:none!important}}
 </style></head><body>
 <header><a class="brand" href="https://angeluzunov.site/" aria-label="Основен сайт"><img src="https://angeluzunov.site/AU_favicon.png" alt="AU"><div><strong>ANGEL <span>SMART</span></strong><small>ОФИЦИАЛНА МУЗИКАЛНА ПЛАТФОРМА</small></div></a><nav class="nav" aria-label="Главно меню"><button id="homeNav" class="active">Начало</button><button id="liveNav">▶ TV канал</button><button id="searchNav">⌕ Търсене</button><a href="https://angeluzunov.site/angel-uzunov-songs-v4.html">Каталог</a><a href="https://angeluzunov.site/fan-zone.html">Фен зона</a></nav><span id="clock" class="clock"></span></header>
 <div id="searchPanel" class="search-panel"><label for="search">Търси песен</label><div><input id="search" type="search" autocomplete="off" placeholder="Въведи заглавие..."></div></div>
-<main><section id="hero" class="hero"><div class="hero-content"><div class="eyebrow">✦ ОФИЦИАЛНАТА МУЗИКАЛНА ПЛАТФОРМА</div><div class="hero-kicker">МУЗИКАЛНИЯТ СВЯТ НА</div><h1 id="heroTitle">АНГЕЛ УЗУНОВ</h1><p id="heroDesc">Твоята музика. Твоят екран. Твоят свят.</p><div class="hero-actions"><button class="btn primary" id="heroPlay">▶ Разгледай клиповете</button><button class="btn" id="heroLive">▣ Пусни TV канал</button></div></div></section><div id="homeContent" class="home-content"><section class="v2-section" id="featured"><div class="v2-head"><div><h2>✦ Избрани видеоклипове</h2><div class="v2-sub">Музиката оживява — избери клип с дистанционното</div></div></div><div class="flow-stage" id="flowStage" aria-label="Избрани видеоклипове"></div><div class="flow-actions"><button id="flowPrev" aria-label="Предишен клип">❮</button><div id="flowCaption" class="flow-caption"></div><button id="flowNext" aria-label="Следващ клип">❯</button></div></section><section class="v2-section" id="categories"><div class="v2-head"><div><h2>Музикални категории</h2><div class="v2-sub">Избери категория, за да разгледаш видеоклиповете</div></div></div><div class="category-grid" id="categoryGrid"></div></section></div><div id="categoryView" class="category-view"><div class="category-backbar"><button class="back-categories" id="backCategories">← Всички категории</button><h2 id="categoryTitle"></h2><p id="categorySubtitle"></p></div><div id="rails"></div></div></main>
+<main><section id="hero" class="hero"><div class="hero-content"><div class="eyebrow">✦ ОФИЦИАЛНАТА МУЗИКАЛНА ПЛАТФОРМА</div><div class="hero-kicker">МУЗИКАЛНИЯТ СВЯТ НА</div><h1 id="heroTitle">АНГЕЛ УЗУНОВ</h1><p id="heroDesc">Твоята музика. Твоят екран. Твоят свят.</p><div class="hero-actions"><button class="btn primary" id="heroPlay">▶ Разгледай клиповете</button><button class="btn" id="heroLive">▣ Пусни TV канал</button></div></div></section><div id="homeContent" class="home-content"><section class="v2-section" id="featured"><div class="flow-stage" id="flowStage" aria-label="Избрани видеоклипове"></div><div class="flow-actions"><button id="flowPrev" aria-label="Предишен клип">❮</button><div id="flowCaption" class="flow-caption"></div><button id="flowNext" aria-label="Следващ клип">❯</button></div></section><section class="v2-section" id="categories"><div class="v2-head"><div><h2>Музикални категории</h2><div class="v2-sub">Избери категория, за да разгледаш видеоклиповете</div></div></div><div class="category-grid" id="categoryGrid"></div></section></div><div id="categoryView" class="category-view"><div class="category-backbar"><button class="back-categories" id="backCategories">← Всички категории</button><h2 id="categoryTitle"></h2><p id="categorySubtitle"></p></div><div id="rails"></div></div></main>
 <footer><span>© 2026 Ангел Узунов · ANGEL SMART</span><span>Официални видеоклипове чрез YouTube · Управление: ← ↑ ↓ → / Enter / Esc</span><a href="https://www.youtube.com/@angeluzunovuzi" target="_blank" rel="noopener">YouTube канал ↗</a></footer>
 <aside id="previewDock" class="preview-dock" aria-label="Автоматичен преглед без звук"><div class="preview-screen" id="previewScreen"><img id="previewPoster" alt="Преглед на клипа"></div><div class="preview-meta"><strong id="previewTitle"></strong><span>Без звук · OK за гледане</span></div></aside>
 <div id="overlay" class="player-overlay" tabindex="-1" role="dialog" aria-modal="true" aria-label="Видео плейър"><div class="player-top"><strong id="nowTitle"></strong><button id="closePlayer" aria-label="Затвори плейъра">✕ Затвори</button></div><div id="player"></div><div class="player-bottom"><button id="prev">⏮ Предишен</button><button id="toggle">⏯ Пауза / Пусни</button><button id="next">Следващ ⏭</button><button id="mode">TV канал: ИЗКЛ.</button><button id="fullscreen" aria-label="Цял екран">⛶ Цял екран</button><a id="youtubeLink" class="btn" href="#" target="_blank" rel="noopener">YouTube ↗</a></div><div class="hint">Esc / Back: назад · ← →: избор на бутон · Space: пауза · OK: потвърди</div></div>
@@ -269,26 +305,33 @@ function schedulePreview(i){
 const featuredIndices=[0,8,17,23,29,31,12];
 let flowIndex=0,flowTimer=null,activeCategory=null;
 const categoryVisuals={folk:'FmUQEAQ6bFs',popfolk:'mHK8o9dvHks',estrada:'H_Ry5JCuhsg',other:'zxYwyu0oaYE'};
-function renderFlow(){
+function flowPose(delta){
+ const abs=Math.abs(delta),scale=abs===0?1:abs===1?.79:.59;
+ return {transform:`translate(-50%,-50%) translateX(${delta*70}%) rotateY(${-delta*19}deg) scale(${scale})`,opacity:abs===2?'.72':'1',filter:abs===2?'brightness(.73)':abs===1?'brightness(.88)':'brightness(1)'};
+}
+function renderFlow(direction=0){
  const stage=$('flowStage');stage.replaceChildren();
  for(let delta=-2;delta<=2;delta++){
   const pos=(flowIndex+delta+featuredIndices.length)%featuredIndices.length;
   const i=featuredIndices[pos],song=songs[i],btn=element('button','flow-card'+(delta===0?' is-center':''));
   btn.type='button';btn.dataset.delta=delta;btn.setAttribute('aria-label','Гледай '+song.title);
   btn.style.zIndex=String(10-Math.abs(delta));
-  const offset=delta*67,scale=delta===0?1:Math.abs(delta)===1?.78:.59;
-  btn.style.transform=`translate(-50%,-50%) translateX(${offset}%) rotateY(${-delta*17}deg) scale(${scale})`;
-  btn.style.opacity=Math.abs(delta)===2?'.68':'1';
+  const target=flowPose(delta),start=flowPose(delta+(direction>0?1:direction<0?-1:0));
+  Object.assign(btn.style,direction?start:target);
   const im=element('img');im.src=thumb(song.id);im.alt='';im.loading='lazy';
   btn.append(im,element('span','',song.title));
-  btn.onclick=()=>{if(delta===0)openPlayer(i,false);else shiftFlow(delta)};
+  btn.onclick=()=>{if(delta===0)openPlayer(i,false);else{pauseFlow();shiftFlow(delta)}};
   btn.onfocus=()=>pauseFlow();stage.append(btn);
+  if(direction){requestAnimationFrame(()=>requestAnimationFrame(()=>Object.assign(btn.style,target)))}
  }
  $('flowCaption').textContent=songs[featuredIndices[flowIndex]].title;
 }
-function shiftFlow(delta){flowIndex=(flowIndex+delta+featuredIndices.length)%featuredIndices.length;renderFlow()}
+function shiftFlow(delta){
+ flowIndex=(flowIndex+delta+featuredIndices.length)%featuredIndices.length;
+ renderFlow(delta===0?0:delta>0?1:-1);
+}
 function pauseFlow(){clearInterval(flowTimer);flowTimer=null}
-function startFlow(){pauseFlow();if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;flowTimer=setInterval(()=>{if(!$('overlay').classList.contains('open')&&!activeCategory&&!$('flowStage').contains(document.activeElement))shiftFlow(1)},6500)}
+function startFlow(){pauseFlow();if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;flowTimer=setInterval(()=>{if(!$('overlay').classList.contains('open')&&!activeCategory&&!$('flowStage').contains(document.activeElement))shiftFlow(1)},4800)}
 function buildCategories(){const grid=$('categoryGrid');grid.replaceChildren();for(const [cat,label] of Object.entries(labels)){
  const count=songs.filter(s=>s.category===cat).length,b=element('button','category-card');b.type='button';b.dataset.category=cat;
  b.style.setProperty('--cat-img',`url("${thumb(categoryVisuals[cat])}")`);
