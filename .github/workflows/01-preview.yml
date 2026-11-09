@@ -1,0 +1,30 @@
+
+name: "01 — Провери YouTube (без публикуване)"
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Провери плейлистите и създай отчет
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: node scripts/sync-youtube.mjs
+
+      - name: Запази отчета за преглед
+        uses: actions/upload-artifact@v4
+        with:
+          name: angel-smart-preview
+          path: preview/
+          retention-days: 30
