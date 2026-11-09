@@ -1,0 +1,17 @@
+import fs from 'node:fs';
+import crypto from 'node:crypto';
+const sha=x=>crypto.createHash('sha256').update(x).digest('hex');
+const manifest=JSON.parse(fs.readFileSync('preview/manifest.json','utf8'));
+const current=fs.readFileSync('music-catalog.json','utf8');
+const candidate=fs.readFileSync('preview/music-catalog.json','utf8');
+if(sha(current)!==manifest.baseSha256)throw new Error('Каталогът е променен след предварителния преглед. Направи нова проверка.');
+if(sha(candidate)!==manifest.previewSha256)throw new Error('Предложеният каталог е променен.');
+const old=JSON.parse(current), next=JSON.parse(candidate);
+const valid=x=>x&&typeof x.id==='string'&&/^[\w-]{11}$/.test(x.id)&&typeof x.title==='string'&&typeof x.description==='string'&&['folk','popfolk','estrada','other'].includes(x.category);
+if(!Array.isArray(next.songs)||!next.songs.length||!next.songs.every(valid))throw new Error('Невалиден предложен каталог');
+const originalAlbum=old.songs.filter(x=>x.category==='other');
+const nextAlbum=next.songs.filter(x=>x.category==='other');
+if(originalAlbum.length!==1||JSON.stringify(originalAlbum)!==JSON.stringify(nextAlbum))throw new Error('Албумът не трябва да се променя');
+for(const cat of ['folk','popfolk','estrada'])if(!next.songs.some(x=>x.category===cat))throw new Error('Празна категория: '+cat);
+fs.writeFileSync('music-catalog.json',candidate);
+console.log('Каталогът е одобрен и готов за git commit.');
