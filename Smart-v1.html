@@ -273,6 +273,10 @@ header::before,header::after{content:none!important;display:none!important}
 #featured .flow-caption{font-size:clamp(16px,1.2vw,24px);color:#ecd19a;min-width:clamp(180px,22vw,390px)}
 @media(max-width:700px){#featured .flow-stage{min-height:255px}#featured .flow-card{width:clamp(155px,43vw,290px)}#featured .flow-actions button{width:42px;height:42px}}
 @media(prefers-reduced-motion:reduce){#featured .flow-card{transition:none!important}}
+
+/* ANGEL SMART: native listening count; preserve original card design */
+.tile .smart-play-count{display:flex;align-items:center;gap:7px;margin-top:9px;color:#e6c980!important;font-size:clamp(12px,.83vw,17px)!important;font-variant-numeric:tabular-nums;letter-spacing:0}
+.tile .smart-play-count svg{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 </style></head><body>
 <header><a class="brand" href="https://angeluzunov.site/" aria-label="Основен сайт"><img src="https://angeluzunov.site/AU_favicon.png" alt="AU"><div><strong>ANGEL <span>SMART</span></strong><small>ОФИЦИАЛНА МУЗИКАЛНА ПЛАТФОРМА</small></div></a><nav class="nav" aria-label="Главно меню"><button id="homeNav" class="active">Начало</button><button id="liveNav">▶ TV канал</button><button id="searchNav">⌕ Търсене</button><a href="https://angeluzunov.site/angel-uzunov-songs-v4.html">Каталог</a><a href="https://angeluzunov.site/fan-zone.html">Фен зона</a></nav><span id="clock" class="clock"></span></header>
 <div id="searchPanel" class="search-panel"><label for="search">Търси песен</label><div><input id="search" type="search" autocomplete="off" placeholder="Въведи заглавие..."></div></div>
@@ -285,12 +289,73 @@ header::before,header::after{content:none!important;display:none!important}
 let songs=[{"id": "FmUQEAQ6bFs", "title": "Елено, моме убаво", "category": "folk", "description": "Авторска песен, вдъхновена от красотата, мелодиката и духа на Пирин."}, {"id": "z6I9QPKcCcY", "title": "Росна зора", "category": "folk", "description": "Българска фолклорна песен с традиционно звучене и силен народен дух."}, {"id": "o_coeUCQS3A", "title": "Коле и Рада", "category": "folk", "description": "Авторска народна песен с фолклорен характер и жива българска мелодика."}, {"id": "ykNUxumIQRo", "title": "Край чешмата", "category": "folk", "description": "Фолклорна песен с атмосфера на стара българска история и традиционно звучене."}, {"id": "xq3fuN5D9D4", "title": "Искат ме мамо", "category": "folk", "description": "Авторска песен на фолклорна основа, вдъхновена от българската традиция и народната мелодика."}, {"id": "oKCgChl8jOo", "title": "При тебе, мале", "category": "folk", "description": "Емоционална народна песен с български фолклорен дух и силно послание към майката и родния дом."}, {"id": "Z2IDYGvE_1U", "title": "Богат със сърце", "category": "folk", "description": "Авторска песен на фолклорна основа за истинското богатство, човечността и доброто сърце."}, {"id": "DDewXOhINiY", "title": "Пей ми, сърце", "category": "folk", "description": "Авторска народна песен за любовта към музиката и българския дух."}, {"id": "QV5LAOTnNk4", "title": "Заспало моме край ниве", "category": "folk", "description": "Игрива народна песен с шопско звучене и хороводен ритъм."}, {"id": "b8JXU8dzJ-g", "title": "Женска хубост", "category": "folk", "description": "Народна песен, посветена на красотата и обаянието на жената."}, {"id": "mX4t0kCmKwo", "title": "Враня коня", "category": "folk", "description": "Жива народна песен, вдъхновена от българската традиция."}, {"id": "5KzXhN6djC0", "title": "Вечен стих е любовта", "category": "folk", "description": "Авторска песен на фолклорна основа, посветена на любовта."}, {"id": "lyGRz83xOSY", "title": "Не ме оставяй", "category": "popfolk", "description": "Емоционална песен за любовта, страха от раздялата и човека, който превръща света в дом."}, {"id": "mHK8o9dvHks", "title": "Кръв и огън", "category": "popfolk", "description": "Силна авторска песен за страстта, сблъсъка на чувства и любовта, която гори."}, {"id": "yOIzCb_R2hw", "title": "Сърцето ми гори", "category": "popfolk", "description": "Емоционална песен с драматично любовно послание и модерно балканско звучене."}, {"id": "Y8y7K8PmVwM", "title": "Ти си искрата", "category": "popfolk", "description": "Мелодична авторска песен за човека, който запалва надеждата и дава смисъл на чувствата."}, {"id": "MLCLaXaSneI", "title": "Без теб не мога", "category": "popfolk", "description": "Романтична песен за липсата, привързаността и любовта, без която светът остава празен."}, {"id": "TAdokYOzz38", "title": "Отключи ме", "category": "popfolk", "description": "Песен за любовта, която не се печели със сила и не се доказва само с красиви обещания."}, {"id": "IQeLGxa-s8o", "title": "Как да те забравя", "category": "popfolk", "description": "Емоционална поп-фолк песен за любовта, спомените и трудния път след раздялата."}, {"id": "BhDohIEGJjk", "title": "Остани", "category": "popfolk", "description": "Любовна поп-фолк песен за онзи миг, в който една дума може да спаси чувствата и да промени раздялата."}, {"id": "xOhCuQ7WSig", "title": "Подарявам те на него", "category": "popfolk", "description": "Балканска поп-фолк песен за раздялата и новото начало."}, {"id": "w5WpFiGzJDw", "title": "Още те искам", "category": "popfolk", "description": "Любовна поп-фолк балада за силните чувства след раздялата."}, {"id": "ruSQXz2GBo0", "title": "Очи мои", "category": "popfolk", "description": "Поп-фолк песен за любовта, която се чете в очите."}, {"id": "ahhszzBppWc", "title": "За теб бих живял", "category": "popfolk", "description": "Поп-фолк песен за отдадеността и силата на любовта."}, {"id": "H_Ry5JCuhsg", "title": "Светът е хубав, светът е чудесен", "category": "estrada", "description": "Песен по текст на Недялко Йорданов, с музика и аранжимент от Ангел Узунов."}, {"id": "gpLYgQaU1Mk", "title": "Песен за душата", "category": "estrada", "description": "„Песен за душата“ е музика, която не се слуша… а се усеща. Разказ за болката, любовта и надеждата."}, {"id": "0065BaHiJgY", "title": "Когато душите запеят", "category": "estrada", "description": "Авторска песен за силата на музиката, човешката близост и момента, в който душите говорят чрез песен."}, {"id": "03xM_dLyOwI", "title": "На стария риф", "category": "estrada", "description": "Романтична песен за първата любов, раздялата и обещанието да се върнеш там, където морето помни."}, {"id": "O69_z_k4VE0", "title": "Обич за обич", "category": "estrada", "description": "Естрадна песен за любовта и чувствата, които остават в сърцето."}, {"id": "xl7YveeK5cE", "title": "Огън и нежност", "category": "estrada", "description": "Емоционална естрадна песен за силата и нежността на любовта."}, {"id": "4ofz6UhIEZo", "title": "Шепот", "category": "estrada", "description": "Лирична песен за неизказаните чувства и спомените."}, {"id": "_xmUeCtje30", "title": "Камбана над Бояна", "category": "estrada", "description": "Естрадна песен, вдъхновена от Бояна, зората и звъна на камбаната."}, {"id": "bQqQAVKDZrQ", "title": "Ела", "category": "estrada", "description": "Мелодична естрадна песен за близостта и копнежа."}, {"id": "gOcfdcyFqs0", "title": "Бог ли ме наказа", "category": "estrada", "description": "Емоционална естрадна песен за болката и любовта."}, {"id": "zxYwyu0oaYE", "title": "Албум Луда любов 2026", "category": "other", "description": "Албум „Луда любов“ – 2026. Слушайте директно в страницата или отворете официалното видео в YouTube."}];
 const labels={folk:'Народна музика',popfolk:'Поп-фолк / Кафана',estrada:'Естрада',other:'Албум · Луда любов 2026'};
 const $=id=>document.getElementById(id);
+
+// Supabase public configuration shared with FAN ZONE (anon key, not service_role).
+const SMART_SUPABASE_URL='https://cmiylzpmpwqbacjoqtkx.supabase.co';
+const SMART_SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNtaXlsenBtcHdxYmFjam9xdGt4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM5ODcwMDUsImV4cCI6MjA2OTU2MzAwNX0.FY2d1NSGTmw6SydxT_V0cKF7Kp2USbp91VdfO_eqZz8';
+const smartCounts=new Map();
+const smartNumber=new Intl.NumberFormat('bg-BG');
+const smartHeadphones='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 14v-3a9 9 0 0 1 18 0v3"/><rect x="2" y="13" width="4" height="8" rx="2"/><rect x="18" y="13" width="4" height="8" rx="2"/></svg>';
+let smartSessionId=null;
+try{
+  smartSessionId=sessionStorage.getItem('angel_smart_session');
+  if(!smartSessionId || !/^[0-9a-f-]{36}$/i.test(smartSessionId)){smartSessionId=crypto.randomUUID();sessionStorage.setItem('angel_smart_session',smartSessionId)}
+}catch(err){if(typeof crypto.randomUUID==='function')smartSessionId=crypto.randomUUID()}
+function smartHeaders(){return {'apikey':SMART_SUPABASE_ANON_KEY,'Authorization':'Bearer '+SMART_SUPABASE_ANON_KEY,'Content-Type':'application/json'}}
+function smartCount(id){return smartCounts.get(id)||0}
+function smartUpdateVisibleCounts(){
+ document.querySelectorAll('.tile[data-song-index]').forEach(b=>{
+  const s=songs[Number(b.dataset.songIndex)];if(!s)return;
+  const counter=b.querySelector('.smart-play-count .smart-count-number');
+  if(counter)counter.textContent=smartNumber.format(smartCount(s.id))+' слушания';
+ });
+}
+function smartReorderVisible(){
+ // Move existing DOM cards without destroying TV focus or click handlers.
+ document.querySelectorAll('#rails .rail').forEach(rail=>{
+  const focused=document.activeElement;
+  const cards=[...rail.querySelectorAll('.tile[data-song-index]')];
+  cards.sort((a,b)=>{
+   const sa=songs[Number(a.dataset.songIndex)],sb=songs[Number(b.dataset.songIndex)];
+   return smartCount(sb.id)-smartCount(sa.id) || Number(a.dataset.songIndex)-Number(b.dataset.songIndex);
+  });
+  cards.forEach(card=>rail.append(card));
+  if(rail.contains(focused)&&focused?.classList?.contains('tile')){
+   try{focused.focus({preventScroll:true})}catch(e){}
+  }
+ });
+}
+async function smartFetchCounts(){
+ try{
+  const response=await fetch(SMART_SUPABASE_URL+'/rest/v1/angel_smart_plays?select=video_id,play_count',{headers:smartHeaders(),cache:'no-store'});
+  if(!response.ok)throw new Error('Supabase HTTP '+response.status);
+  const rows=await response.json();
+  if(!Array.isArray(rows))throw new Error('Invalid counts response');
+  smartCounts.clear();
+  for(const row of rows){if(typeof row.video_id==='string')smartCounts.set(row.video_id,Math.max(0,Number(row.play_count)||0))}
+  smartUpdateVisibleCounts();smartReorderVisible();
+ }catch(err){console.warn('ANGEL SMART: counts temporarily unavailable',err)}
+}
+let smartPlaybackPending=false;
+let smartPlaybackVideoId=null;
+function smartArmPlayback(id){smartPlaybackVideoId=id;smartPlaybackPending=true}
+async function smartRecordPlayback(id){
+ if(!smartSessionId||typeof crypto.randomUUID!=='function')return;
+ try{
+  const response=await fetch(SMART_SUPABASE_URL+'/rest/v1/rpc/angel_smart_record_play',{
+   method:'POST',headers:smartHeaders(),body:JSON.stringify({p_video_id:id,p_event_id:crypto.randomUUID(),p_session_id:smartSessionId})
+  });
+  if(!response.ok)throw new Error('Supabase HTTP '+response.status);
+  const count=Number(await response.json());
+  if(Number.isFinite(count)){smartCounts.set(id,Math.max(0,count));smartUpdateVisibleCounts();smartReorderVisible()}
+ }catch(err){console.warn('ANGEL SMART: playback count not recorded',err)}
+}
 const thumb=id=>'https://i.ytimg.com/vi/'+encodeURIComponent(id)+'/hqdefault.jpg';
 let previewTimer=null,previewIndex=-1,previewFrame=null;
 let current=0,queue=songs.map((_,i)=>i),queuePos=0,live=false,player=null,apiReady=false,returnFocus=null,controlsTimer=null;
 function element(tag,cls,txt){let el=document.createElement(tag);if(cls)el.className=cls;if(txt!==undefined)el.textContent=txt;return el}
 function showHero(i){/* Началният банер е постоянен и представя автора. */}
-function tile(i){let s=songs[i],b=element('button','tile');b.type='button';b.dataset.songIndex=i;b.setAttribute('aria-label','Гледай '+s.title);let im=element('img');im.src=thumb(s.id);im.alt='Обложка: '+s.title;im.loading='lazy';im.onerror=()=>{im.onerror=null;im.src='https://i.ytimg.com/vi/'+s.id+'/mqdefault.jpg'};let info=element('div','info');info.append(element('b','',s.title),element('small','',labels[s.category]||'Музика'));b.append(im,info);b.onclick=()=>openPlayer(i,false);b.onfocus=()=>{showHero(i);schedulePreview(i)};return b}
+function tile(i){let s=songs[i],b=element('button','tile');b.type='button';b.dataset.songIndex=i;b.setAttribute('aria-label','Гледай '+s.title);let im=element('img');im.src=thumb(s.id);im.alt='Обложка: '+s.title;im.loading='lazy';im.onerror=()=>{im.onerror=null;im.src='https://i.ytimg.com/vi/'+s.id+'/mqdefault.jpg'};let info=element('div','info');info.append(element('b','',s.title),element('small','',labels[s.category]||'Музика'));if(['folk','popfolk','estrada'].includes(s.category)){const count=element('small','smart-play-count');count.innerHTML=smartHeadphones+'<span class="smart-count-number"></span>';count.querySelector('.smart-count-number').textContent=smartNumber.format(smartCount(s.id))+' слушания';info.append(count)}b.append(im,info);b.onclick=()=>openPlayer(i,false);b.onfocus=()=>{showHero(i);schedulePreview(i)};return b}
 function stopPreview(){
  clearTimeout(previewTimer);
  previewIndex=-1;
@@ -344,7 +409,7 @@ function closeCategory(){if(!activeCategory)return;const cat=activeCategory;acti
 $('backCategories').onclick=()=>{if(activeCategory)closeCategory();else{$('categoryView').classList.remove('open');$('homeContent').classList.remove('hidden');$('hero').style.display='';$('searchPanel').classList.remove('show');$('search').value='';window.scrollTo(0,0);focusTV($('heroPlay'))}};
 $('flowPrev').onclick=()=>{pauseFlow();shiftFlow(-1)};$('flowNext').onclick=()=>{pauseFlow();shiftFlow(1)};
 $('homeNav').addEventListener('click',()=>{if(activeCategory)closeCategory()});
-function draw(filter='',onlyCategory=null){const root=$('rails');root.replaceChildren();const q=filter.trim().toLocaleLowerCase('bg');let total=0;for(const [cat,label] of Object.entries(labels)){if(onlyCategory&&cat!==onlyCategory)continue;const found=songs.map((s,i)=>({...s,i})).filter(s=>s.category===cat&&(!q||s.title.toLocaleLowerCase('bg').includes(q)));if(!found.length)continue;total+=found.length;const sec=element('section','section');sec.id='category-'+cat;const head=element('div','section-head');head.append(element('h2','',label),element('span','count',found.length+' клипа'));const rail=element('div','rail');rail.setAttribute('aria-label',label);found.forEach(s=>rail.append(tile(s.i)));sec.append(head,rail);root.append(sec)}if(!total)root.append(element('div','empty','Няма намерени песни.'));stopPreview()}
+function draw(filter='',onlyCategory=null){const root=$('rails');root.replaceChildren();const q=filter.trim().toLocaleLowerCase('bg');let total=0;for(const [cat,label] of Object.entries(labels)){if(onlyCategory&&cat!==onlyCategory)continue;const found=songs.map((s,i)=>({...s,i})).filter(s=>s.category===cat&&(!q||s.title.toLocaleLowerCase('bg').includes(q)));if(!found.length)continue;total+=found.length;const sec=element('section','section');sec.id='category-'+cat;const head=element('div','section-head');head.append(element('h2','',label),element('span','count',found.length+' клипа'));const rail=element('div','rail');rail.setAttribute('aria-label',label);found.sort((a,b)=>smartCount(b.id)-smartCount(a.id)||a.i-b.i);found.forEach(s=>rail.append(tile(s.i)));sec.append(head,rail);root.append(sec)}if(!total)root.append(element('div','empty','Няма намерени песни.'));stopPreview()}
 function setMode(on){live=on;$('mode').textContent='TV канал: '+(live?'ВКЛ.':'ИЗКЛ.');$('mode').classList.toggle('selected',live)}
 function isFullscreen(){return !!(document.fullscreenElement||document.webkitFullscreenElement)}
 function syncFullscreenButton(){ $('fullscreen').textContent=isFullscreen()?'⤢ Намали екрана':'⛶ Цял екран'; }
@@ -372,8 +437,8 @@ function requestCinemaFullscreen(){
 document.addEventListener('fullscreenchange',()=>{syncFullscreenButton();revealControls()});
 document.addEventListener('webkitfullscreenchange',()=>{syncFullscreenButton();revealControls()});
 function openPlayer(i,asLive){stopPreview();returnFocus=document.activeElement;current=i;setMode(asLive);queue=songs.map((_,j)=>j);queuePos=queue.indexOf(i);$('overlay').classList.add('open');document.body.style.overflow='hidden';loadSong(i);$('overlay').focus({preventScroll:true});syncFullscreenButton();revealControls()}
-function loadSong(i){current=i;queuePos=queue.indexOf(i);const s=songs[i];$('nowTitle').textContent=s.title;$('youtubeLink').href='https://www.youtube.com/watch?v='+s.id;if(apiReady&&window.YT&&YT.Player){if(!player){player=new YT.Player('player',{width:'100%',height:'100%',videoId:s.id,playerVars:{playsinline:1,rel:0,origin:location.protocol.startsWith('http')?location.origin:undefined},events:{onStateChange:onStateChange,onError:onPlayerError}})}else{player.loadVideoById(s.id)}}else{const holder=$('player');holder.replaceChildren();const f=element('iframe');f.src='https://www.youtube-nocookie.com/embed/'+s.id+'?autoplay=1&rel=0';f.title=s.title;f.allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen';f.allowFullscreen=true;f.style.cssText='width:100%;height:100%;border:0';holder.append(f)}}
-function onStateChange(e){if(e.data===YT.PlayerState.ENDED&&live)nextSong()}
+function loadSong(i){smartArmPlayback(songs[i].id);current=i;queuePos=queue.indexOf(i);const s=songs[i];$('nowTitle').textContent=s.title;$('youtubeLink').href='https://www.youtube.com/watch?v='+s.id;if(apiReady&&window.YT&&YT.Player){if(!player){player=new YT.Player('player',{width:'100%',height:'100%',videoId:s.id,playerVars:{playsinline:1,rel:0,origin:location.protocol.startsWith('http')?location.origin:undefined},events:{onStateChange:onStateChange,onError:onPlayerError}})}else{player.loadVideoById(s.id)}}else{const holder=$('player');holder.replaceChildren();const f=element('iframe');f.src='https://www.youtube-nocookie.com/embed/'+s.id+'?autoplay=1&rel=0';f.title=s.title;f.allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen';f.allowFullscreen=true;f.style.cssText='width:100%;height:100%;border:0';holder.append(f)}}
+function onStateChange(e){if(e.data===YT.PlayerState.PLAYING&&smartPlaybackPending&&smartPlaybackVideoId===songs[current]?.id){smartPlaybackPending=false;smartRecordPlayback(smartPlaybackVideoId)}if(e.data===YT.PlayerState.ENDED&&live)nextSong()}
 function onPlayerError(){/* Some videos may disable embedding. The YouTube link remains available. */}
 function nextSong(){loadSong(queue[(queuePos+1)%queue.length])}function prevSong(){loadSong(queue[(queuePos-1+queue.length)%queue.length])}
 function closePlayer(){if(player&&typeof player.stopVideo==='function')player.stopVideo();else $('player').replaceChildren();$('overlay').classList.remove('open','controls-hidden','controls-awake');clearTimeout(controlsTimer);if(isFullscreen()){const exit=document.exitFullscreen||document.webkitExitFullscreen;if(exit){try{const r=exit.call(document);if(r&&r.catch)r.catch(()=>{});}catch(e){}}}document.body.style.overflow='';setMode(false);if(returnFocus?.focus){returnFocus.focus();if(returnFocus.classList?.contains('tile')){const i=Number(returnFocus.dataset.songIndex);if(Number.isInteger(i))schedulePreview(i)}}}
@@ -523,6 +588,7 @@ async function loadApprovedMusicCategories(){
  }
 }
 loadApprovedMusicCategories();
+smartFetchCounts();setInterval(smartFetchCounts,20000);
 // YouTube IFrame API enables reliable end-of-video playback for TV mode.
 window.onYouTubeIframeAPIReady=function(){apiReady=true};const api=document.createElement('script');api.src='https://www.youtube.com/iframe_api';document.head.append(api);
 </script></body></html>
