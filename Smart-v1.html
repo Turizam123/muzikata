@@ -277,6 +277,18 @@ header::before,header::after{content:none!important;display:none!important}
 /* ANGEL SMART: native listening count; preserve original card design */
 .tile .smart-play-count{display:flex;align-items:center;gap:7px;margin-top:9px;color:#e6c980!important;font-size:clamp(12px,.83vw,17px)!important;font-variant-numeric:tabular-nums;letter-spacing:0}
 .tile .smart-play-count svg{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* ANGEL SMART — uniform premium badges and 72-hour catalogue promotion */
+.smart-cover{position:relative;display:block;overflow:hidden}
+.smart-cover>img{width:100%;display:block}
+.smart-badge{position:absolute;right:10px;top:10px;z-index:2;width:150px;height:36px;display:flex;align-items:center;justify-content:center;white-space:nowrap;border:1px solid #e5c27a;border-radius:7px;box-shadow:inset 0 1px 0 #ffffff70,0 4px 13px #0009;color:#fff;font-size:12px;font-weight:800;letter-spacing:.04em;text-shadow:0 1px 2px #0008;pointer-events:none}
+.smart-badge.premiere{background:linear-gradient(155deg,#d64a62,#8d102d 65%,#5d0a22)}
+.smart-badge.new{background:linear-gradient(155deg,#f2d27e,#bd8a2b 58%,#8a5a18)}
+.smart-badge.top{background:linear-gradient(155deg,#923e58,#59142f 60%,#350d21)}
+.tile.smart-fresh{border-color:#e3b962!important;box-shadow:0 0 0 1px #d8b66a66,0 0 28px #d8b66a35,0 12px 28px #0008!important}
+.tile.smart-fresh .info{background:linear-gradient(120deg,#57432e,#2d292a 65%,#171920)!important}
+.category-card .smart-badge{top:12px;right:12px}
+@media(max-width:560px){.smart-badge{width:120px;height:29px;font-size:10px;right:7px;top:7px}}
 </style></head><body>
 <header><a class="brand" href="https://angeluzunov.site/" aria-label="Основен сайт"><img src="https://angeluzunov.site/AU_favicon.png" alt="AU"><div><strong>ANGEL <span>SMART</span></strong><small>ОФИЦИАЛНА МУЗИКАЛНА ПЛАТФОРМА</small></div></a><nav class="nav" aria-label="Главно меню"><button id="homeNav" class="active">Начало</button><button id="liveNav">▶ TV канал</button><button id="searchNav">⌕ Търсене</button><a href="https://angeluzunov.site/angel-uzunov-songs-v4.html">Каталог</a><a href="https://angeluzunov.site/fan-zone.html">Фен зона</a></nav><span id="clock" class="clock"></span></header>
 <div id="searchPanel" class="search-panel"><label for="search">Търси песен</label><div><input id="search" type="search" autocomplete="off" placeholder="Въведи заглавие..."></div></div>
@@ -310,6 +322,14 @@ function smartUpdateVisibleCounts(){
   if(counter)counter.textContent=smartNumber.format(smartCount(s.id))+' слушания';
  });
 }
+const SMART_PROMOTION_MS=72*60*60*1000;
+const SMART_PREMIERE_MS=48*60*60*1000;
+function smartAge(s){if(!s||!s.addedAt)return null;const t=Date.parse(s.addedAt);if(!Number.isFinite(t))return null;const age=Date.now()-t;return age>=0?age:null}
+function smartIsFresh(s){const age=smartAge(s);return age!==null&&age<SMART_PROMOTION_MS}
+function smartPopularityLeader(cat){return songs.filter(s=>s.category===cat).sort((a,b)=>smartCount(b.id)-smartCount(a.id)||songs.indexOf(a)-songs.indexOf(b))[0]?.id}
+function smartCompare(a,b){const af=smartIsFresh(a),bf=smartIsFresh(b);if(af!==bf)return af?-1:1;if(af&&bf)return Date.parse(b.addedAt)-Date.parse(a.addedAt);return smartCount(b.id)-smartCount(a.id)||songs.indexOf(a)-songs.indexOf(b)}
+function smartBadgeFor(s){if(s.category==='other')return null;const age=smartAge(s);if(age!==null&&age<SMART_PREMIERE_MS)return ['ПРЕМИЕРА','premiere'];if(age!==null&&age<SMART_PROMOTION_MS)return ['НОВО ВИДЕО','new'];if(smartPopularityLeader(s.category)===s.id)return ['ТОП ВИДЕО','top'];return null}
+function smartUpdateBadges(){document.querySelectorAll('.tile[data-song-index]').forEach(card=>{const s=songs[Number(card.dataset.songIndex)];if(!s)return;card.classList.toggle('smart-fresh',smartIsFresh(s));const cover=card.querySelector('.smart-cover');if(!cover)return;cover.querySelector('.smart-badge')?.remove();const badge=smartBadgeFor(s);if(badge){const el=element('span','smart-badge '+badge[1],badge[0]);cover.append(el)}});document.querySelectorAll('.category-card[data-category]').forEach(card=>{card.querySelector('.smart-badge')?.remove();const n=songs.filter(s=>s.category===card.dataset.category&&smartIsFresh(s)).length;if(n){card.append(element('span','smart-badge new','НОВО ВИДЕО · '+n))}})}
 function smartReorderVisible(){
  // Move existing DOM cards without destroying TV focus or click handlers.
  document.querySelectorAll('#rails .rail').forEach(rail=>{
@@ -317,13 +337,14 @@ function smartReorderVisible(){
   const cards=[...rail.querySelectorAll('.tile[data-song-index]')];
   cards.sort((a,b)=>{
    const sa=songs[Number(a.dataset.songIndex)],sb=songs[Number(b.dataset.songIndex)];
-   return smartCount(sb.id)-smartCount(sa.id) || Number(a.dataset.songIndex)-Number(b.dataset.songIndex);
+   return smartCompare(sa,sb);
   });
   cards.forEach(card=>rail.append(card));
   if(rail.contains(focused)&&focused?.classList?.contains('tile')){
    try{focused.focus({preventScroll:true})}catch(e){}
   }
  });
+ smartUpdateBadges();
 }
 async function smartFetchCounts(){
  try{
@@ -355,7 +376,7 @@ let previewTimer=null,previewIndex=-1,previewFrame=null;
 let current=0,queue=songs.map((_,i)=>i),queuePos=0,live=false,player=null,apiReady=false,returnFocus=null,controlsTimer=null;
 function element(tag,cls,txt){let el=document.createElement(tag);if(cls)el.className=cls;if(txt!==undefined)el.textContent=txt;return el}
 function showHero(i){/* Началният банер е постоянен и представя автора. */}
-function tile(i){let s=songs[i],b=element('button','tile');b.type='button';b.dataset.songIndex=i;b.setAttribute('aria-label','Гледай '+s.title);let im=element('img');im.src=thumb(s.id);im.alt='Обложка: '+s.title;im.loading='lazy';im.onerror=()=>{im.onerror=null;im.src='https://i.ytimg.com/vi/'+s.id+'/mqdefault.jpg'};let info=element('div','info');info.append(element('b','',s.title),element('small','',labels[s.category]||'Музика'));if(['folk','popfolk','estrada'].includes(s.category)){const count=element('small','smart-play-count');count.innerHTML=smartHeadphones+'<span class="smart-count-number"></span>';count.querySelector('.smart-count-number').textContent=smartNumber.format(smartCount(s.id))+' слушания';info.append(count)}b.append(im,info);b.onclick=()=>openPlayer(i,false);b.onfocus=()=>{showHero(i);schedulePreview(i)};return b}
+function tile(i){let s=songs[i],b=element('button','tile');b.type='button';b.dataset.songIndex=i;b.setAttribute('aria-label','Гледай '+s.title);let im=element('img');im.src=thumb(s.id);im.alt='Обложка: '+s.title;im.loading='lazy';im.onerror=()=>{im.onerror=null;im.src='https://i.ytimg.com/vi/'+s.id+'/mqdefault.jpg'};let info=element('div','info');info.append(element('b','',s.title),element('small','',labels[s.category]||'Музика'));if(['folk','popfolk','estrada'].includes(s.category)){const count=element('small','smart-play-count');count.innerHTML=smartHeadphones+'<span class="smart-count-number"></span>';count.querySelector('.smart-count-number').textContent=smartNumber.format(smartCount(s.id))+' слушания';info.append(count)}const cover=element('span','smart-cover');cover.append(im);b.append(cover,info);b.onclick=()=>openPlayer(i,false);b.onfocus=()=>{showHero(i);schedulePreview(i)};return b}
 function stopPreview(){
  clearTimeout(previewTimer);
  previewIndex=-1;
@@ -403,13 +424,13 @@ function buildCategories(){const grid=$('categoryGrid');grid.replaceChildren();f
  b.style.setProperty('--cat-img',`url("${thumb(categoryVisuals[cat])}")`);
  const inner=element('div','cat-inner');inner.append(element('strong','',label),element('small','',count+' '+(count===1?'видеозапис':'видеозаписа')+'  →'));
  b.append(inner);b.onclick=()=>openCategory(cat);grid.append(b);
- }}
+ }smartUpdateBadges();}
 function openCategory(cat){activeCategory=cat;pauseFlow();$('homeContent').classList.add('hidden');$('hero').style.display='none';$('categoryView').classList.add('open');$('categoryTitle').textContent=labels[cat];$('categorySubtitle').textContent=songs.filter(s=>s.category===cat).length+' видеозаписа · Избери клип за гледане';draw('',cat);window.scrollTo(0,0);focusTV($('backCategories'))}
 function closeCategory(){if(!activeCategory)return;const cat=activeCategory;activeCategory=null;$('categoryView').classList.remove('open');$('homeContent').classList.remove('hidden');$('hero').style.display='';window.scrollTo(0,0);focusTV(document.querySelector(`[data-category="${cat}"]`));startFlow()}
 $('backCategories').onclick=()=>{if(activeCategory)closeCategory();else{$('categoryView').classList.remove('open');$('homeContent').classList.remove('hidden');$('hero').style.display='';$('searchPanel').classList.remove('show');$('search').value='';window.scrollTo(0,0);focusTV($('heroPlay'))}};
 $('flowPrev').onclick=()=>{pauseFlow();shiftFlow(-1)};$('flowNext').onclick=()=>{pauseFlow();shiftFlow(1)};
 $('homeNav').addEventListener('click',()=>{if(activeCategory)closeCategory()});
-function draw(filter='',onlyCategory=null){const root=$('rails');root.replaceChildren();const q=filter.trim().toLocaleLowerCase('bg');let total=0;for(const [cat,label] of Object.entries(labels)){if(onlyCategory&&cat!==onlyCategory)continue;const found=songs.map((s,i)=>({...s,i})).filter(s=>s.category===cat&&(!q||s.title.toLocaleLowerCase('bg').includes(q)));if(!found.length)continue;total+=found.length;const sec=element('section','section');sec.id='category-'+cat;const head=element('div','section-head');head.append(element('h2','',label),element('span','count',found.length+' клипа'));const rail=element('div','rail');rail.setAttribute('aria-label',label);found.sort((a,b)=>smartCount(b.id)-smartCount(a.id)||a.i-b.i);found.forEach(s=>rail.append(tile(s.i)));sec.append(head,rail);root.append(sec)}if(!total)root.append(element('div','empty','Няма намерени песни.'));stopPreview()}
+function draw(filter='',onlyCategory=null){const root=$('rails');root.replaceChildren();const q=filter.trim().toLocaleLowerCase('bg');let total=0;for(const [cat,label] of Object.entries(labels)){if(onlyCategory&&cat!==onlyCategory)continue;const found=songs.map((s,i)=>({...s,i})).filter(s=>s.category===cat&&(!q||s.title.toLocaleLowerCase('bg').includes(q)));if(!found.length)continue;total+=found.length;const sec=element('section','section');sec.id='category-'+cat;const head=element('div','section-head');head.append(element('h2','',label),element('span','count',found.length+' клипа'));const rail=element('div','rail');rail.setAttribute('aria-label',label);found.sort((a,b)=>smartCompare(a,b));found.forEach(s=>rail.append(tile(s.i)));sec.append(head,rail);root.append(sec)}if(!total)root.append(element('div','empty','Няма намерени песни.'));smartUpdateBadges();stopPreview()}
 function setMode(on){live=on;$('mode').textContent='TV канал: '+(live?'ВКЛ.':'ИЗКЛ.');$('mode').classList.toggle('selected',live)}
 function isFullscreen(){return !!(document.fullscreenElement||document.webkitFullscreenElement)}
 function syncFullscreenButton(){ $('fullscreen').textContent=isFullscreen()?'⤢ Намали екрана':'⛶ Цял екран'; }
@@ -545,7 +566,7 @@ document.addEventListener('keydown',remoteKey,true);
 window.addEventListener('load',()=>{if(!$('overlay').classList.contains('open'))focusTV(document.querySelector('.tile')||$('heroPlay'))});
 // Pointer selection also updates the visible focus ring.
 document.addEventListener('focusin',e=>{if(e.target.closest?.('header,.hero-actions,.search-panel'))stopPreview();if(e.target.classList?.contains('tile')){document.querySelectorAll('.tile.tv-selected').forEach(x=>x.classList.remove('tv-selected'));e.target.classList.add('tv-selected')}});
-function clock(){const d=new Date();$('clock').textContent=d.toLocaleTimeString('bg-BG',{hour:'2-digit',minute:'2-digit'})}clock();setInterval(clock,30000);buildCategories();renderFlow();startFlow();draw();showHero(0);$('heroPlay').onclick=()=>{document.getElementById('featured').scrollIntoView({behavior:'smooth',block:'start'});};
+function clock(){const d=new Date();$('clock').textContent=d.toLocaleTimeString('bg-BG',{hour:'2-digit',minute:'2-digit'})}clock();setInterval(clock,30000);setInterval(()=>{smartReorderVisible();smartUpdateBadges()},60000);buildCategories();renderFlow();startFlow();draw();showHero(0);$('heroPlay').onclick=()=>{document.getElementById('featured').scrollIntoView({behavior:'smooth',block:'start'});};
 // Only the music catalogue is refreshed; the interface and playback logic stay unchanged.
 async function loadApprovedMusicCategories(){
  try{
@@ -562,7 +583,7 @@ async function loadApprovedMusicCategories(){
     throw new Error('Invalid video entry');
    if(seen.has(item.id))continue;
    seen.add(item.id);
-   updated.push({id:item.id,title:item.title,category:item.category,description:typeof item.description==='string'?item.description:''});
+   updated.push({id:item.id,title:item.title,category:item.category,description:typeof item.description==='string'?item.description:'',addedAt:typeof item.addedAt==='string'&&Number.isFinite(Date.parse(item.addedAt))?item.addedAt:null});
   }
   if(!['folk','popfolk','estrada'].every(cat=>updated.some(item=>item.category===cat)))
    throw new Error('Missing music category');
