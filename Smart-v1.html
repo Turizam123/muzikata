@@ -744,6 +744,7 @@ async function loadApprovedMusicCategories(){
    if(updated[i].category!=='other'&&!indices.includes(i))indices.push(i);
   }
   songs=updated;
+  window.dispatchEvent(new Event('angelSmartCatalogueUpdated'));
   featuredIndices=indices;
   queue=songs.map((_,i)=>i);
   current=0;queuePos=0;flowIndex=0;
@@ -950,7 +951,9 @@ renderPersonal();
  const picks=document.getElementById('musicMobilePicks');
  const filters=[...root.querySelectorAll('[data-music-filter]')];
  const preferred=['QV5LAOTnNk4','FmUQEAQ6bFs','lyGRz83xOSY','H_Ry5JCuhsg','5KzXhN6djC0','mHK8o9dvHks'];
- function selectSong(i){
+ function selectSong(id){
+  const i=songs.findIndex(song=>song.id===id);
+  if(i<0){console.warn('ANGEL SMART: video missing from catalogue',id);return;}
   if(typeof openPlayer==='function')openPlayer(i,false);
   else if(typeof playSong==='function')playSong(i);
   else {const existing=document.querySelector('#rails .tile[data-song-index="'+i+'"]');if(existing)existing.click();else if(typeof startSong==='function')startSong(i)}
@@ -968,7 +971,7 @@ renderPersonal();
   const tag=document.createElement('span');tag.className='music-spotlight-tag';tag.textContent='♪ ИЗБРАНА ПЕСЕН';
   const heading=document.createElement('h3');heading.textContent=main.title;
   const info=document.createElement('p');info.textContent=labels[main.category]||'Музика';
-  const play=document.createElement('button');play.type='button';play.className='music-spotlight-play';play.textContent='▶ Слушай сега';play.addEventListener('click',()=>selectSong(main.index));
+  const play=document.createElement('button');play.type='button';play.className='music-spotlight-play';play.textContent='▶ Слушай сега';play.addEventListener('click',()=>selectSong(main.id));
   content.append(tag,heading,info,play);spotlight.append(image,content);
   // Rotate the six suggested clips on every new page load, without duplicates.
   // On reload, prefer clips not shown in the previous selection (where available).
@@ -988,7 +991,9 @@ renderPersonal();
   try{sessionStorage.setItem('angelSmartPreviousPicks:'+cat,JSON.stringify(selection.map(s=>s.id)))}catch{}
   filters.forEach(f=>{const active=f.dataset.musicFilter===cat;f.classList.toggle('selected',active);f.setAttribute('aria-pressed',String(active))});
  }
- filters.forEach(f=>f.addEventListener('click',()=>render(f.dataset.musicFilter)));
+ let activeFilter='all';
+ filters.forEach(f=>f.addEventListener('click',()=>{activeFilter=f.dataset.musicFilter;render(activeFilter)}));
+ window.addEventListener('angelSmartCatalogueUpdated',()=>render(activeFilter));
  render('all');
 })();
 </script></body></html>
