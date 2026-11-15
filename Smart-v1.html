@@ -347,10 +347,89 @@ header::before,header::after{content:none!important;display:none!important}
 .smart-player-favorite[aria-pressed=true]{background:#6b4a2b!important}
 @media(max-width:760px){.smart-personal{margin:22px 0 32px}.smart-personal h2{font-size:22px}.smart-favorite-toggle{width:40px;height:40px}.smart-personal .tile{flex-basis:calc(85vw - 20px)}}
 </style>
-</head><body>
+<style id="angel-streaming-mobile-redesign">
+.music-mobile-home{display:none}
+@media (max-width:760px) and (pointer:coarse), (max-width:600px){
+ :root{--side:17px}
+ header{height:62px!important;min-height:62px!important;background:#08090d!important;padding:8px 17px!important}
+ header .brand img{width:36px!important}
+ header .brand strong{font-size:18px!important}
+ header .brand small{font-size:7px!important}
+ #hero{display:none!important}
+ .music-mobile-home{display:block;padding:23px 17px 6px}
+ .music-mobile-eyebrow{display:block;color:#d8b66a;font-size:10px;letter-spacing:.18em;font-weight:800}
+ .music-mobile-intro h2{font-size:clamp(27px,7vw,34px);letter-spacing:-.035em;margin:7px 0 4px;font-weight:850;line-height:1.1}
+ .music-mobile-intro h2 span{color:#d8b66a}
+ .music-mobile-intro p{font-size:13px;color:#aaa6a1;margin:0 0 18px;line-height:1.5}
+ .music-mobile-filters{display:flex;gap:8px;overflow-x:auto;padding:0 0 17px;scroll-snap-type:x proximity}
+ .music-mobile-filters button{flex:none;background:#1c1c24;color:#eae3d6;border:1px solid #ffffff17;border-radius:999px;padding:10px 14px;font-size:12px;font-weight:700;scroll-snap-align:start;min-height:39px}
+ .music-mobile-filters button.selected{background:#dfbe78;color:#17130b;border-color:#dfbe78}
+ .music-mobile-spotlight{position:relative;overflow:hidden;border-radius:20px;min-height:210px;background:linear-gradient(130deg,#30251e,#0d0e13);box-shadow:0 18px 38px #0007;border:1px solid #d8b66a55}
+ .music-mobile-spotlight .music-spotlight-art{position:absolute;inset:0 0 0 28%;width:72%;height:100%;object-fit:cover;filter:saturate(.96) contrast(1.08)}
+ .music-mobile-spotlight:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#121015 2%,#151117e8 31%,#17101738 76%),linear-gradient(0deg,#0c0b0b99,transparent 75%);pointer-events:none}
+ .music-spotlight-content{position:relative;z-index:1;padding:22px 16px 18px;width:75%;min-height:210px;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end}
+ .music-spotlight-tag{font-size:10px;font-weight:800;letter-spacing:.14em;color:#f2d38c}
+ .music-spotlight-content h3{font-size:clamp(23px,6vw,30px);line-height:1.12;margin:9px 0 7px;text-shadow:0 2px 12px #000b}
+ .music-spotlight-content p{font-size:11px;color:#d2c6b7;margin:0 0 13px}
+ .music-spotlight-play{border:0;border-radius:999px;background:#e8c67e;color:#17120a;font-weight:800;padding:11px 18px;font-size:12px;min-height:40px}
+ .music-mobile-section-title{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin:25px 0 12px}
+ .music-mobile-section-title h3{font-size:21px;margin:0}
+ .music-mobile-section-title span{color:#b9ad9a;font-size:11px}
+ .music-mobile-picks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .music-mobile-picks .tile{width:100%;max-width:100%;min-width:0;flex:none;border-radius:12px!important}
+ .music-mobile-picks .tile .info{min-height:70px!important;padding:11px!important}
+ .music-mobile-picks .tile b{font-size:13px!important;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+ .music-mobile-picks .tile small{font-size:10px!important;margin-top:5px!important}
+ .music-mobile-picks .smart-play-count{font-size:10px!important}
+ .music-mobile-picks .smart-favorite-toggle{width:31px;height:31px;left:6px;top:6px}
+ .music-mobile-picks .smart-favorite-toggle svg{width:17px;height:17px}
+ #homeContent{display:flex;flex-direction:column}
+ #musicMobileHome{order:0}
+ #smartContinue{order:1}
+ #smartFavorites{order:2}
+ #categories{order:3}
+ #featured{order:4}
+ #homeContent #featured{margin-top:10px!important;margin-bottom:32px!important}
+ #homeContent #featured .flow-stage{min-height:230px!important}
+ #homeContent .smart-personal{padding:0 17px;margin:18px 0 10px}
+ #homeContent .smart-personal h2{font-size:21px}
+ #homeContent .smart-personal .rail .tile{flex-basis:78vw}
+ #categories{padding:0 17px;margin:25px 0 8px}
+ #categories .v2-head h2{font-size:21px}
+ #categories .v2-sub{font-size:12px}
+ #categories .category-card{min-height:135px!important}
+ #categories .category-card strong{font-size:15px!important}
+ #categories .category-card .cat-inner{padding:12px!important}
+ .smart-mobile-bar{background:#0b0c12fa!important;border-top:1px solid #d8b66a30!important}
+ .smart-mobile-bar button.is-active{background:#d8b66a18!important;outline:none!important;color:#f3d993}
+}
+</style><style id="mobile-portrait-carousel-order">
+.mobile-portrait-banner{display:none}
+@media (max-width:760px) and (pointer:coarse), (max-width:600px){
+ #homeContent{display:flex!important;flex-direction:column!important}
+ #mobilePortraitBanner{display:block!important;order:0!important;width:100%;aspect-ratio:2660/1140;background:#08090d url("Spotify_Header_2660x1140.png") center center/cover no-repeat;margin:0 0 5px}
+ #homeContent #featured{order:1!important;margin:0 0 18px!important;padding:0 10px!important}
+ #homeContent #featured .flow-stage{min-height:clamp(205px,53vw,290px)!important}
+ #homeContent #featured .flow-actions{margin-top:0!important}
+ #musicMobileHome{order:2!important;padding-top:10px!important}
+ #smartContinue{order:3!important}
+ #smartFavorites{order:4!important}
+ #categories{order:5!important}
+ #musicMobileHome .music-mobile-intro{display:none!important}
+ #musicMobileHome .music-mobile-filters{padding-top:3px}
+}
+</style></head><body>
 <header><a class="brand" href="https://angeluzunov.site/" aria-label="Основен сайт"><img src="https://angeluzunov.site/AU_favicon.png" alt="AU"><div><strong>ANGEL <span>SMART</span></strong><small>ОФИЦИАЛНА МУЗИКАЛНА ПЛАТФОРМА</small></div></a><nav class="nav" aria-label="Главно меню"><button id="homeNav" class="active">Начало</button><button id="liveNav">▶ TV канал</button><button id="searchNav">⌕ Търсене</button><a href="https://angeluzunov.site/angel-uzunov-songs-v4.html">Каталог</a><a href="https://angeluzunov.site/fan-zone.html">Фен зона</a></nav><span id="clock" class="clock"></span></header>
 <div id="searchPanel" class="search-panel"><label for="search">Търси песен</label><div><input id="search" type="search" autocomplete="off" placeholder="Въведи заглавие..."></div></div>
-<main><section id="hero" class="hero"><div class="hero-content"><div class="eyebrow">✦ ОФИЦИАЛНАТА МУЗИКАЛНА ПЛАТФОРМА</div><div class="hero-kicker">МУЗИКАЛНИЯТ СВЯТ НА</div><h1 id="heroTitle">АНГЕЛ УЗУНОВ</h1><p id="heroDesc">Твоята музика. Твоят екран. Твоят свят.</p><div class="hero-actions"><button class="btn primary" id="heroPlay">▶ Разгледай клиповете</button><button class="btn" id="heroLive">▣ Пусни TV канал</button></div></div></section><div id="homeContent" class="home-content"><section class="v2-section" id="featured"><div class="flow-stage" id="flowStage" aria-label="Избрани видеоклипове"></div><div class="flow-actions"><button id="flowPrev" aria-label="Предишен клип">❮</button><div id="flowCaption" class="flow-caption"></div><button id="flowNext" aria-label="Следващ клип">❯</button></div></section><section class="v2-section" id="categories"><div class="v2-head"><div><h2>Музикални категории</h2><div class="v2-sub">Избери категория, за да разгледаш видеоклиповете</div></div></div><div class="category-grid" id="categoryGrid"></div></section></div><div id="categoryView" class="category-view"><div class="category-backbar"><button class="back-categories" id="backCategories">← Всички категории</button><h2 id="categoryTitle"></h2><p id="categorySubtitle"></p></div><div id="rails"></div></div></main>
+<main><section id="hero" class="hero"><div class="hero-content"><div class="eyebrow">✦ ОФИЦИАЛНАТА МУЗИКАЛНА ПЛАТФОРМА</div><div class="hero-kicker">МУЗИКАЛНИЯТ СВЯТ НА</div><h1 id="heroTitle">АНГЕЛ УЗУНОВ</h1><p id="heroDesc">Твоята музика. Твоят екран. Твоят свят.</p><div class="hero-actions"><button class="btn primary" id="heroPlay">▶ Разгледай клиповете</button><button class="btn" id="heroLive">▣ Пусни TV канал</button></div></div></section><div id="homeContent" class="home-content"><div id="mobilePortraitBanner" class="mobile-portrait-banner" role="img" aria-label="Ангел Узунов"></div><section id="musicMobileHome" class="music-mobile-home" aria-label="Начало на музикалната платформа">
+ <div class="music-mobile-intro"><span class="music-mobile-eyebrow">ANGEL SMART · МУЗИКА</span><h2>Твоята музика<span>.</span></h2><p>Открий следващата си любима песен.</p></div>
+ <div class="music-mobile-filters" aria-label="Музикални жанрове">
+ <button type="button" class="selected" data-music-filter="all">Всичко</button><button type="button" data-music-filter="folk">Народна музика</button><button type="button" data-music-filter="popfolk">Поп-фолк</button><button type="button" data-music-filter="estrada">Естрада</button>
+ </div>
+ <div class="music-mobile-spotlight" id="musicMobileSpotlight"></div>
+ <div class="music-mobile-section-title"><h3>Слушай сега</h3><span>Подбрано за теб</span></div>
+ <div class="music-mobile-picks" id="musicMobilePicks"></div>
+ </section><section class="v2-section" id="featured"><div class="flow-stage" id="flowStage" aria-label="Избрани видеоклипове"></div><div class="flow-actions"><button id="flowPrev" aria-label="Предишен клип">❮</button><div id="flowCaption" class="flow-caption"></div><button id="flowNext" aria-label="Следващ клип">❯</button></div></section><section class="v2-section" id="categories"><div class="v2-head"><div><h2>Музикални категории</h2><div class="v2-sub">Избери категория, за да разгледаш видеоклиповете</div></div></div><div class="category-grid" id="categoryGrid"></div></section></div><div id="categoryView" class="category-view"><div class="category-backbar"><button class="back-categories" id="backCategories">← Всички категории</button><h2 id="categoryTitle"></h2><p id="categorySubtitle"></p></div><div id="rails"></div></div></main>
 <footer><span>© 2026 Ангел Узунов · ANGEL SMART</span><span>Официални видеоклипове чрез YouTube · Управление: ← ↑ ↓ → / Enter / Esc</span><a href="https://www.youtube.com/@angeluzunovuzi" target="_blank" rel="noopener">YouTube канал ↗</a></footer>
 <aside id="previewDock" class="preview-dock" aria-label="Автоматичен преглед без звук"><div class="preview-screen" id="previewScreen"><img id="previewPoster" alt="Преглед на клипа"></div><div class="preview-meta"><strong id="previewTitle"></strong><span>Без звук · OK за гледане</span></div></aside>
 <div id="overlay" class="player-overlay" tabindex="-1" role="dialog" aria-modal="true" aria-label="Видео плейър"><div class="player-top"><strong id="nowTitle"></strong><button id="closePlayer" aria-label="Затвори плейъра">✕ Затвори</button></div><div id="player"></div><div class="player-bottom"><button id="prev">⏮ Предишен</button><button id="toggle">⏯ Пауза / Пусни</button><button id="next">Следващ ⏭</button><button id="mode">TV канал: ИЗКЛ.</button><button id="fullscreen" aria-label="Цял екран">⛶ Цял екран</button><a id="youtubeLink" class="btn" href="#" target="_blank" rel="noopener">YouTube ↗</a></div><div class="hint">Esc / Back: назад · ← →: избор на бутон · Space: пауза · OK: потвърди</div></div>
@@ -855,4 +934,36 @@ window.addEventListener('pagehide',()=>saveProgress(true));
 renderPersonal();
 })();
 </script>
-</body></html>
+<script id="angel-streaming-mobile-home-js">
+(function(){
+ 'use strict';
+ const root=document.getElementById('musicMobileHome');
+ if(!root||typeof songs==='undefined'||typeof tile!=='function')return;
+ const spotlight=document.getElementById('musicMobileSpotlight');
+ const picks=document.getElementById('musicMobilePicks');
+ const filters=[...root.querySelectorAll('[data-music-filter]')];
+ const preferred=['QV5LAOTnNk4','FmUQEAQ6bFs','lyGRz83xOSY','H_Ry5JCuhsg','5KzXhN6djC0','mHK8o9dvHks'];
+ function selectSong(i){
+  if(typeof openPlayer==='function')openPlayer(i,false);
+  else if(typeof playSong==='function')playSong(i);
+  else {const existing=document.querySelector('#rails .tile[data-song-index="'+i+'"]');if(existing)existing.click();else if(typeof startSong==='function')startSong(i)}
+ }
+ function render(cat){
+  const list=songs.map((song,i)=>({...song,index:i})).filter(s=>cat==='all'||s.category===cat);
+  const sorted=list.sort((a,b)=>preferred.indexOf(a.id)===-1?1:preferred.indexOf(b.id)===-1?-1:preferred.indexOf(a.id)-preferred.indexOf(b.id));
+  const main=sorted[0];if(!main)return;
+  spotlight.replaceChildren();
+  const image=document.createElement('img');image.className='music-spotlight-art';image.src=thumb(main.id);image.alt='';
+  const content=document.createElement('div');content.className='music-spotlight-content';
+  const tag=document.createElement('span');tag.className='music-spotlight-tag';tag.textContent='♪ ИЗБРАНА ПЕСЕН';
+  const heading=document.createElement('h3');heading.textContent=main.title;
+  const info=document.createElement('p');info.textContent=labels[main.category]||'Музика';
+  const play=document.createElement('button');play.type='button';play.className='music-spotlight-play';play.textContent='▶ Слушай сега';play.addEventListener('click',()=>selectSong(main.index));
+  content.append(tag,heading,info,play);spotlight.append(image,content);
+  picks.replaceChildren(...sorted.slice(1,7).map(s=>tile(s.index)));
+  filters.forEach(f=>{const active=f.dataset.musicFilter===cat;f.classList.toggle('selected',active);f.setAttribute('aria-pressed',String(active))});
+ }
+ filters.forEach(f=>f.addEventListener('click',()=>render(f.dataset.musicFilter)));
+ render('all');
+})();
+</script></body></html>
