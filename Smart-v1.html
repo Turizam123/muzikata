@@ -418,6 +418,13 @@ header::before,header::after{content:none!important;display:none!important}
  #musicMobileHome .music-mobile-intro{display:none!important}
  #musicMobileHome .music-mobile-filters{padding-top:3px}
 }
+</style><style id="smart-player-heart-icon-fix">
+@media(max-width:760px) and (pointer:coarse), (max-width:600px){
+ #smartPlayerFavorite{flex:0 0 auto!important;width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;padding:0!important;border-radius:50%!important;font-family:Arial,sans-serif!important;font-size:30px!important;line-height:1!important;white-space:nowrap!important;display:inline-flex!important;align-items:center!important;justify-content:center!important}
+ #overlay .player-top{gap:8px!important}
+ #overlay .player-top strong{min-width:0;flex:1}
+ #closePlayer{flex-shrink:0}
+}
 </style></head><body>
 <header><a class="brand" href="https://angeluzunov.site/" aria-label="Основен сайт"><img src="https://angeluzunov.site/AU_favicon.png" alt="AU"><div><strong>ANGEL <span>SMART</span></strong><small>ОФИЦИАЛНА МУЗИКАЛНА ПЛАТФОРМА</small></div></a><nav class="nav" aria-label="Главно меню"><button id="homeNav" class="active">Начало</button><button id="liveNav">▶ TV канал</button><button id="searchNav">⌕ Търсене</button><a href="https://angeluzunov.site/angel-uzunov-songs-v4.html">Каталог</a><a href="https://angeluzunov.site/fan-zone.html">Фен зона</a></nav><span id="clock" class="clock"></span></header>
 <div id="searchPanel" class="search-panel"><label for="search">Търси песен</label><div><input id="search" type="search" autocomplete="off" placeholder="Въведи заглавие..."></div></div>
@@ -841,7 +848,7 @@ function updateHearts(){
   el.setAttribute('aria-label',(on?'Премахни от любими: ':'Добави в любими: ')+(songs.find(s=>s.id===el.dataset.favoriteId)?.title||''));
  });
  const b=document.getElementById('smartPlayerFavorite');
- if(b&&typeof current!=='undefined'&&songs[current]){const on=favorites.has(songs[current].id);b.setAttribute('aria-pressed',String(on));b.textContent=on?'♥ В любими':'♡ Добави в любими'}
+ if(b&&typeof current!=='undefined'&&songs[current]){const on=favorites.has(songs[current].id);b.setAttribute('aria-pressed',String(on));b.textContent=on?'♥':'♡';b.title=on?'Премахни от любими':'Добави в любими';b.setAttribute('aria-label',b.title)}
 }
 function makeCard(id,resume){
  const i=videoIndex(id);if(i<0)return null;
@@ -885,7 +892,7 @@ observer.observe(document.getElementById('rails')||document.body,{childList:true
 document.querySelectorAll('.tile[data-song-index]').forEach(decorate);
 const top=document.querySelector('#overlay .player-top');
 if(top){
- const b=document.createElement('button');b.id='smartPlayerFavorite';b.type='button';b.className='smart-player-favorite';b.textContent='♡ Добави в любими';
+ const b=document.createElement('button');b.id='smartPlayerFavorite';b.type='button';b.className='smart-player-favorite';b.textContent='♡';b.title='Добави в любими';b.setAttribute('aria-label',b.title);
  b.addEventListener('click',()=>{if(songs[current])toggleFavorite(songs[current].id)});
  top.insertBefore(b,document.getElementById('closePlayer'));
 }
@@ -950,8 +957,11 @@ renderPersonal();
  }
  function render(cat){
   const list=songs.map((song,i)=>({...song,index:i})).filter(s=>cat==='all'||s.category===cat);
-  const sorted=list.sort((a,b)=>preferred.indexOf(a.id)===-1?1:preferred.indexOf(b.id)===-1?-1:preferred.indexOf(a.id)-preferred.indexOf(b.id));
-  const main=sorted[0];if(!main)return;
+  const rank=id=>{const n=preferred.indexOf(id);return n<0?preferred.length:n};
+  const sorted=list.sort((a,b)=>rank(a.id)-rank(b.id)||a.index-b.index);
+  // The spotlight is always tied to the actual catalogue entry and its YouTube ID.
+  const featuredId='QV5LAOTnNk4';
+  const main=sorted.find(s=>s.id===featuredId)||sorted[0];if(!main)return;
   spotlight.replaceChildren();
   const image=document.createElement('img');image.className='music-spotlight-art';image.src=thumb(main.id);image.alt='';
   const content=document.createElement('div');content.className='music-spotlight-content';
@@ -960,7 +970,22 @@ renderPersonal();
   const info=document.createElement('p');info.textContent=labels[main.category]||'Музика';
   const play=document.createElement('button');play.type='button';play.className='music-spotlight-play';play.textContent='▶ Слушай сега';play.addEventListener('click',()=>selectSong(main.index));
   content.append(tag,heading,info,play);spotlight.append(image,content);
-  picks.replaceChildren(...sorted.slice(1,7).map(s=>tile(s.index)));
+  // Rotate the six suggested clips on every new page load, without duplicates.
+  // On reload, prefer clips not shown in the previous selection (where available).
+  const candidates=sorted.filter(s=>s.id!==main.id);
+  const shuffled=candidates.slice();
+  for(let i=shuffled.length-1;i>0;i--){
+   const j=Math.floor(Math.random()*(i+1));
+   [shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]];
+  }
+  let previous=[];
+  try{previous=JSON.parse(sessionStorage.getItem('angelSmartPreviousPicks:'+cat)||'[]')}catch{}
+  const last=new Set(Array.isArray(previous)?previous:[]);
+  const fresh=shuffled.filter(s=>!last.has(s.id));
+  const repeated=shuffled.filter(s=>last.has(s.id));
+  const selection=fresh.concat(repeated).slice(0,6);
+  picks.replaceChildren(...selection.map(s=>tile(s.index)));
+  try{sessionStorage.setItem('angelSmartPreviousPicks:'+cat,JSON.stringify(selection.map(s=>s.id)))}catch{}
   filters.forEach(f=>{const active=f.dataset.musicFilter===cat;f.classList.toggle('selected',active);f.setAttribute('aria-pressed',String(active))});
  }
  filters.forEach(f=>f.addEventListener('click',()=>render(f.dataset.musicFilter)));
