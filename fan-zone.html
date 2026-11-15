@@ -1335,6 +1335,12 @@
       border-radius:20px;
       background:rgba(216,182,106,.045);
     }
+
+    /* Only the ANGEL SMART interview closing card; original interview untouched. */
+    .angel-smart-closing{display:flex;align-items:center;min-height:340px;overflow:hidden;position:relative;background:linear-gradient(90deg,rgba(8,8,12,.96) 0%,rgba(8,8,12,.82) 35%,rgba(8,8,12,.12) 76%),url("Spotify_Header_2660x1140.png") center center/cover no-repeat}
+    .angel-smart-closing-copy{min-width:0;position:relative;z-index:1;max-width:58%;padding:12px 0;text-shadow:0 2px 10px rgba(0,0,0,.5)}
+    
+    @media(max-width:680px){.angel-smart-closing{min-height:390px;align-items:flex-end;background-position:66% center;background-image:linear-gradient(0deg,rgba(8,8,12,.96) 0%,rgba(8,8,12,.78) 35%,rgba(8,8,12,.04) 85%),url("Spotify_Header_2660x1140.png")}.angel-smart-closing-copy{max-width:100%}}
     .interview-closing h4{
       font-family:"Cormorant Garamond",serif;
       color:var(--gold-light);
@@ -1575,7 +1581,16 @@
   color:#fff1bf;
 }
 
-</style>
+
+    /* ANGEL SMART interview: photo placeholder only; replace with supplied photo later */
+    #interview .interview-promo-card + .interview-promo-card{margin-top:24px}
+    .angel-smart-interview-placeholder{display:grid;place-items:center;background:radial-gradient(circle at 60% 25%,rgba(216,182,106,.19),transparent 56%),linear-gradient(145deg,#15131a,#08090d)}
+    .angel-smart-placeholder-brand{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:22px;text-align:center;color:var(--gold-light)}
+    .angel-smart-placeholder-au{display:grid;place-items:center;width:86px;height:86px;border-radius:50%;background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#21180b;font-family:"Cormorant Garamond",serif;font-size:2.7rem;box-shadow:0 0 0 7px rgba(216,182,106,.09)}
+    .angel-smart-placeholder-brand strong{font-size:clamp(1.2rem,3vw,1.8rem);letter-spacing:.12em}
+    .angel-smart-placeholder-brand small{font-size:.7rem;color:#c9c0ae;line-height:1.6}
+
+  </style>
 </head>
 <body>
 
@@ -1781,6 +1796,22 @@
         <h2 class="section-title">Лице в лице с Ангел Узунов</h2>
         <p class="section-text">Разговор за песните, историите зад тях, българския фолклор, новите технологии и връзката с хората, които слушат музиката.</p>
 
+        <!-- ANGEL SMART interview: editorial card with hero image -->
+        <article class="interview-promo-card" id="article-angel-smart-interview">
+          <div class="interview-promo-media" aria-label="Ангел Узунов – ANGEL SMART">
+            <img src="Angel_Uzunov_Deezer_hero.png" alt="Ангел Узунов – ANGEL SMART" loading="lazy">
+          </div>
+          <div class="interview-promo-copy">
+            <span class="topic-badge">ANGEL FAN ZONE · Ново интервю</span>
+            <h3>ANGEL SMART – Твоята музика. Твоят екран. Твоят свят.</h3>
+            <p class="interview-lead">Ангел Узунов за създаването на музикалната платформа, любимите песни, удобството за слушателите и следващите стъпки.</p>
+            <div class="interview-promo-actions">
+              <button class="btn btn-primary" id="openAngelSmartInterviewButton" type="button">Прочети интервюто</button>
+              <button class="share-post-btn" id="shareAngelSmartInterviewButton" type="button" aria-label="Сподели интервюто за ANGEL SMART">↗ Сподели</button>
+            </div>
+          </div>
+        </article>
+
         <article class="interview-promo-card" id="article-angel-uzunov-interview">
           <div class="interview-promo-media" aria-hidden="true">
             <img src="Angel_Uzunov_fabepage.png" alt="">
@@ -1799,6 +1830,39 @@
         </article>
       </div>
     </section>
+
+    <!-- Independent ANGEL SMART interview modal; original interview remains unchanged -->
+    <div class="interview-modal-backdrop" id="angelSmartInterviewBackdrop" aria-hidden="true">
+      <article class="interview-modal" role="dialog" aria-modal="true" aria-labelledby="angelSmartInterviewTitle">
+        <button class="interview-modal-close" id="angelSmartInterviewClose" type="button" aria-label="Затвори интервюто">✕</button>
+        <header class="interview-modal-header">
+          <span class="topic-badge">ANGEL FAN ZONE · Специално интервю</span>
+          <h3 id="angelSmartInterviewTitle">ANGEL SMART – Твоята музика. Твоят екран. Твоят свят.</h3>
+          <p class="interview-lead">Ангел Узунов представя идеята зад своята музикална платформа.</p>
+        </header>
+        <div class="interview-modal-scroll">
+          <div class="interview-body">
+            <div class="interview-qa"><div class="interview-question">Как се роди идеята за ANGEL SMART?</div><div class="interview-answer"><p>Идеята се роди от желанието ми да създам собствено музикално пространство, в което почитателите на моята музика да могат лесно да откриват и гледат любимите си песни. Исках нещо повече от обикновен каталог — платформа с характер, удобство и собствена идентичност.</p></div></div>
+            <div class="interview-qa"><div class="interview-question">Какво представлява ANGEL SMART?</div><div class="interview-answer"><p>ANGEL SMART е безплатна онлайн музикална платформа, която обединява видеоклипове от различни музикални жанрове. Създадена е за мобилни телефони, таблети, компютри и съвместими телевизори.</p></div></div>
+            <div class="interview-qa"><div class="interview-question">Каква музика могат да открият посетителите?</div><div class="interview-answer"><p>Българска народна музика, поп-фолк, кафана и естрада. Това са жанрове, които имат своето място в творчеството ми. Вярвам, че музиката не трябва да бъде ограничавана от стилове. Важното е да докосва човешкото сърце.</p></div></div>
+            <div class="interview-qa"><div class="interview-question">С какво платформата се отличава от обикновения YouTube канал?</div><div class="interview-answer"><p>Най-вече с начина, по който е организирана музиката. Потребителят разполага с категории, предложения за слушане, любими песни, продължаване на гледането и специален TV режим. Всичко е събрано в един интерфейс, създаден за моя музикален каталог.</p></div></div>
+            <div class="interview-qa"><div class="interview-question">Може ли ANGEL SMART да бъде инсталиран като приложение?</div><div class="interview-answer"><p>Да. Платформата използва технология, която позволява инсталиране от съвместим браузър. Например на Android телефон потребителят може да отвори сайта през Google Chrome и да избере опцията за инсталиране. Така ANGEL SMART се появява на началния екран като самостоятелна икона.</p></div></div>
+            <div class="interview-qa"><div class="interview-question">Платена ли е услугата?</div><div class="interview-answer"><p>Не. Достъпът до ANGEL SMART е безплатен. Искам музиката ми да достига до възможно най-много хора, без да е необходимо да заплащат абонамент за използването на платформата.</p></div></div>
+            <div class="interview-qa"><div class="interview-question">Какво означава възможността човек да запазва любимите си песни?</div><div class="interview-answer"><p>Това прави преживяването лично. Всеки има песни, към които се връща отново и отново. Затова добавихме възможност за любими клипове, както и за продължаване на гледането.</p></div></div>
+            <div class="interview-qa"><div class="interview-question">Предвиждате ли развитие на ANGEL SMART?</div><div class="interview-answer"><p>Разбира се. Платформата ще се развива постепенно. Ще работим за още по-добро управление през телевизор, по-удобно мобилно приложение, нови функционалности и разширяване на музикалния каталог.</p></div></div>
+            <div class="interview-qa"><div class="interview-question">Какво бихте казали на почитателите, които все още не са посетили платформата?</div><div class="interview-answer"><p>Каня ги да открият ANGEL SMART, да изберат любимата си песен и да се насладят на музиката. Създадох тази платформа с много желание и внимание към всеки детайл. Защото вярвам в едно — песента е любов!</p></div></div>
+          </div>
+          <div class="interview-closing angel-smart-closing">
+            <div class="angel-smart-closing-copy">
+            <h4>Открий ANGEL SMART</h4>
+            <p>Твоята музика. Твоят екран. Твоят свят.</p>
+            <p><a class="btn btn-primary" href="https://angeluzunov.site/Smart-v1.html" target="_blank" rel="noopener noreferrer">Посети ANGEL SMART</a></p>
+            <p class="interview-signature">„Песента е любов!“</p>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
 
     <div class="interview-modal-backdrop" id="interviewModalBackdrop" aria-hidden="true">
       <article class="interview-modal" id="interviewModal" role="dialog" aria-modal="true" aria-labelledby="interviewModalTitle">
@@ -3956,5 +4020,44 @@
     })();
 
 </script>
+
+  <script id="angel-smart-interview-controls">
+  (() => {
+    const backdrop = document.getElementById('angelSmartInterviewBackdrop');
+    const open = document.getElementById('openAngelSmartInterviewButton');
+    const close = document.getElementById('angelSmartInterviewClose');
+    if (!backdrop || !open || !close) return;
+    let previousFocus = null;
+    const show = () => {
+      previousFocus = document.activeElement;
+      backdrop.classList.add('show');
+      backdrop.setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+      close.focus();
+    };
+    const hide = () => {
+      backdrop.classList.remove('show');
+      backdrop.setAttribute('aria-hidden','true');
+      document.body.style.overflow = '';
+      if (previousFocus && previousFocus.focus) previousFocus.focus();
+    };
+    open.addEventListener('click', show);
+    close.addEventListener('click', hide);
+    backdrop.addEventListener('click', e => { if(e.target === backdrop) hide(); });
+    document.addEventListener('keydown', e => {
+      if(e.key === 'Escape' && backdrop.classList.contains('show')) hide();
+    });
+    document.getElementById('shareAngelSmartInterviewButton')?.addEventListener('click', async () => {
+      const url = `${location.origin}${location.pathname}#article-angel-smart-interview`;
+      const data = {title:'ANGEL SMART – Интервю с Ангел Узунов', text:'Специално интервю за ANGEL SMART във FAN ZONA', url};
+      try {
+        if(navigator.share) await navigator.share(data);
+        else if(navigator.clipboard) {await navigator.clipboard.writeText(url);}
+        else window.prompt('Копирай адреса на интервюто:', url);
+      } catch(e) { if(e.name !== 'AbortError') console.warn('Неуспешно споделяне',e); }
+    });
+  })();
+  </script>
+
 </body>
 </html>
