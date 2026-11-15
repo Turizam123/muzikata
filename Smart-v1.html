@@ -461,9 +461,9 @@ function smartHeaders(){return {'apikey':SMART_SUPABASE_ANON_KEY,'Authorization'
 function smartCount(id){return smartCounts.get(id)||0}
 function smartUpdateVisibleCounts(){
  document.querySelectorAll('.tile[data-song-index]').forEach(b=>{
-  const s=songs[Number(b.dataset.songIndex)];if(!s)return;
+  const id=b.dataset.videoId||songs[Number(b.dataset.songIndex)]?.id;if(!id)return;
   const counter=b.querySelector('.smart-play-count .smart-count-number');
-  if(counter)counter.textContent=smartNumber.format(smartCount(s.id))+' слушания';
+  if(counter)counter.textContent=smartNumber.format(smartCount(id))+' слушания';
  });
 }
 const SMART_PROMOTION_MS=72*60*60*1000;
@@ -551,7 +551,7 @@ function renderFlow(direction=0){
   Object.assign(btn.style,direction?start:target);
   const im=element('img');im.src=thumb(song.id);im.alt='';im.loading='lazy';
   btn.append(im,element('span','',song.title));
-  btn.onclick=()=>{if(delta===0)openPlayer(i,false);else{pauseFlow();shiftFlow(delta)}};
+  btn.onclick=()=>{if(delta===0)openPlayer(i,false);else{pauseFlow();shiftFlow(delta);resumeFlowLater()}};
   btn.onfocus=()=>pauseFlow();stage.append(btn);
   if(direction){requestAnimationFrame(()=>requestAnimationFrame(()=>Object.assign(btn.style,target)))}
  }
@@ -562,7 +562,7 @@ function shiftFlow(delta){
  renderFlow(delta===0?0:delta>0?1:-1);
 }
 function pauseFlow(){clearInterval(flowTimer);flowTimer=null}
-function startFlow(){pauseFlow();if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;flowTimer=setInterval(()=>{if(!$('overlay').classList.contains('open')&&!activeCategory&&!$('flowStage').contains(document.activeElement))shiftFlow(1)},4800)}
+function startFlow(){pauseFlow();if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;flowTimer=setInterval(()=>{if(!document.hidden&&!$('overlay').classList.contains('open')&&!activeCategory&&!$('flowStage').contains(document.activeElement))shiftFlow(1)},5000)}
 function buildCategories(){const grid=$('categoryGrid');grid.replaceChildren();for(const [cat,label] of Object.entries(labels)){
  const count=songs.filter(s=>s.category===cat).length,b=element('button','category-card');b.type='button';b.dataset.category=cat;
  b.style.setProperty('--cat-img',`url("${thumb(categoryVisuals[cat])}")`);
@@ -572,7 +572,31 @@ function buildCategories(){const grid=$('categoryGrid');grid.replaceChildren();f
 function openCategory(cat){activeCategory=cat;pauseFlow();$('homeContent').classList.add('hidden');$('hero').style.display='none';$('categoryView').classList.add('open');$('categoryTitle').textContent=labels[cat];$('categorySubtitle').textContent=songs.filter(s=>s.category===cat).length+' видеозаписа · Избери клип за гледане';draw('',cat);window.scrollTo(0,0);focusTV($('backCategories'))}
 function closeCategory(){if(!activeCategory)return;const cat=activeCategory;activeCategory=null;$('categoryView').classList.remove('open');$('homeContent').classList.remove('hidden');$('hero').style.display='';window.scrollTo(0,0);focusTV(document.querySelector(`[data-category="${cat}"]`));startFlow()}
 $('backCategories').onclick=()=>{if(activeCategory)closeCategory();else{$('categoryView').classList.remove('open');$('homeContent').classList.remove('hidden');$('hero').style.display='';$('searchPanel').classList.remove('show');$('search').value='';window.scrollTo(0,0);focusTV($('heroPlay'))}};
-$('flowPrev').onclick=()=>{pauseFlow();shiftFlow(-1)};$('flowNext').onclick=()=>{pauseFlow();shiftFlow(1)};
+// Touch carousel: swipe without accidentally opening a video; resume auto-rotation after interaction.
+let flowTouchStart=null,flowTouchMoved=false,flowResumeTimer=null;
+const flowStage=$('flowStage');
+function resumeFlowLater(){clearTimeout(flowResumeTimer);flowResumeTimer=setTimeout(()=>{if(!activeCategory&&!$('overlay').classList.contains('open'))startFlow()},7000)}
+flowStage.style.touchAction='pan-y';
+flowStage.addEventListener('touchstart',e=>{
+ if(e.touches.length!==1)return;
+ flowTouchStart={x:e.touches[0].clientX,y:e.touches[0].clientY};flowTouchMoved=false;pauseFlow();clearTimeout(flowResumeTimer);
+},{passive:true});
+flowStage.addEventListener('touchmove',e=>{
+ if(!flowTouchStart||e.touches.length!==1)return;
+ if(Math.abs(e.touches[0].clientX-flowTouchStart.x)>14)flowTouchMoved=true;
+},{passive:true});
+flowStage.addEventListener('touchend',e=>{
+ if(!flowTouchStart)return;
+ const dx=e.changedTouches[0].clientX-flowTouchStart.x;
+ const dy=e.changedTouches[0].clientY-flowTouchStart.y;
+ flowTouchStart=null;
+ if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.2){flowTouchMoved=true;shiftFlow(dx<0?1:-1)}
+ resumeFlowLater();
+},{passive:true});
+flowStage.addEventListener('touchcancel',()=>{flowTouchStart=null;resumeFlowLater()},{passive:true});
+flowStage.addEventListener('click',e=>{if(flowTouchMoved){e.preventDefault();e.stopImmediatePropagation();flowTouchMoved=false}},true);
+$('flowPrev').onclick=()=>{pauseFlow();shiftFlow(-1);resumeFlowLater()};
+$('flowNext').onclick=()=>{pauseFlow();shiftFlow(1);resumeFlowLater()};
 $('homeNav').addEventListener('click',()=>{if(activeCategory)closeCategory()});
 function draw(filter='',onlyCategory=null){const root=$('rails');root.replaceChildren();const q=filter.trim().toLocaleLowerCase('bg');let total=0;for(const [cat,label] of Object.entries(labels)){if(onlyCategory&&cat!==onlyCategory)continue;const found=songs.map((s,i)=>({...s,i})).filter(s=>s.category===cat&&(!q||s.title.toLocaleLowerCase('bg').includes(q)));if(!found.length)continue;total+=found.length;const sec=element('section','section');sec.id='category-'+cat;const head=element('div','section-head');head.append(element('h2','',label),element('span','count',found.length+' клипа'));const rail=element('div','rail');rail.setAttribute('aria-label',label);found.sort((a,b)=>smartCompare(a,b));found.forEach(s=>rail.append(tile(s.i)));sec.append(head,rail);root.append(sec)}if(!total)root.append(element('div','empty','Няма намерени песни.'));smartUpdateBadges();stopPreview()}
 function setMode(on){live=on;$('mode').textContent='TV канал: '+(live?'ВКЛ.':'ИЗКЛ.');$('mode').classList.toggle('selected',live)}
@@ -854,6 +878,14 @@ function updateHearts(){
 function makeCard(id,resume){
  const i=videoIndex(id);if(i<0)return null;
  const card=tile(i);
+ // Bind personal cards to immutable YouTube IDs, never stale catalogue indices.
+ card.dataset.videoId=id;
+ card.onfocus=()=>{const liveIndex=videoIndex(id);if(liveIndex>=0){showHero(liveIndex);schedulePreview(liveIndex)}};
+ card.onclick=event=>{
+  if(event.target.closest('.smart-favorite-toggle'))return;
+  const liveIndex=videoIndex(id);
+  if(liveIndex>=0)openPlayer(liveIndex,false);
+ };
  if(resume){
   const item=progress[id],duration=Number(item?.duration)||0,seconds=Number(item?.seconds)||0;
   const label=document.createElement('span');label.className='smart-resume-meta';
@@ -939,6 +971,21 @@ onStateChange=function(e){
 setInterval(()=>saveProgress(false),3000);
 document.addEventListener('visibilitychange',()=>{if(document.hidden)saveProgress(true)});
 window.addEventListener('pagehide',()=>saveProgress(true));
+// Catalogue refresh changes indices: rebuild cards from saved IDs.
+window.addEventListener('angelSmartCatalogueUpdated',()=>{
+ favorites=new Set([...favorites].filter(validId));
+ renderPersonal();
+});
+// Supabase refresh must update counts using each card's immutable video ID.
+function refreshPersonalCounts(){
+ document.querySelectorAll('#smartFavorites .tile[data-video-id],#smartContinue .tile[data-video-id]').forEach(card=>{
+  const id=card.dataset.videoId;
+  const count=card.querySelector('.smart-play-count .smart-count-number');
+  if(count)count.textContent=smartNumber.format(smartCount(id))+' слушания';
+ });
+}
+const originalUpdateVisibleCounts=smartUpdateVisibleCounts;
+smartUpdateVisibleCounts=function(){originalUpdateVisibleCounts();refreshPersonalCounts()};
 renderPersonal();
 })();
 </script>
