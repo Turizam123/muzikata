@@ -487,8 +487,8 @@ function smartUpdateVisibleCounts(){
   if(counter)counter.textContent=smartNumber.format(smartCount(id))+' слушания';
  });
 }
-const SMART_PROMOTION_MS=72*60*60*1000;
-const SMART_PREMIERE_MS=48*60*60*1000;
+const SMART_PROMOTION_MS=5*24*60*60*1000;
+const SMART_PREMIERE_MS=72*60*60*1000;
 function smartAge(s){if(!s||!s.addedAt)return null;const t=Date.parse(s.addedAt);if(!Number.isFinite(t))return null;const age=Date.now()-t;return age>=0?age:null}
 function smartIsFresh(s){const age=smartAge(s);return age!==null&&age<SMART_PROMOTION_MS}
 function smartPopularityLeader(cat){return songs.filter(s=>s.category===cat).sort((a,b)=>smartCount(b.id)-smartCount(a.id)||songs.indexOf(a)-songs.indexOf(b))[0]?.id}
