@@ -425,8 +425,29 @@ header::before,header::after{content:none!important;display:none!important}
  #overlay .player-top strong{min-width:0;flex:1}
  #closePlayer{flex-shrink:0}
 }
-</style></head><body>
-<header><a class="brand" href="https://angeluzunov.site/" aria-label="Основен сайт"><img src="https://angeluzunov.site/AU_favicon.png" alt="AU"><div><strong>ANGEL <span>SMART</span></strong><small>ОФИЦИАЛНА МУЗИКАЛНА ПЛАТФОРМА</small></div></a><nav class="nav" aria-label="Главно меню"><button id="homeNav" class="active">Начало</button><button id="liveNav">▶ TV канал</button><button id="searchNav">⌕ Търсене</button><a href="https://angeluzunov.site/angel-uzunov-songs-v4.html">Каталог</a><a href="https://angeluzunov.site/fan-zone.html">Фен зона</a></nav><span id="clock" class="clock"></span></header>
+</style>
+<style id="angel-device-word-only">
+/* Only APP/TAB: blended colors and gentle glow. SMART keeps original styles. */
+.brand strong #angelDeviceWord.angel-device-accent {
+  background:linear-gradient(105deg,#d7ae65 0%,#6ad9e6 29%,#c39af0 57%,#f0c77c 80%,#d7ae65 100%);
+  background-size:240% 100%;
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+  color:#e8c77f;
+  animation:angelDeviceGlow 6s ease-in-out infinite alternate;
+  filter:drop-shadow(0 0 3px rgba(205,171,221,.35));
+}
+.brand strong #angelDeviceWord.angel-device-tab {
+  background-image:linear-gradient(105deg,#d8b66a 0%,#b68ee9 30%,#efb3cf 59%,#f3d993 83%,#d8b66a 100%);
+}
+@keyframes angelDeviceGlow {
+  0% {background-position:0% 50%;filter:drop-shadow(0 0 2px rgba(216,182,106,.22))}
+  100% {background-position:100% 50%;filter:drop-shadow(0 0 6px rgba(196,159,228,.6))}
+}
+@media(prefers-reduced-motion:reduce){.brand strong #angelDeviceWord.angel-device-accent{animation:none!important}}
+</style>
+</head><body>
+<header><a class="brand" href="https://angeluzunov.site/" aria-label="Основен сайт"><img src="https://angeluzunov.site/AU_favicon.png" alt="AU"><div><strong>ANGEL <span id="angelDeviceWord">SMART</span></strong><small>ОФИЦИАЛНА МУЗИКАЛНА ПЛАТФОРМА</small></div></a><nav class="nav" aria-label="Главно меню"><button id="homeNav" class="active">Начало</button><button id="liveNav">▶ TV канал</button><button id="searchNav">⌕ Търсене</button><a href="https://angeluzunov.site/angel-uzunov-songs-v4.html">Каталог</a><a href="https://angeluzunov.site/fan-zone.html">Фен зона</a></nav><span id="clock" class="clock"></span></header>
 <div id="searchPanel" class="search-panel"><label for="search">Търси песен</label><div><input id="search" type="search" autocomplete="off" placeholder="Въведи заглавие..."></div></div>
 <main><section id="hero" class="hero"><div class="hero-content"><div class="eyebrow">✦ ОФИЦИАЛНАТА МУЗИКАЛНА ПЛАТФОРМА</div><div class="hero-kicker">МУЗИКАЛНИЯТ СВЯТ НА</div><h1 id="heroTitle">АНГЕЛ УЗУНОВ</h1><p id="heroDesc">Твоята музика. Твоят екран. Твоят свят.</p><div class="hero-actions"><button class="btn primary" id="heroPlay">▶ Разгледай клиповете</button><button class="btn" id="heroLive">▣ Пусни TV канал</button></div></div></section><div id="homeContent" class="home-content"><div id="mobilePortraitBanner" class="mobile-portrait-banner" role="img" aria-label="Ангел Узунов"></div><section id="musicMobileHome" class="music-mobile-home" aria-label="Начало на музикалната платформа">
  <div class="music-mobile-intro"><span class="music-mobile-eyebrow">ANGEL SMART · МУЗИКА</span><h2>Твоята музика<span>.</span></h2><p>Открий следващата си любима песен.</p></div>
@@ -1043,4 +1064,17 @@ renderPersonal();
  window.addEventListener('angelSmartCatalogueUpdated',()=>render(activeFilter));
  render('all');
 })();
-</script></body></html>
+</script>
+<script id="angel-device-word-script">
+(function(){
+  var word=document.getElementById('angelDeviceWord');
+  if(!word)return;
+  var ua=navigator.userAgent||'';
+  var ipad=/iPad/i.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  var tablet=ipad||/Android/i.test(ua)&&!/Mobile/i.test(ua)||/Tablet|PlayBook|Silk/i.test(ua);
+  var phone=!tablet&&/iPhone|iPod|Android.*Mobile|Windows Phone|Mobile/i.test(ua);
+  if(tablet){word.textContent='TAB';word.classList.add('angel-device-accent','angel-device-tab')}
+  else if(phone){word.textContent='APP';word.classList.add('angel-device-accent')}
+})();
+</script>
+</body></html>
