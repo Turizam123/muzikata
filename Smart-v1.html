@@ -289,7 +289,65 @@ header::before,header::after{content:none!important;display:none!important}
 .tile.smart-fresh .info{background:linear-gradient(120deg,#57432e,#2d292a 65%,#171920)!important}
 .category-card .smart-badge{top:12px;right:12px}
 @media(max-width:560px){.smart-badge{width:120px;height:29px;font-size:10px;right:7px;top:7px}}
-</style></head><body>
+</style>
+<style id="angel-mobile-2026">
+.smart-mobile-bar,.smart-mobile-sheet,.smart-mobile-shade{display:none}
+@media(max-width:900px) and (pointer:coarse), (max-width:760px){
+ html,body{max-width:100%;overflow-x:clip}
+ body{padding-bottom:calc(78px + env(safe-area-inset-bottom,0px))}
+ header{height:68px!important;min-height:68px;flex-wrap:nowrap!important;padding:9px 16px!important;position:relative;z-index:3}
+ header .brand{min-width:0;gap:9px}header .brand img{width:40px!important}
+ header .brand strong{font-size:19px!important}header .brand small{font-size:8px!important;letter-spacing:.09em!important;white-space:normal}
+ header .nav,header .clock{display:none!important}
+ .hero{min-height:420px!important}.hero-content{width:100%!important;padding:36px 18px 45px!important}
+ .hero h1{font-size:clamp(34px,9vw,58px)!important}
+ .hero p{font-size:16px!important}.hero-actions{gap:8px}
+ .hero-actions .btn{font-size:13px!important;padding:13px 12px!important}
+ .v2-section,.section{max-width:100%;overflow:hidden}
+ .category-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+ .category-card{min-width:0;min-height:155px!important}
+ .category-view .rail{max-width:100%}
+ .tile{max-width:calc(100vw - 36px)} .category-view .tile{flex-basis:calc((100% - 12px)/2)!important} .category-view .rail{gap:12px!important} .category-view .tile .info{padding:11px!important;min-height:78px} .category-view .tile b{font-size:14px!important;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden} .category-view .tile small{font-size:11px!important} .smart-badge{max-width:calc(100% - 12px)}
+ .player-overlay{height:100dvh;max-height:100dvh;z-index:110!important}
+ .player-top{padding:9px 12px!important;min-height:58px}
+ .player-bottom{padding:8px 7px calc(12px + env(safe-area-inset-bottom,0px))!important;gap:6px!important;display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));max-height:38dvh;overflow-y:auto}
+ .player-bottom button,.player-bottom a{min-width:0!important;min-height:42px!important;font-size:clamp(10px,2.7vw,13px)!important;padding:9px 5px!important;white-space:normal;text-align:center}
+ .hero:before{background:linear-gradient(0deg,#08090df8 0%,#08090d99 55%,#08090d44 100%),url("Spotify_Header_2660x1140.png") 68% top/auto 100% no-repeat!important} .hero-content{align-self:flex-end!important} .smart-mobile-bar{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));position:fixed;inset:auto 0 0;z-index:90;background:#0c0d13f5;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid #d8b66a55;padding:7px 5px calc(7px + env(safe-area-inset-bottom,0px));box-shadow:0 -10px 28px #0009}
+ .smart-mobile-bar button{border:0;background:none;color:#d9d1c0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;min-height:54px;font-size:10px;font-weight:700;border-radius:12px;padding:5px 0}
+ .smart-mobile-bar button svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+ .smart-mobile-bar button:focus-visible,.smart-mobile-bar button[aria-expanded=true],.smart-mobile-bar button.is-active{background:#d8b66a20;color:#f3d993;outline:2px solid #d8b66a}
+ .smart-mobile-shade.open{display:block;position:fixed;inset:0;z-index:91;background:#000a}
+ .smart-mobile-sheet.open{display:flex;flex-direction:column;position:fixed;left:12px;right:12px;bottom:calc(83px + env(safe-area-inset-bottom,0px));z-index:92;max-height:min(72dvh,590px);overflow-y:auto;background:#15161f;border:1px solid #d8b66a77;border-radius:20px;padding:16px;box-shadow:0 16px 55px #000d}
+ .smart-mobile-sheet h2{font-size:19px;color:#f3d993;margin:0 0 12px}
+ .smart-mobile-sheet button,.smart-mobile-sheet a{display:block;text-align:left;padding:14px 13px;border:0;border-bottom:1px solid #ffffff18;background:transparent;color:#f7f2e8;font-weight:700;min-height:48px;border-radius:7px}
+ .smart-mobile-sheet button:focus-visible,.smart-mobile-sheet a:focus-visible{outline:2px solid #f3d993}
+}
+@media(min-width:761px) and (max-width:900px) and (pointer:fine){.smart-mobile-bar,.smart-mobile-sheet,.smart-mobile-shade{display:none!important}}
+@media(max-width:430px){.hero{min-height:440px!important}.hero h1{font-size:36px!important}.hero-kicker{font-size:12px!important}.hero .eyebrow{font-size:10px!important;letter-spacing:.12em!important}.category-card{min-height:142px!important}.category-card strong{font-size:16px!important}.category-card .cat-inner{padding:12px!important}.category-view .tile{flex-basis:100%!important}.player-top strong{font-size:14px!important}.player-top button{font-size:12px!important;min-height:42px!important;padding:8px!important}}
+@media(min-width:600px) and (max-width:900px) and (pointer:coarse){.category-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}.category-view .tile{flex-basis:calc((100% - 24px)/3)!important}}
+</style>
+
+<style id="smart-personal-css">
+.smart-personal{padding:0 var(--side);margin:26px 0 45px}
+.smart-personal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.smart-personal h2{margin:0;font-size:clamp(22px,2vw,36px)}
+.smart-personal-sub{color:#bdb1a0;font-size:13px;margin-top:5px}
+.smart-personal .rail{padding:8px 5px 20px}
+.smart-personal[hidden]{display:none!important}
+.smart-favorite-toggle{position:absolute;z-index:5;left:10px;top:10px;display:grid;place-items:center;width:43px;height:43px;border:1px solid #f0d79b9c;border-radius:50%;background:#090a10d9;color:#f5e4c1;box-shadow:0 3px 15px #0009;cursor:pointer;touch-action:manipulation}
+.smart-favorite-toggle svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:2}
+.smart-favorite-toggle[aria-pressed=true]{color:#f3d993;background:#4b2f25f0}
+.smart-favorite-toggle[aria-pressed=true] svg{fill:#d8b66a}
+.smart-favorite-toggle:focus-visible{outline:3px solid #f3d993;outline-offset:2px}
+.smart-personal .tile{position:relative}
+.smart-resume-meta{display:block;color:#e5c27a;font-size:12px;margin-top:8px}
+.smart-progress-track{height:4px;background:#ffffff40;position:absolute;left:0;right:0;bottom:0;z-index:3}
+.smart-progress-fill{height:100%;background:#e4bb6a}
+.smart-player-favorite{min-width:0!important;color:#f3d993!important}
+.smart-player-favorite[aria-pressed=true]{background:#6b4a2b!important}
+@media(max-width:760px){.smart-personal{margin:22px 0 32px}.smart-personal h2{font-size:22px}.smart-favorite-toggle{width:40px;height:40px}.smart-personal .tile{flex-basis:calc(85vw - 20px)}}
+</style>
+</head><body>
 <header><a class="brand" href="https://angeluzunov.site/" aria-label="Основен сайт"><img src="https://angeluzunov.site/AU_favicon.png" alt="AU"><div><strong>ANGEL <span>SMART</span></strong><small>ОФИЦИАЛНА МУЗИКАЛНА ПЛАТФОРМА</small></div></a><nav class="nav" aria-label="Главно меню"><button id="homeNav" class="active">Начало</button><button id="liveNav">▶ TV канал</button><button id="searchNav">⌕ Търсене</button><a href="https://angeluzunov.site/angel-uzunov-songs-v4.html">Каталог</a><a href="https://angeluzunov.site/fan-zone.html">Фен зона</a></nav><span id="clock" class="clock"></span></header>
 <div id="searchPanel" class="search-panel"><label for="search">Търси песен</label><div><input id="search" type="search" autocomplete="off" placeholder="Въведи заглавие..."></div></div>
 <main><section id="hero" class="hero"><div class="hero-content"><div class="eyebrow">✦ ОФИЦИАЛНАТА МУЗИКАЛНА ПЛАТФОРМА</div><div class="hero-kicker">МУЗИКАЛНИЯТ СВЯТ НА</div><h1 id="heroTitle">АНГЕЛ УЗУНОВ</h1><p id="heroDesc">Твоята музика. Твоят екран. Твоят свят.</p><div class="hero-actions"><button class="btn primary" id="heroPlay">▶ Разгледай клиповете</button><button class="btn" id="heroLive">▣ Пусни TV канал</button></div></div></section><div id="homeContent" class="home-content"><section class="v2-section" id="featured"><div class="flow-stage" id="flowStage" aria-label="Избрани видеоклипове"></div><div class="flow-actions"><button id="flowPrev" aria-label="Предишен клип">❮</button><div id="flowCaption" class="flow-caption"></div><button id="flowNext" aria-label="Следващ клип">❯</button></div></section><section class="v2-section" id="categories"><div class="v2-head"><div><h2>Музикални категории</h2><div class="v2-sub">Избери категория, за да разгледаш видеоклиповете</div></div></div><div class="category-grid" id="categoryGrid"></div></section></div><div id="categoryView" class="category-view"><div class="category-backbar"><button class="back-categories" id="backCategories">← Всички категории</button><h2 id="categoryTitle"></h2><p id="categorySubtitle"></p></div><div id="rails"></div></div></main>
@@ -612,4 +670,189 @@ loadApprovedMusicCategories();
 smartFetchCounts();setInterval(smartFetchCounts,20000);
 // YouTube IFrame API enables reliable end-of-video playback for TV mode.
 window.onYouTubeIframeAPIReady=function(){apiReady=true};const api=document.createElement('script');api.src='https://www.youtube.com/iframe_api';document.head.append(api);
-</script></body></html>
+</script>
+<div class="smart-mobile-shade" id="smartMobileShade" aria-hidden="true"></div>
+<nav class="smart-mobile-bar" aria-label="Мобилна навигация">
+ <button type="button" data-smart-action="home" class="is-active" aria-label="Начало"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10H3z"/><path d="M9 20v-7h6v7"/></svg><span>Начало</span></button>
+ <button type="button" data-smart-action="categories" aria-label="Категории"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Категории</span></button>
+ <button type="button" data-smart-action="tv" aria-label="TV канал"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="15" rx="2"/><path d="m10 9 6 3-6 3z"/></svg><span>TV канал</span></button>
+ <button type="button" data-smart-action="search" aria-label="Търсене"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><span>Търсене</span></button>
+ <button type="button" data-smart-action="menu" aria-label="Още" aria-controls="smartMobileSheet" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span>Меню</span></button>
+</nav>
+<div class="smart-mobile-sheet" id="smartMobileSheet" role="dialog" aria-modal="true" aria-label="Меню ANGEL SMART" hidden>
+ <h2>ANGEL SMART · Меню</h2>
+ <button type="button" data-smart-action="home">⌂ Начало</button>
+ <button type="button" data-smart-action="categories">▦ Музикални категории</button>
+ <button type="button" data-smart-action="tv">▶ TV канал</button>
+ <button type="button" data-smart-action="search">⌕ Търсене</button>
+ <a href="https://angeluzunov.site/angel-uzunov-songs-v4.html">♫ Музикален каталог</a>
+ <a href="https://angeluzunov.site/fan-zone.html">★ Фен зона</a>
+ <a href="https://angeluzunov.site/">↗ Официален сайт</a>
+ <button type="button" data-smart-action="close">✕ Затвори менюто</button>
+</div>
+
+<script id="angel-mobile-navigation-script">
+(()=>{'use strict';
+ const sheet=document.getElementById('smartMobileSheet'),shade=document.getElementById('smartMobileShade'),menuBtn=document.querySelector('.smart-mobile-bar [data-smart-action="menu"]');
+ let lastFocus=null;
+ const close=()=>{sheet.classList.remove('open');shade.classList.remove('open');sheet.hidden=true;menuBtn.setAttribute('aria-expanded','false');if(lastFocus){lastFocus.focus({preventScroll:true});lastFocus=null}};
+ const open=()=>{lastFocus=document.activeElement;sheet.hidden=false;sheet.classList.add('open');shade.classList.add('open');menuBtn.setAttribute('aria-expanded','true');sheet.querySelector('button').focus({preventScroll:true})};
+ const invoke=(id)=>{const el=document.getElementById(id);if(el)el.click();return !!el};
+ document.querySelectorAll('[data-smart-action]').forEach(el=>el.addEventListener('click',()=>{
+  const action=el.dataset.smartAction;
+  if(action==='menu'){sheet.classList.contains('open')?close():open();return}
+  close();
+  if(action==='close')return;
+  if(action==='home'){invoke('homeNav');window.scrollTo({top:0,behavior:'smooth'})}
+  if(action==='categories'){invoke('homeNav');requestAnimationFrame(()=>setTimeout(()=>document.getElementById('categories')?.scrollIntoView({behavior:'smooth',block:'start'}),80))}
+  if(action==='tv')invoke('liveNav');
+  if(action==='search'){invoke('searchNav');setTimeout(()=>document.querySelector('.search-panel input')?.focus({preventScroll:true}),100)}
+  document.querySelectorAll('.smart-mobile-bar button').forEach(b=>b.classList.toggle('is-active',b.dataset.smartAction===action))
+ }));
+ shade.addEventListener('click',close);
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&sheet.classList.contains('open'))close()});
+ window.addEventListener('resize',()=>{if(window.innerWidth>900)close()});
+ document.getElementById('overlay')?.addEventListener('transitionend',()=>{if(document.getElementById('overlay')?.classList.contains('open'))close()});
+})();
+</script>
+
+<script id="smart-personal-features">
+(()=>{'use strict';
+const FAVORITES='angel_smart_favorites_v1',PROGRESS='angel_smart_progress_v1';
+const safeRead=(k,fallback)=>{try{return JSON.parse(localStorage.getItem(k))??fallback}catch{return fallback}};
+const safeWrite=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){console.warn('ANGEL SMART: локалното съхранение е недостъпно',e)}};
+const validId=id=>typeof id==='string'&&songs.some(s=>s.id===id);
+let favorites=new Set((safeRead(FAVORITES,[])||[]).filter(validId));
+let progress=safeRead(PROGRESS,{});
+if(!progress||typeof progress!=='object'||Array.isArray(progress))progress={};
+const main=document.getElementById('homeContent');
+if(!main)return;
+function section(id,title,desc){
+ const el=document.createElement('section');el.id=id;el.className='smart-personal';el.hidden=true;
+ const h=document.createElement('div');h.className='smart-personal-head';
+ const inner=document.createElement('div'),heading=document.createElement('h2');heading.textContent=title;
+ const subtitle=document.createElement('div');subtitle.className='smart-personal-sub';subtitle.textContent=desc;
+ inner.append(heading,subtitle);h.append(inner);
+ const rail=document.createElement('div');rail.className='rail';rail.setAttribute('aria-label',title);
+ el.append(h,rail);return el;
+}
+const resumeSection=section('smartContinue','▶ Продължи гледането','Продължи от мястото, на което спря');
+const favoritesSection=section('smartFavorites','♡ Моите любими','Твоите избрани музикални клипове');
+main.insertBefore(favoritesSection,main.querySelector('#categories'));
+main.insertBefore(resumeSection,favoritesSection);
+function videoIndex(id){return songs.findIndex(s=>s.id===id)}
+function heartSvg(){return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/></svg>'}
+function toggleFavorite(id){
+ if(favorites.has(id))favorites.delete(id);else favorites.add(id);
+ safeWrite(FAVORITES,[...favorites]);updateHearts();renderPersonal();
+}
+function decorate(card){
+ if(card.dataset.smartPersonalDecorated==='yes')return;
+ const i=Number(card.dataset.songIndex),song=songs[i];if(!song)return;
+ const cover=card.querySelector('.smart-cover');if(!cover)return;
+ card.dataset.smartPersonalDecorated='yes';
+ const heart=document.createElement('span');heart.className='smart-favorite-toggle';heart.setAttribute('role','button');heart.setAttribute('tabindex','0');heart.dataset.favoriteId=song.id;heart.innerHTML=heartSvg();
+ heart.addEventListener('click',e=>{e.stopPropagation();e.preventDefault();toggleFavorite(song.id)});
+ heart.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.stopPropagation();e.preventDefault();toggleFavorite(song.id)}});
+ cover.append(heart);
+}
+function updateHearts(){
+ document.querySelectorAll('.smart-favorite-toggle[data-favorite-id]').forEach(el=>{
+  const on=favorites.has(el.dataset.favoriteId);el.setAttribute('aria-pressed',String(on));
+  el.setAttribute('aria-label',(on?'Премахни от любими: ':'Добави в любими: ')+(songs.find(s=>s.id===el.dataset.favoriteId)?.title||''));
+ });
+ const b=document.getElementById('smartPlayerFavorite');
+ if(b&&typeof current!=='undefined'&&songs[current]){const on=favorites.has(songs[current].id);b.setAttribute('aria-pressed',String(on));b.textContent=on?'♥ В любими':'♡ Добави в любими'}
+}
+function makeCard(id,resume){
+ const i=videoIndex(id);if(i<0)return null;
+ const card=tile(i);
+ if(resume){
+  const item=progress[id],duration=Number(item?.duration)||0,seconds=Number(item?.seconds)||0;
+  const label=document.createElement('span');label.className='smart-resume-meta';
+  label.textContent='Продължи от '+Math.floor(seconds/60)+':'+String(Math.floor(seconds%60)).padStart(2,'0');
+  card.querySelector('.info')?.append(label);
+  if(duration>0){
+   const track=document.createElement('div');track.className='smart-progress-track';
+   const fill=document.createElement('div');fill.className='smart-progress-fill';fill.style.width=Math.min(100,100*seconds/duration)+'%';
+   track.append(fill);card.querySelector('.smart-cover')?.append(track);
+  }
+ }
+ return card;
+}
+let rendering=false;
+function renderPersonal(){
+ if(rendering)return;rendering=true;
+ try{
+  const favIds=[...favorites].filter(validId);
+  favoritesSection.hidden=!favIds.length;
+  favoritesSection.querySelector('.rail').replaceChildren(...favIds.map(id=>makeCard(id,false)).filter(Boolean));
+  const recent=Object.entries(progress).filter(([id,p])=>validId(id)&&Number(p?.seconds)>=5&&!p?.finished).sort((a,b)=>(b[1].updated||0)-(a[1].updated||0)).slice(0,12);
+  resumeSection.hidden=!recent.length;
+  resumeSection.querySelector('.rail').replaceChildren(...recent.map(([id])=>makeCard(id,true)).filter(Boolean));
+  updateHearts();
+ }finally{rendering=false}
+}
+const observer=new MutationObserver(records=>{
+ let added=false;
+ for(const record of records)for(const node of record.addedNodes){
+  if(node.nodeType!==1)continue;
+  if(node.matches?.('.tile[data-song-index]')){decorate(node);added=true}
+  node.querySelectorAll?.('.tile[data-song-index]').forEach(el=>{decorate(el);added=true});
+ }
+ if(added)updateHearts();
+});
+observer.observe(document.getElementById('rails')||document.body,{childList:true,subtree:true});
+document.querySelectorAll('.tile[data-song-index]').forEach(decorate);
+const top=document.querySelector('#overlay .player-top');
+if(top){
+ const b=document.createElement('button');b.id='smartPlayerFavorite';b.type='button';b.className='smart-player-favorite';b.textContent='♡ Добави в любими';
+ b.addEventListener('click',()=>{if(songs[current])toggleFavorite(songs[current].id)});
+ top.insertBefore(b,document.getElementById('closePlayer'));
+}
+let pendingResume=null,lastSave=0,lastSongId=null;
+function saveProgress(force=false){
+ if(!document.getElementById('overlay')?.classList.contains('open'))return;
+ if(!player||typeof player.getCurrentTime!=='function')return;
+ let seconds,duration,state;
+ try{seconds=player.getCurrentTime();duration=player.getDuration();state=player.getPlayerState()}catch{return}
+ if(!Number.isFinite(seconds)||seconds<0||!Number.isFinite(duration)||duration<=0)return;
+ if(!force&&(!window.YT||state!==YT.PlayerState.PLAYING||Date.now()-lastSave<5000))return;
+ const id=songs[current]?.id;if(!id)return;
+ const finished=duration-seconds<8||seconds/duration>=.97;
+ progress[id]={seconds:finished?0:Math.floor(seconds),duration:Math.floor(duration),updated:Date.now(),finished};
+ const entries=Object.entries(progress).sort((a,b)=>(b[1].updated||0)-(a[1].updated||0)).slice(0,60);
+ progress=Object.fromEntries(entries);safeWrite(PROGRESS,progress);lastSave=Date.now();
+}
+const originalLoadSong=loadSong;
+loadSong=function(i){
+ saveProgress(true);
+ const id=songs[i]?.id;
+ pendingResume=id&&progress[id]&&!progress[id].finished&&progress[id].seconds>=5?{id,seconds:progress[id].seconds}:null;
+ lastSongId=id;
+ const result=originalLoadSong.apply(this,arguments);
+ updateHearts();
+ return result;
+};
+const originalClose=closePlayer;
+closePlayer=function(){saveProgress(true);const result=originalClose.apply(this,arguments);renderPersonal();return result};
+document.getElementById('closePlayer').onclick=closePlayer;
+const originalState=onStateChange;
+onStateChange=function(e){
+ originalState.apply(this,arguments);
+ if(!window.YT)return;
+ if(e.data===YT.PlayerState.PLAYING&&pendingResume&&songs[current]?.id===pendingResume.id){
+  const target=pendingResume.seconds;pendingResume=null;
+  try{player.seekTo(target,true)}catch{}
+ }
+ if(e.data===YT.PlayerState.ENDED){
+  const id=songs[current]?.id;if(id&&progress[id]){progress[id].finished=true;progress[id].seconds=0;safeWrite(PROGRESS,progress);renderPersonal()}
+ }
+};
+setInterval(()=>saveProgress(false),3000);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)saveProgress(true)});
+window.addEventListener('pagehide',()=>saveProgress(true));
+renderPersonal();
+})();
+</script>
+</body></html>
