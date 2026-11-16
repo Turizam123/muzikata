@@ -446,6 +446,14 @@ header::before,header::after{content:none!important;display:none!important}
 }
 @media(prefers-reduced-motion:reduce){.brand strong #angelDeviceWord.angel-device-accent{animation:none!important}}
 </style>
+
+<style id="angel-mobile-player-swipe-style">
+/* Mobile touch devices only: edge swipe right to return to the catalogue. */
+#angelMobileBackEdge{display:none}
+@media (hover:none) and (pointer:coarse) and (max-width:900px){
+ #overlay.open #angelMobileBackEdge{display:block;position:absolute;left:0;top:0;bottom:0;width:28px;z-index:8;touch-action:none;background:transparent;overscroll-behavior:contain}
+}
+</style>
 </head><body>
 <header><a class="brand" href="https://angeluzunov.site/" aria-label="Основен сайт"><img src="https://angeluzunov.site/AU_favicon.png" alt="AU"><div><strong>ANGEL <span id="angelDeviceWord">SMART</span></strong><small>ОФИЦИАЛНА МУЗИКАЛНА ПЛАТФОРМА</small></div></a><nav class="nav" aria-label="Главно меню"><button id="homeNav" class="active">Начало</button><button id="liveNav">▶ TV канал</button><button id="searchNav">⌕ Търсене</button><a href="https://angeluzunov.site/angel-uzunov-songs-v4.html">Каталог</a><a href="https://angeluzunov.site/fan-zone.html">Фен зона</a></nav><span id="clock" class="clock"></span></header>
 <div id="searchPanel" class="search-panel"><label for="search">Търси песен</label><div><input id="search" type="search" autocomplete="off" placeholder="Въведи заглавие..."></div></div>
@@ -460,7 +468,7 @@ header::before,header::after{content:none!important;display:none!important}
  </section><section class="v2-section" id="featured"><div class="flow-stage" id="flowStage" aria-label="Избрани видеоклипове"></div><div class="flow-actions"><button id="flowPrev" aria-label="Предишен клип">❮</button><div id="flowCaption" class="flow-caption"></div><button id="flowNext" aria-label="Следващ клип">❯</button></div></section><section class="v2-section" id="categories"><div class="v2-head"><div><h2>Музикални категории</h2><div class="v2-sub">Избери категория, за да разгледаш видеоклиповете</div></div></div><div class="category-grid" id="categoryGrid"></div></section></div><div id="categoryView" class="category-view"><div class="category-backbar"><button class="back-categories" id="backCategories">← Всички категории</button><h2 id="categoryTitle"></h2><p id="categorySubtitle"></p></div><div id="rails"></div></div></main>
 <footer><span>© 2026 Ангел Узунов · ANGEL SMART</span><span>Официални видеоклипове чрез YouTube · Управление: ← ↑ ↓ → / Enter / Esc</span><a href="https://www.youtube.com/@angeluzunovuzi" target="_blank" rel="noopener">YouTube канал ↗</a></footer>
 <aside id="previewDock" class="preview-dock" aria-label="Автоматичен преглед без звук"><div class="preview-screen" id="previewScreen"><img id="previewPoster" alt="Преглед на клипа"></div><div class="preview-meta"><strong id="previewTitle"></strong><span>Без звук · OK за гледане</span></div></aside>
-<div id="overlay" class="player-overlay" tabindex="-1" role="dialog" aria-modal="true" aria-label="Видео плейър"><div class="player-top"><strong id="nowTitle"></strong><button id="closePlayer" aria-label="Затвори плейъра">✕ Затвори</button></div><div id="player"></div><div class="player-bottom"><button id="prev">⏮ Предишен</button><button id="toggle">⏯ Пауза / Пусни</button><button id="next">Следващ ⏭</button><button id="mode">TV канал: ИЗКЛ.</button><button id="fullscreen" aria-label="Цял екран">⛶ Цял екран</button><a id="youtubeLink" class="btn" href="#" target="_blank" rel="noopener">YouTube ↗</a></div><div class="hint">Esc / Back: назад · ← →: избор на бутон · Space: пауза · OK: потвърди</div></div>
+<div id="overlay" class="player-overlay" tabindex="-1" role="dialog" aria-modal="true" aria-label="Видео плейър"><div class="player-top"><strong id="nowTitle"></strong><button id="closePlayer" aria-label="Затвори плейъра">✕ Затвори</button></div><div id="player"></div><div id="angelMobileBackEdge" aria-hidden="true"></div><div class="player-bottom"><button id="prev">⏮ Предишен</button><button id="toggle">⏯ Пауза / Пусни</button><button id="next">Следващ ⏭</button><button id="mode">TV канал: ИЗКЛ.</button><button id="fullscreen" aria-label="Цял екран">⛶ Цял екран</button><a id="youtubeLink" class="btn" href="#" target="_blank" rel="noopener">YouTube ↗</a></div><div class="hint">Esc / Back: назад · ← →: избор на бутон · Space: пауза · OK: потвърди</div></div>
 <script>
 'use strict';
 let songs=[{"id": "FmUQEAQ6bFs", "title": "Елено, моме убаво", "category": "folk", "description": "Авторска песен, вдъхновена от красотата, мелодиката и духа на Пирин."}, {"id": "z6I9QPKcCcY", "title": "Росна зора", "category": "folk", "description": "Българска фолклорна песен с традиционно звучене и силен народен дух."}, {"id": "o_coeUCQS3A", "title": "Коле и Рада", "category": "folk", "description": "Авторска народна песен с фолклорен характер и жива българска мелодика."}, {"id": "ykNUxumIQRo", "title": "Край чешмата", "category": "folk", "description": "Фолклорна песен с атмосфера на стара българска история и традиционно звучене."}, {"id": "xq3fuN5D9D4", "title": "Искат ме мамо", "category": "folk", "description": "Авторска песен на фолклорна основа, вдъхновена от българската традиция и народната мелодика."}, {"id": "oKCgChl8jOo", "title": "При тебе, мале", "category": "folk", "description": "Емоционална народна песен с български фолклорен дух и силно послание към майката и родния дом."}, {"id": "Z2IDYGvE_1U", "title": "Богат със сърце", "category": "folk", "description": "Авторска песен на фолклорна основа за истинското богатство, човечността и доброто сърце."}, {"id": "DDewXOhINiY", "title": "Пей ми, сърце", "category": "folk", "description": "Авторска народна песен за любовта към музиката и българския дух."}, {"id": "QV5LAOTnNk4", "title": "Заспало моме край ниве", "category": "folk", "description": "Игрива народна песен с шопско звучене и хороводен ритъм."}, {"id": "b8JXU8dzJ-g", "title": "Женска хубост", "category": "folk", "description": "Народна песен, посветена на красотата и обаянието на жената."}, {"id": "mX4t0kCmKwo", "title": "Враня коня", "category": "folk", "description": "Жива народна песен, вдъхновена от българската традиция."}, {"id": "5KzXhN6djC0", "title": "Вечен стих е любовта", "category": "folk", "description": "Авторска песен на фолклорна основа, посветена на любовта."}, {"id": "lyGRz83xOSY", "title": "Не ме оставяй", "category": "popfolk", "description": "Емоционална песен за любовта, страха от раздялата и човека, който превръща света в дом."}, {"id": "mHK8o9dvHks", "title": "Кръв и огън", "category": "popfolk", "description": "Силна авторска песен за страстта, сблъсъка на чувства и любовта, която гори."}, {"id": "yOIzCb_R2hw", "title": "Сърцето ми гори", "category": "popfolk", "description": "Емоционална песен с драматично любовно послание и модерно балканско звучене."}, {"id": "Y8y7K8PmVwM", "title": "Ти си искрата", "category": "popfolk", "description": "Мелодична авторска песен за човека, който запалва надеждата и дава смисъл на чувствата."}, {"id": "MLCLaXaSneI", "title": "Без теб не мога", "category": "popfolk", "description": "Романтична песен за липсата, привързаността и любовта, без която светът остава празен."}, {"id": "TAdokYOzz38", "title": "Отключи ме", "category": "popfolk", "description": "Песен за любовта, която не се печели със сила и не се доказва само с красиви обещания."}, {"id": "IQeLGxa-s8o", "title": "Как да те забравя", "category": "popfolk", "description": "Емоционална поп-фолк песен за любовта, спомените и трудния път след раздялата."}, {"id": "BhDohIEGJjk", "title": "Остани", "category": "popfolk", "description": "Любовна поп-фолк песен за онзи миг, в който една дума може да спаси чувствата и да промени раздялата."}, {"id": "xOhCuQ7WSig", "title": "Подарявам те на него", "category": "popfolk", "description": "Балканска поп-фолк песен за раздялата и новото начало."}, {"id": "w5WpFiGzJDw", "title": "Още те искам", "category": "popfolk", "description": "Любовна поп-фолк балада за силните чувства след раздялата."}, {"id": "ruSQXz2GBo0", "title": "Очи мои", "category": "popfolk", "description": "Поп-фолк песен за любовта, която се чете в очите."}, {"id": "ahhszzBppWc", "title": "За теб бих живял", "category": "popfolk", "description": "Поп-фолк песен за отдадеността и силата на любовта."}, {"id": "H_Ry5JCuhsg", "title": "Светът е хубав, светът е чудесен", "category": "estrada", "description": "Песен по текст на Недялко Йорданов, с музика и аранжимент от Ангел Узунов."}, {"id": "gpLYgQaU1Mk", "title": "Песен за душата", "category": "estrada", "description": "„Песен за душата“ е музика, която не се слуша… а се усеща. Разказ за болката, любовта и надеждата."}, {"id": "0065BaHiJgY", "title": "Когато душите запеят", "category": "estrada", "description": "Авторска песен за силата на музиката, човешката близост и момента, в който душите говорят чрез песен."}, {"id": "03xM_dLyOwI", "title": "На стария риф", "category": "estrada", "description": "Романтична песен за първата любов, раздялата и обещанието да се върнеш там, където морето помни."}, {"id": "O69_z_k4VE0", "title": "Обич за обич", "category": "estrada", "description": "Естрадна песен за любовта и чувствата, които остават в сърцето."}, {"id": "xl7YveeK5cE", "title": "Огън и нежност", "category": "estrada", "description": "Емоционална естрадна песен за силата и нежността на любовта."}, {"id": "4ofz6UhIEZo", "title": "Шепот", "category": "estrada", "description": "Лирична песен за неизказаните чувства и спомените."}, {"id": "_xmUeCtje30", "title": "Камбана над Бояна", "category": "estrada", "description": "Естрадна песен, вдъхновена от Бояна, зората и звъна на камбаната."}, {"id": "bQqQAVKDZrQ", "title": "Ела", "category": "estrada", "description": "Мелодична естрадна песен за близостта и копнежа."}, {"id": "gOcfdcyFqs0", "title": "Бог ли ме наказа", "category": "estrada", "description": "Емоционална естрадна песен за болката и любовта."}, {"id": "zxYwyu0oaYE", "title": "Албум Луда любов 2026", "category": "other", "description": "Албум „Луда любов“ – 2026. Слушайте директно в страницата или отворете официалното видео в YouTube."}];
@@ -1088,6 +1096,35 @@ renderPersonal();
   var phone=!tablet&&/iPhone|iPod|Android.*Mobile|Windows Phone|Mobile/i.test(ua);
   if(tablet){word.textContent='TAB';word.classList.add('angel-device-accent','angel-device-tab')}
   else if(phone){word.textContent='APP';word.classList.add('angel-device-accent')}
+})();
+</script>
+
+<script id="angel-mobile-player-swipe-script">
+(function(){
+  'use strict';
+  const edge=document.getElementById('angelMobileBackEdge');
+  const overlay=document.getElementById('overlay');
+  if(!edge||!overlay)return;
+  const mobile=window.matchMedia('(hover: none) and (pointer: coarse) and (max-width: 900px)');
+  let start=null;
+  edge.addEventListener('touchstart',function(e){
+    if(!mobile.matches||!overlay.classList.contains('open')||e.touches.length!==1){start=null;return}
+    const t=e.touches[0];start={x:t.clientX,y:t.clientY};
+  },{passive:true});
+  edge.addEventListener('touchmove',function(e){
+    if(start&&e.cancelable)e.preventDefault();
+  },{passive:false});
+  edge.addEventListener('touchend',function(e){
+    if(!start||!mobile.matches||!overlay.classList.contains('open')){start=null;return}
+    const t=e.changedTouches[0],dx=t.clientX-start.x,dy=t.clientY-start.y;
+    start=null;
+    if(dx<65||Math.abs(dy)>Math.abs(dx)*0.65)return;
+    const scrollY=window.scrollY;
+    // Reuse the existing close routine: progress, player cleanup, focus and TV mode.
+    if(typeof closePlayer==='function')closePlayer();
+    requestAnimationFrame(function(){window.scrollTo({top:scrollY,behavior:'instant'})});
+  },{passive:true});
+  edge.addEventListener('touchcancel',function(){start=null},{passive:true});
 })();
 </script>
 </body></html>
