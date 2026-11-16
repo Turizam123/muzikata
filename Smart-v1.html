@@ -448,10 +448,11 @@ header::before,header::after{content:none!important;display:none!important}
 </style>
 
 <style id="angel-mobile-player-swipe-style">
-/* Mobile touch devices only: edge swipe right to return to the catalogue. */
+/* Mobile only: inward swipe LEFT, away from browser back-navigation edge. */
 #angelMobileBackEdge{display:none}
 @media (hover:none) and (pointer:coarse) and (max-width:900px){
- #overlay.open #angelMobileBackEdge{display:block;position:absolute;left:0;top:0;bottom:0;width:28px;z-index:8;touch-action:none;background:transparent;overscroll-behavior:contain}
+ #overlay.open #angelMobileBackEdge{display:flex;position:absolute;right:20px;top:38%;width:44px;height:100px;z-index:8;touch-action:none;overscroll-behavior:contain;align-items:center;justify-content:center;border-radius:24px;background:rgba(12,13,19,.40);border:1px solid rgba(216,182,106,.4);color:#f3d993;opacity:.7;user-select:none;-webkit-user-select:none}
+ #angelMobileBackEdge::after{content:'‹';font-size:38px;line-height:1}
 }
 </style>
 </head><body>
@@ -1101,30 +1102,27 @@ renderPersonal();
 
 <script id="angel-mobile-player-swipe-script">
 (function(){
-  'use strict';
-  const edge=document.getElementById('angelMobileBackEdge');
-  const overlay=document.getElementById('overlay');
-  if(!edge||!overlay)return;
-  const mobile=window.matchMedia('(hover: none) and (pointer: coarse) and (max-width: 900px)');
-  let start=null;
-  edge.addEventListener('touchstart',function(e){
-    if(!mobile.matches||!overlay.classList.contains('open')||e.touches.length!==1){start=null;return}
-    const t=e.touches[0];start={x:t.clientX,y:t.clientY};
-  },{passive:true});
-  edge.addEventListener('touchmove',function(e){
-    if(start&&e.cancelable)e.preventDefault();
-  },{passive:false});
-  edge.addEventListener('touchend',function(e){
-    if(!start||!mobile.matches||!overlay.classList.contains('open')){start=null;return}
-    const t=e.changedTouches[0],dx=t.clientX-start.x,dy=t.clientY-start.y;
-    start=null;
-    if(dx<65||Math.abs(dy)>Math.abs(dx)*0.65)return;
-    const scrollY=window.scrollY;
-    // Reuse the existing close routine: progress, player cleanup, focus and TV mode.
-    if(typeof closePlayer==='function')closePlayer();
-    requestAnimationFrame(function(){window.scrollTo({top:scrollY,behavior:'instant'})});
-  },{passive:true});
-  edge.addEventListener('touchcancel',function(){start=null},{passive:true});
+ 'use strict';
+ const handle=document.getElementById('angelMobileBackEdge');
+ const overlay=document.getElementById('overlay');
+ if(!handle||!overlay)return;
+ const mobile=window.matchMedia('(hover: none) and (pointer: coarse) and (max-width: 900px)');
+ let start=null;
+ handle.addEventListener('touchstart',function(e){
+   if(!mobile.matches||!overlay.classList.contains('open')||e.touches.length!==1){start=null;return}
+   const t=e.touches[0];start={x:t.clientX,y:t.clientY};
+ },{passive:true});
+ handle.addEventListener('touchmove',function(e){if(start&&e.cancelable)e.preventDefault()},{passive:false});
+ handle.addEventListener('touchend',function(e){
+   if(!start||!mobile.matches||!overlay.classList.contains('open')){start=null;return}
+   const t=e.changedTouches[0],dx=t.clientX-start.x,dy=t.clientY-start.y;
+   start=null;
+   if(dx>-55||Math.abs(dy)>Math.abs(dx)*0.65)return;
+   const scrollY=window.scrollY;
+   if(typeof closePlayer==='function')closePlayer();
+   requestAnimationFrame(function(){window.scrollTo({top:scrollY,behavior:'instant'})});
+ },{passive:true});
+ handle.addEventListener('touchcancel',function(){start=null},{passive:true});
 })();
 </script>
 </body></html>
