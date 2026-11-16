@@ -481,6 +481,31 @@ html.angel-ios-mobile #overlay.open #angelMobileBackEdge{
 }
 #angelMobileBackEdge::after{content:'‹';font-size:38px;line-height:1}
 </style>
+<style id="angel-mobile-transparent-back-control">
+/* Invisible gesture target, with only a discreet arrow visible. */
+@media (max-width:900px) and (pointer:coarse){
+ #overlay.open #angelMobileBackEdge{
+  background:transparent!important;border:0!important;box-shadow:none!important;
+  -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+  border-radius:0!important;width:56px!important;height:112px!important;
+  right:12px!important;top:38%!important;padding:0!important;
+ }
+ #overlay.open #angelMobileBackEdge::after{
+  color:rgba(243,217,147,.88)!important;font-size:34px!important;
+  text-shadow:0 2px 8px rgba(0,0,0,.85)!important;
+ }
+}
+html.angel-ios-mobile #overlay.open #angelMobileBackEdge{
+ background:transparent!important;border:0!important;box-shadow:none!important;
+ -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+ border-radius:0!important;width:56px!important;height:112px!important;
+ right:12px!important;top:38%!important;padding:0!important;
+}
+html.angel-ios-mobile #overlay.open #angelMobileBackEdge::after{
+ color:rgba(243,217,147,.88)!important;font-size:34px!important;
+ text-shadow:0 2px 8px rgba(0,0,0,.85)!important;
+}
+</style>
 </head><body>
 <header><a class="brand" href="https://angeluzunov.site/" aria-label="Основен сайт"><img src="https://angeluzunov.site/AU_favicon.png" alt="AU"><div><strong>ANGEL <span id="angelDeviceWord">SMART</span></strong><small>ОФИЦИАЛНА МУЗИКАЛНА ПЛАТФОРМА</small></div></a><nav class="nav" aria-label="Главно меню"><button id="homeNav" class="active">Начало</button><button id="liveNav">▶ TV канал</button><button id="searchNav">⌕ Търсене</button><a href="https://angeluzunov.site/angel-uzunov-songs-v4.html">Каталог</a><a href="https://angeluzunov.site/fan-zone.html">Фен зона</a></nav><span id="clock" class="clock"></span></header>
 <div id="searchPanel" class="search-panel"><label for="search">Търси песен</label><div><input id="search" type="search" autocomplete="off" placeholder="Въведи заглавие..."></div></div>
