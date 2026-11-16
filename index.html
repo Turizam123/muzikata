@@ -1517,6 +1517,29 @@
     .privacy-settings-link:hover{color:var(--gold-light)}
     @media(max-width:760px){.privacy-consent{left:10px;right:10px;bottom:10px}.privacy-consent-card{padding:18px;border-radius:18px}.privacy-consent-grid{grid-template-columns:1fr;gap:17px}.privacy-consent-actions{justify-content:stretch}.privacy-btn{flex:1 1 150px}}
 
+
+  /* ANGEL SMART PROMO — styles scoped to this section only */
+  #angel-smart-promo .asp-title{display:flex;flex-wrap:wrap;align-items:baseline;gap:.18em;margin-bottom:16px}
+  #angel-smart-promo .asp-rotator{display:inline-block;min-width:5.6ch;white-space:nowrap}
+  #angel-smart-promo .asp-word{display:inline-block;color:#f3d993;background:linear-gradient(110deg,#f3d993,#d8b66a,#fff0b8);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;transition:opacity .35s ease,transform .35s ease}
+  #angel-smart-promo .asp-word.asp-switch{opacity:0;transform:translateY(-10px)}
+  #angel-smart-promo .asp-word.asp-app{background-image:linear-gradient(110deg,#74caff,#8a9dff,#b9f1ff)}
+  #angel-smart-promo .asp-word.asp-tab{background-image:linear-gradient(110deg,#d3a1ff,#fa9fc9,#f4c2ff)}
+  #angel-smart-promo .asp-slogan{font-size:clamp(.95rem,2vw,1.15rem)}
+  #angel-smart-promo .asp-actions{margin-top:27px}
+  #angel-smart-promo .asp-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin-top:46px}
+  #angel-smart-promo .asp-card{position:relative;display:flex;align-items:flex-end;isolation:isolate;min-height:340px;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:#15141b;transition:transform .3s ease,border-color .3s ease}
+  #angel-smart-promo .asp-card:hover,#angel-smart-promo .asp-card:focus-visible{transform:translateY(-6px);border-color:rgba(216,182,106,.7);outline:none}
+  #angel-smart-promo .asp-photo{position:absolute;inset:0;z-index:-1;background-image:linear-gradient(to top,rgba(6,7,10,.96) 0%,rgba(6,7,10,.25) 72%),var(--asp-image);background-position:center;background-size:cover;transition:transform .5s ease}
+  #angel-smart-promo .asp-card:hover .asp-photo{transform:scale(1.05)}
+  #angel-smart-promo .asp-overlay{display:flex;flex-direction:column;gap:9px;padding:26px;width:100%}
+  #angel-smart-promo .asp-label{color:var(--gold-light);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;font-weight:800}
+  #angel-smart-promo .asp-name{font-family:"Cormorant Garamond",serif;font-size:clamp(1.65rem,2.6vw,2.25rem);line-height:1.05}
+  #angel-smart-promo .asp-hint{color:#e0d8ca;font-size:.73rem;font-weight:700}
+  #angel-smart-promo .asp-status{align-self:flex-start;border-radius:999px;background:rgba(12,12,16,.85);border:1px solid rgba(216,182,106,.65);color:#f3d993;font-size:.62rem;font-weight:800;letter-spacing:.05em;padding:6px 10px;margin-bottom:4px}
+  @media(max-width:900px){#angel-smart-promo .asp-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media(max-width:640px){#angel-smart-promo .asp-grid{grid-template-columns:1fr;gap:16px;margin-top:30px}#angel-smart-promo .asp-card{min-height:300px}#angel-smart-promo .asp-rotator{min-width:5.3ch}}
+  @media(prefers-reduced-motion:reduce){#angel-smart-promo .asp-word{transition:none}}
   </style>
 
   <script type="application/ld+json">
@@ -1655,6 +1678,31 @@
       </div>
     </div>
     </section>
+
+    <!-- ANGEL SMART PROMO: isolated new section; existing sections unchanged -->
+    <section class="section" id="angel-smart-promo" aria-labelledby="asp-title">
+      <div class="container">
+        <span class="eyebrow">Официална музикална платформа</span>
+        <h2 class="section-title asp-title" id="asp-title"><span>ANGEL</span> <span class="asp-rotator" aria-label="SMART, APP, TAB"><span class="asp-word">SMART</span></span></h2>
+        <p class="section-text asp-slogan"><em>Твоята музика. Твоят екран. Твоят свят.</em></p>
+        <div class="hero-actions asp-actions"><a class="btn btn-primary" href="https://angeluzunov.site/Smart-v1.html">Отвори ANGEL SMART <span aria-hidden="true">▶</span></a></div>
+        <div class="asp-grid" aria-label="Музикални категории в ANGEL SMART">
+          <a class="asp-card" href="https://angeluzunov.site/Smart-v1.html" data-asp-category="folk">
+            <span class="asp-photo" style="--asp-image:url('https://i.ytimg.com/vi/FmUQEAQ6bFs/hqdefault.jpg')"></span>
+            <span class="asp-overlay"><span class="asp-label">Народна музика</span><strong class="asp-name">Открий народните песни</strong><span class="asp-hint">Гледай в ANGEL SMART ↗</span></span>
+          </a>
+          <a class="asp-card" href="https://angeluzunov.site/Smart-v1.html" data-asp-category="pop">
+            <span class="asp-photo" style="--asp-image:url('https://i.ytimg.com/vi/lyGRz83xOSY/hqdefault.jpg')"></span>
+            <span class="asp-overlay"><span class="asp-label">Поп-фолк / Кафана</span><strong class="asp-name">Открий поп-фолк песните</strong><span class="asp-hint">Гледай в ANGEL SMART ↗</span></span>
+          </a>
+          <a class="asp-card" href="https://angeluzunov.site/Smart-v1.html" data-asp-category="estrada">
+            <span class="asp-photo" style="--asp-image:url('https://i.ytimg.com/vi/03xM_dLyOwI/hqdefault.jpg')"></span>
+            <span class="asp-overlay"><span class="asp-label">Естрада</span><strong class="asp-name">Открий естрадните песни</strong><span class="asp-hint">Гледай в ANGEL SMART ↗</span></span>
+          </a>
+        </div>
+      </div>
+    </section>
+    <!-- END ANGEL SMART PROMO -->
 
     <section class="section" id="music">
       <div class="container">
@@ -2396,5 +2444,122 @@
 
 <script src="angel-uzunov-ai-widget.js" defer></script>
  
+
+  <!-- ANGEL SMART PROMO: independent rotation + best-effort catalog discovery -->
+  <script>
+  (() => {
+    const root = document.getElementById('angel-smart-promo');
+    if (!root) return;
+    const word = root.querySelector('.asp-word');
+    const states = [{text:'SMART',css:''},{text:'APP',css:'asp-app'},{text:'TAB',css:'asp-tab'}];
+    let index = 0;
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setInterval(() => {
+        word.classList.add('asp-switch');
+        setTimeout(() => {
+          index = (index + 1) % states.length;
+          word.textContent = states[index].text;
+          word.className = 'asp-word ' + states[index].css + ' asp-switch';
+          requestAnimationFrame(() => requestAnimationFrame(() => word.classList.remove('asp-switch')));
+        }, 360);
+      }, 3000);
+    }
+    // Синхронизация само на трите рекламни карета с одобрения каталог на ANGEL SMART.
+    // Не променя видеоплейъра, останалите секции или начина на броене на гледания.
+    const categories = ['folk', 'popfolk', 'estrada'];
+    const cards = Object.fromEntries(categories.map(cat =>
+      [cat, root.querySelector('.asp-card[data-asp-category="' + cat + '"]')]
+    ));
+    const SUPABASE_URL = "https://cmiylzpmpwqbacjoqtkx.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNtaXlsenBtcHdxYmFjam9xdGt4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM5ODcwMDUsImV4cCI6MjA2OTU2MzAwNX0.FY2d1NSGTmw6SydxT_V0cKF7Kp2USbp91VdfO_eqZz8";
+    const PREMIERE_MS = 72 * 60 * 60 * 1000;
+    const NEW_MS = 5 * 24 * 60 * 60 * 1000;
+
+    function age(song) {
+      if (!song.addedAt) return null;
+      const time = Date.parse(song.addedAt);
+      return Number.isFinite(time) && Date.now() >= time ? Date.now() - time : null;
+    }
+    function cover(id) {
+      return 'https://i.ytimg.com/vi/' + id + '/hqdefault.jpg';
+    }
+    function setCard(cat, song, badge) {
+      const card = cards[cat];
+      if (!card || !song) return;
+      const photo = card.querySelector('.asp-photo');
+      const title = card.querySelector('.asp-name');
+      const hint = card.querySelector('.asp-hint');
+      const overlay = card.querySelector('.asp-overlay');
+      if (photo) photo.style.setProperty('--asp-image', 'url("' + cover(song.id) + '")');
+      if (title) title.textContent = song.title.split('|')[0].trim() || song.title;
+      if (hint) hint.textContent = 'Гледай в ANGEL SMART ↗';
+      const existing = overlay?.querySelector('.asp-status');
+      if (existing) existing.remove();
+      if (badge && overlay) {
+        const label = document.createElement('span');
+        label.className = 'asp-status';
+        label.textContent = badge;
+        overlay.prepend(label);
+      }
+      // Препратката остава към официалната платформа, без да променя нейния код.
+      card.setAttribute('aria-label', song.title + ' — отвори ANGEL SMART');
+    }
+    async function loadPromoVideos() {
+      try {
+        const response = await fetch('music-catalog.json', {cache:'no-store'});
+        if (!response.ok) throw new Error('Каталогът не е достъпен');
+        const json = await response.json();
+        if (!json || !Array.isArray(json.songs)) throw new Error('Невалиден каталог');
+        const valid = json.songs.filter(song =>
+          song && /^[a-zA-Z0-9_-]{11}$/.test(song.id || '') &&
+          typeof song.title === 'string' && categories.includes(song.category)
+        );
+        let counts = new Map();
+        let countsAvailable = false;
+        try {
+          const stats = await fetch(
+            SUPABASE_URL + '/rest/v1/angel_smart_plays?select=video_id,play_count',
+            {headers: {apikey:SUPABASE_ANON_KEY, Authorization:'Bearer ' + SUPABASE_ANON_KEY},
+              cache:'no-store'}
+          );
+          if (stats.ok) {
+            const rows = await stats.json();
+            if (Array.isArray(rows)) {
+              counts = new Map(rows.map(row => [row.video_id, Number(row.play_count) || 0]));
+              countsAvailable = true;
+            }
+          }
+        } catch (_) { /* Показваме каталога и без статистика. */ }
+        for (const cat of categories) {
+          const group = valid.filter(song => song.category === cat);
+          if (!group.length) continue;
+          const popularity = song => counts.get(song.id) || 0;
+          const leader = countsAvailable
+            ? [...group].sort((a,b) => popularity(b)-popularity(a) ||
+                group.indexOf(a)-group.indexOf(b))[0]?.id
+            : null;
+          // Същият приоритет като ANGEL SMART: нови записи, после активност.
+          group.sort((a,b) => {
+            const freshA = age(a) !== null && age(a) < NEW_MS;
+            const freshB = age(b) !== null && age(b) < NEW_MS;
+            if (freshA !== freshB) return freshA ? -1 : 1;
+            if (freshA && freshB) return Date.parse(b.addedAt)-Date.parse(a.addedAt);
+            return popularity(b)-popularity(a);
+          });
+          const selected = group[0];
+          const elapsed = age(selected);
+          const badge = elapsed !== null && elapsed < PREMIERE_MS ? 'ПРЕМИЕРА'
+            : elapsed !== null && elapsed < NEW_MS ? 'НОВО ВИДЕО'
+            : selected.id === leader ? 'ТОП ВИДЕО' : null;
+          setCard(cat, selected, badge);
+        }
+      } catch (error) {
+        // При липса на мрежа запазваме първоначалните карета и работещите връзки.
+        console.warn('[ANGEL SMART promo] Каталогът не се зареди:', error);
+      }
+    }
+    loadPromoVideos();
+  })();
+  </script>
 </body>
 </html>
