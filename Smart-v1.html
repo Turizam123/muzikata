@@ -590,8 +590,9 @@ function buildCategories(){const grid=$('categoryGrid');grid.replaceChildren();f
  const inner=element('div','cat-inner');inner.append(element('strong','',label),element('small','',count+' '+(count===1?'видеозапис':'видеозаписа')+'  →'));
  b.append(inner);b.onclick=()=>openCategory(cat);grid.append(b);
  }smartUpdateBadges();}
-function openCategory(cat){activeCategory=cat;pauseFlow();$('homeContent').classList.add('hidden');$('hero').style.display='none';$('categoryView').classList.add('open');$('categoryTitle').textContent=labels[cat];$('categorySubtitle').textContent=songs.filter(s=>s.category===cat).length+' видеозаписа · Избери клип за гледане';draw('',cat);window.scrollTo(0,0);focusTV($('backCategories'))}
-function closeCategory(){if(!activeCategory)return;const cat=activeCategory;activeCategory=null;$('categoryView').classList.remove('open');$('homeContent').classList.remove('hidden');$('hero').style.display='';window.scrollTo(0,0);focusTV(document.querySelector(`[data-category="${cat}"]`));startFlow()}
+let categoryReturnScrollY=0;
+function openCategory(cat){categoryReturnScrollY=window.scrollY;activeCategory=cat;pauseFlow();$('homeContent').classList.add('hidden');$('hero').style.display='none';$('categoryView').classList.add('open');$('categoryTitle').textContent=labels[cat];$('categorySubtitle').textContent=songs.filter(s=>s.category===cat).length+' видеозаписа · Избери клип за гледане';draw('',cat);focusTV($('backCategories'));window.scrollTo({top:0,behavior:'instant'})}
+function closeCategory(){if(!activeCategory)return;const cat=activeCategory;activeCategory=null;$('categoryView').classList.remove('open');$('homeContent').classList.remove('hidden');$('hero').style.display='';focusTV(document.querySelector(`[data-category="${cat}"]`));window.scrollTo({top:categoryReturnScrollY,behavior:'instant'});startFlow()}
 $('backCategories').onclick=()=>{if(activeCategory)closeCategory();else{$('categoryView').classList.remove('open');$('homeContent').classList.remove('hidden');$('hero').style.display='';$('searchPanel').classList.remove('show');$('search').value='';window.scrollTo(0,0);focusTV($('heroPlay'))}};
 // Touch carousel: swipe without accidentally opening a video; resume auto-rotation after interaction.
 let flowTouchStart=null,flowTouchMoved=false,flowResumeTimer=null;
@@ -1031,8 +1032,18 @@ renderPersonal();
   const rank=id=>{const n=preferred.indexOf(id);return n<0?preferred.length:n};
   const sorted=list.sort((a,b)=>rank(a.id)-rank(b.id)||a.index-b.index);
   // The spotlight is always tied to the actual catalogue entry and its YouTube ID.
-  const featuredId='QV5LAOTnNk4';
-  const main=sorted.find(s=>s.id===featuredId)||sorted[0];if(!main)return;
+  // Newest published video gets the spotlight for five days; afterwards
+  // choose a different catalogue entry each UTC day, without repeats in a cycle.
+  const now=Date.now();
+  const newVideos=sorted.filter(s=>s.category!=='other'&&s.addedAt&&Number.isFinite(Date.parse(s.addedAt))&&Date.parse(s.addedAt)<=now&&now-Date.parse(s.addedAt)<SMART_PROMOTION_MS);
+  newVideos.sort((a,b)=>Date.parse(b.addedAt)-Date.parse(a.addedAt)||a.id.localeCompare(b.id));
+  const day=Math.floor(now/86400000);
+  const cycle=sorted.filter(s=>s.category!=='other').slice().sort((a,b)=>a.id.localeCompare(b.id));
+  // Deterministic seeded shuffle: all visitors see the same daily selection.
+  let seed=2166136261;
+  for(const ch of cat){seed=Math.imul(seed^ch.charCodeAt(0),16777619)>>>0}
+  for(let i=cycle.length-1;i>0;i--){seed=(Math.imul(seed,1664525)+1013904223)>>>0;const j=seed%(i+1);[cycle[i],cycle[j]]=[cycle[j],cycle[i]]}
+  const main=newVideos[0]||cycle[day%cycle.length]||sorted[0];if(!main)return;
   spotlight.replaceChildren();
   const image=document.createElement('img');image.className='music-spotlight-art';image.src=thumb(main.id);image.alt='';
   const content=document.createElement('div');content.className='music-spotlight-content';
@@ -1062,6 +1073,8 @@ renderPersonal();
  let activeFilter='all';
  filters.forEach(f=>f.addEventListener('click',()=>{activeFilter=f.dataset.musicFilter;render(activeFilter)}));
  window.addEventListener('angelSmartCatalogueUpdated',()=>render(activeFilter));
+ let lastSpotlightDay=Math.floor(Date.now()/86400000);
+ setInterval(()=>{const day=Math.floor(Date.now()/86400000);if(day!==lastSpotlightDay){lastSpotlightDay=day;render(activeFilter)}},60000);
  render('all');
 })();
 </script>
