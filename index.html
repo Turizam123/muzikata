@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- SEO -->
-  <title>Ангел Узунов | Официален сайт – Авторска музика, Поп-Фолк, Фолклор и Естрада</title>
-  <meta name="description" content="Официалният сайт на Ангел Узунов – автор на музика и текстове. Поп-фолк, български фолклор и естрадна музика. Слушайте новите песни и гледайте видеоклипове.">
-  <meta name="keywords" content="Ангел Узунов, Angel Uzunov, авторска музика, авторски песни, поп-фолк, български фолклор, народни песни, естрада, нови български песни, официален сайт">
+  <title>Ангел Узунов | Авторска музика, фолклор и ANGEL SMART</title>
+  <meta name="description" content="Официален сайт на Ангел Узунов. Авторски песни, български фолклор, поп-фолк и естрада. Гледайте музикални видеоклипове в ANGEL SMART.">
+  <meta name="keywords" content="Ангел Узунов, Angel Uzunov, авторска музика, авторски песни, поп-фолк, български фолклор, народни песни, естрада, нови български песни, официален сайт, ANGEL SMART">
   <meta name="author" content="Ангел Узунов">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <link rel="canonical" href="https://angeluzunov.site/">
@@ -67,7 +67,7 @@
       "@id": "https://angeluzunov.site/#webpage",
       "url": "https://angeluzunov.site/",
       "name": "Ангел Узунов | Официален сайт",
-      "description": "Официален сайт на Ангел Узунов – авторска музика, поп-фолк, български фолклор и естрада.",
+      "description": "Официален сайт на Ангел Узунов – авторска музика, поп-фолк, български фолклор, естрада и видеоклипове в ANGEL SMART.",
       "isPartOf": {
         "@id": "https://angeluzunov.site/#website"
       },
@@ -78,6 +78,11 @@
         "@type": "ImageObject",
         "url": "https://angeluzunov.site/Angel_Uzunov_Deezer_1200x1200.png"
       },
+      "hasPart": {
+        "@type": "WebPage",
+        "name": "ANGEL SMART – официална музикална платформа",
+        "url": "https://angeluzunov.site/Smart-v1.html"
+      },
       "inLanguage": "bg-BG"
     }
   ]
@@ -87,7 +92,7 @@
   <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Ангел Узунов | Официален сайт">
-  <meta property="og:description" content="Авторска музика, поп-фолк, български фолклор и естрада. Открийте песните и творчеството на Ангел Узунов.">
+  <meta property="og:description" content="Авторски песни, български фолклор, поп-фолк и естрада. Открийте видеоклипове в ANGEL SMART – музикалната платформа на Ангел Узунов.">
   <meta property="og:url" content="https://angeluzunov.site/">
   <meta property="og:site_name" content="Ангел Узунов">
   <meta property="og:locale" content="bg_BG">
@@ -99,7 +104,7 @@
   <!-- Twitter / X -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Ангел Узунов | Официален сайт">
-  <meta name="twitter:description" content="Авторска музика, поп-фолк, български фолклор и естрада.">
+  <meta name="twitter:description" content="Авторска музика, поп-фолк, български фолклор, естрада и ANGEL SMART.">
   <meta name="twitter:image" content="https://angeluzunov.site/Angel_Uzunov_Deezer_1200x1200.png">
   <meta name="twitter:image:alt" content="Ангел Узунов – официален артистичен сайт">
 
@@ -1540,6 +1545,13 @@
   @media(max-width:900px){#angel-smart-promo .asp-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
   @media(max-width:640px){#angel-smart-promo .asp-grid{grid-template-columns:1fr;gap:16px;margin-top:30px}#angel-smart-promo .asp-card{min-height:300px}#angel-smart-promo .asp-rotator{min-width:5.3ch}}
   @media(prefers-reduced-motion:reduce){#angel-smart-promo .asp-word{transition:none}}
+  /* ANGEL SMART navigation — same typography and spacing as other links */
+  .nav-links .asp-nav-word{display:inline-block;background:linear-gradient(110deg,#f3d993,#d8b66a,#fff0b8);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;transition:opacity .35s ease,transform .35s ease}
+  .nav-links .asp-nav-word.asp-app{background-image:linear-gradient(110deg,#74caff,#8a9dff,#b9f1ff)}
+  .nav-links .asp-nav-word.asp-tab{background-image:linear-gradient(110deg,#d3a1ff,#fa9fc9,#f4c2ff)}
+  .nav-links .asp-nav-word.asp-switch{opacity:0;transform:translateY(-5px)}
+  #angel-smart-promo{scroll-margin-top:82px}
+  @media(prefers-reduced-motion:reduce){.nav-links .asp-nav-word{transition:none}}
   </style>
 
   <script type="application/ld+json">
@@ -1578,6 +1590,7 @@
 
       <ul class="nav-links" id="navLinks">
         <li><a href="#home">Начало</a></li>
+        <li><a href="#angel-smart-promo">ANGEL <span class="asp-nav-word">SMART</span></a></li>
         <li><a href="#music">Музика</a></li>
         <li><a href="#about">За мен</a></li>
         <li><a href="#video">Видео</a></li>
@@ -2451,16 +2464,25 @@
     const root = document.getElementById('angel-smart-promo');
     if (!root) return;
     const word = root.querySelector('.asp-word');
+    const navWord = document.querySelector('.nav-links .asp-nav-word');
     const states = [{text:'SMART',css:''},{text:'APP',css:'asp-app'},{text:'TAB',css:'asp-tab'}];
     let index = 0;
     if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       setInterval(() => {
         word.classList.add('asp-switch');
+        if (navWord) navWord.classList.add('asp-switch');
         setTimeout(() => {
           index = (index + 1) % states.length;
           word.textContent = states[index].text;
           word.className = 'asp-word ' + states[index].css + ' asp-switch';
-          requestAnimationFrame(() => requestAnimationFrame(() => word.classList.remove('asp-switch')));
+          if (navWord) {
+            navWord.textContent = states[index].text;
+            navWord.className = 'asp-nav-word ' + states[index].css + ' asp-switch';
+          }
+          requestAnimationFrame(() => requestAnimationFrame(() => {
+            word.classList.remove('asp-switch');
+            if (navWord) navWord.classList.remove('asp-switch');
+          })));
         }, 360);
       }, 3000);
     }
