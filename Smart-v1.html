@@ -506,6 +506,52 @@ html.angel-ios-mobile #overlay.open #angelMobileBackEdge::after{
  text-shadow:0 2px 8px rgba(0,0,0,.85)!important;
 }
 </style>
+
+<style id="angel-featured-overlap-mobile-only">
+/* Featured carousel presentation only. No changes to player, catalogue or navigation. */
+#featured .flow-card span{display:none!important}
+#featured .flow-actions{display:none!important}
+@media (max-width:760px) and (pointer:coarse), (max-width:600px){
+  /* Keep the artist photo in place, and blend its bottom into the carousel. */
+  #homeContent #mobilePortraitBanner{position:relative!important;isolation:isolate;margin-bottom:0!important}
+  #homeContent #mobilePortraitBanner::after{
+    content:"";position:absolute;pointer-events:none;inset:auto 0 0;height:47%;
+    background:linear-gradient(to bottom,transparent 0%,rgba(8,9,13,.38) 46%,#08090d 100%);
+  }
+  /* Raise the complete 3D group into the lower part of the portrait. */
+  #homeContent #featured{
+    position:relative!important;z-index:2!important;order:1!important;
+    margin:-58px 0 0!important;padding:0 10px!important;
+    overflow:visible!important;
+  }
+  #homeContent #featured .flow-stage{
+    min-height:clamp(170px,43vw,235px)!important;
+    overflow:visible!important;
+  }
+  /* The next section follows the 3D cards without the former empty gap. */
+  #homeContent #musicMobileHome{padding-top:0!important}
+}
+</style>
+<style id="angel-featured-adaptive-desktop-overlap">
+/* Desktop and Smart TV only: responsive overlap with the artist hero.
+   The previously approved mobile layout is intentionally untouched. */
+@media (min-width:761px){
+  #homeContent{position:relative;isolation:isolate}
+  #homeContent #featured{
+    position:relative;z-index:1;
+    margin-top:calc(-1 * clamp(48px,5.2vw,112px))!important;
+    margin-bottom:clamp(12px,1.7vw,32px)!important;
+    overflow:visible!important;
+  }
+  #homeContent #featured::before{
+    content:"";position:absolute;z-index:-1;pointer-events:none;
+    left:0;right:0;top:0;
+    height:clamp(110px,12vw,230px);
+    background:linear-gradient(to bottom,rgba(8,9,13,0) 0%,rgba(8,9,13,.46) 45%,#08090d 100%);
+  }
+  #homeContent #featured .flow-stage{overflow:visible!important}
+}
+</style>
 </head><body>
 <header><a class="brand" href="https://angeluzunov.site/" aria-label="Основен сайт"><img src="https://angeluzunov.site/AU_favicon.png" alt="AU"><div><strong>ANGEL <span id="angelDeviceWord">SMART</span></strong><small>ОФИЦИАЛНА МУЗИКАЛНА ПЛАТФОРМА</small></div></a><nav class="nav" aria-label="Главно меню"><button id="homeNav" class="active">Начало</button><button id="liveNav">▶ TV канал</button><button id="searchNav">⌕ Търсене</button><a href="https://angeluzunov.site/angel-uzunov-songs-v4.html">Каталог</a><a href="https://angeluzunov.site/fan-zone.html">Фен зона</a></nav><span id="clock" class="clock"></span></header>
 <div id="searchPanel" class="search-panel"><label for="search">Търси песен</label><div><input id="search" type="search" autocomplete="off" placeholder="Въведи заглавие..."></div></div>
