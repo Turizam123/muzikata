@@ -127,31 +127,40 @@ next.songs = next.songs.map(song => {
   };
 });
 
-// Нови видеоклипове за автоматично Push известяване.
-// Записваме обработените ID преди изпращането, за да не изпращаме
-// повторно при рестартиране на workflow. При временен неуспех
-// е нужна ръчна проверка/повторно изпращане.
+// Регистър: pending -> sent само след потвърден отговор от Supabase.
+// Съществуващите клипове са базова линия при първоначално включване.
 const ledgerPath = 'push-notified-ids.json';
-const existingLedger = fs.existsSync(ledgerPath)
+const ledger = fs.existsSync(ledgerPath)
   ? JSON.parse(fs.readFileSync(ledgerPath, 'utf8'))
-  : { ids: [] };
-if (!Array.isArray(existingLedger.ids) ||
-    !existingLedger.ids.every(id => typeof id === 'string')) {
+  : { version: 2, sent: [], pending: [] };
+
+// Миграция от първоначалния формат { ids: [...] }.
+// Старите ID са маркирани като вече обработени, за да не се изпращат
+// масово стари известия при преминаване към новата версия.
+if (Array.isArray(ledger.ids) && !ledger.sent && !ledger.pending) {
+  ledger.sent = ledger.ids;
+  ledger.pending = [];
+  delete ledger.ids;
+}
+if (!Array.isArray(ledger.sent) || !Array.isArray(ledger.pending) ||
+    !ledger.sent.every(id => typeof id === 'string') ||
+    !ledger.pending.every(v => v && typeof v.id === 'string' &&
+      /^[\w-]{11}$/.test(v.id) && typeof v.title === 'string')) {
   throw new Error('Невалиден регистър push-notified-ids.json');
 }
-const seen = new Set(existingLedger.ids);
-// При първо включване всички досегашни видеа са базова линия.
-for (const song of old.songs) seen.add(song.id);
-const newVideos = next.songs
-  .filter(song => !previousSongs.has(song.id) && !seen.has(song.id))
-  .map(song => ({ id: song.id, title: song.title }));
-for (const video of newVideos) seen.add(video.id);
-fs.writeFileSync(ledgerPath,
-  JSON.stringify({ ids: [...seen].sort() }, null, 2) + '\n', 'utf8');
-fs.mkdirSync('preview', { recursive: true });
-fs.writeFileSync('preview/new-videos-for-push.json',
-  JSON.stringify(newVideos, null, 2) + '\n', 'utf8');
-console.log('Нови Push известия за изпращане: ' + newVideos.length);
+const sent = new Set(ledger.sent);
+for (const song of old.songs) {
+  if (!ledger.pending.some(v => v.id === song.id)) sent.add(song.id);
+}
+const pending = new Map(ledger.pending.map(v => [v.id, v]));
+for (const song of next.songs) {
+  if (!previousSongs.has(song.id) && !sent.has(song.id) && !pending.has(song.id)) {
+    pending.set(song.id, { id: song.id, title: song.title });
+  }
+}
+const state = { version: 2, sent: [...sent].sort(), pending: [...pending.values()] };
+fs.writeFileSync(ledgerPath, JSON.stringify(state, null, 2) + '\n', 'utf8');
+console.log('Push известия в изчакване: ' + state.pending.length);
 
 // Записване на окончателния каталог
 fs.writeFileSync(
