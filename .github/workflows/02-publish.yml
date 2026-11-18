@@ -63,6 +63,23 @@ jobs:
           fi
 
       - name: Изпрати Push само за новите клипове
+        id: push
+        continue-on-error: true
         env:
           PUSH_ADMIN_SECRET: ${{ secrets.PUSH_ADMIN_SECRET }}
         run: node scripts/send-new-video-push.mjs
+
+      - name: Запиши резултата от Push известията
+        if: always() && steps.push.outcome != 'skipped'
+        run: |
+          git add push-notified-ids.json
+          if ! git diff --cached --quiet; then
+            git commit -m "ANGEL SMART: актуализирай Push регистъра"
+            git push
+          fi
+
+      - name: Провери резултата от Push
+        if: steps.push.outcome == 'failure'
+        run: |
+          echo "Push изпращането има грешки. Провери логовете; pending записите са запазени."
+          exit 1
