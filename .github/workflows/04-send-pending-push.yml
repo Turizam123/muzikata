@@ -1,0 +1,57 @@
+name: "04 — Изпрати чакащи Push известия (ръчно)"
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: angel-smart-publish
+  cancel-in-progress: false
+
+jobs:
+  send-pending:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Изтегли файловете на проекта
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Настрой Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Провери регистъра и скрипта
+        run: |
+          test -f push-notified-ids.json || { echo 'Липсва push-notified-ids.json'; exit 1; }
+          test -f scripts/send-new-video-push.mjs || { echo 'Липсва скриптът за Push'; exit 1; }
+          node --check scripts/send-new-video-push.mjs
+
+      - name: Изпрати само чакащите Push известия
+        id: push
+        continue-on-error: true
+        env:
+          PUSH_ADMIN_SECRET: ${{ secrets.PUSH_ADMIN_SECRET }}
+        run: node scripts/send-new-video-push.mjs
+
+      - name: Запиши резултата в регистъра
+        if: always() && steps.push.outcome != 'skipped'
+        run: |
+          git config user.name "angel-smart-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add push-notified-ids.json
+          if git diff --cached --quiet; then
+            echo "Няма промени в регистъра."
+          else
+            git commit -m "ANGEL SMART: резултат от ръчно Push изпращане"
+            git push
+          fi
+
+      - name: Провери резултата
+        if: steps.push.outcome == 'failure'
+        run: |
+          echo "Има неуспешни Push изпращания. Провери логовете и pending записите."
+          exit 1
