@@ -1,0 +1,19 @@
+{
+  "name": "ANGEL SMART",
+  "short_name": "ANGEL SMART",
+  "description": "Официална музикална платформа на Ангел Узунов",
+  "lang": "bg",
+  "start_url": "/Smart-v1.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#08090d",
+  "theme_color": "#08090d",
+  "icons": [
+    {
+      "src": "/AU_favicon.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
