@@ -127,6 +127,32 @@ next.songs = next.songs.map(song => {
   };
 });
 
+// Нови видеоклипове за автоматично Push известяване.
+// Записваме обработените ID преди изпращането, за да не изпращаме
+// повторно при рестартиране на workflow. При временен неуспех
+// е нужна ръчна проверка/повторно изпращане.
+const ledgerPath = 'push-notified-ids.json';
+const existingLedger = fs.existsSync(ledgerPath)
+  ? JSON.parse(fs.readFileSync(ledgerPath, 'utf8'))
+  : { ids: [] };
+if (!Array.isArray(existingLedger.ids) ||
+    !existingLedger.ids.every(id => typeof id === 'string')) {
+  throw new Error('Невалиден регистър push-notified-ids.json');
+}
+const seen = new Set(existingLedger.ids);
+// При първо включване всички досегашни видеа са базова линия.
+for (const song of old.songs) seen.add(song.id);
+const newVideos = next.songs
+  .filter(song => !previousSongs.has(song.id) && !seen.has(song.id))
+  .map(song => ({ id: song.id, title: song.title }));
+for (const video of newVideos) seen.add(video.id);
+fs.writeFileSync(ledgerPath,
+  JSON.stringify({ ids: [...seen].sort() }, null, 2) + '\n', 'utf8');
+fs.mkdirSync('preview', { recursive: true });
+fs.writeFileSync('preview/new-videos-for-push.json',
+  JSON.stringify(newVideos, null, 2) + '\n', 'utf8');
+console.log('Нови Push известия за изпращане: ' + newVideos.length);
+
 // Записване на окончателния каталог
 fs.writeFileSync(
   'music-catalog.json',
