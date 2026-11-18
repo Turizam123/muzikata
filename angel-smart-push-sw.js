@@ -1,30 +1,7 @@
-
 /* ANGEL SMART — Push Service Worker
-   Diagnostic notification click handling
-   No caching. No fetch interception.
+   Push notifications and reliable notification click handling.
+   No fetch interception. No caching.
 */
-
-const APP_URL = '/Smart-v1.html';
-const DEBUG_CACHE = 'angel-smart-push-debug-v1';
-
-async function debugLog(message) {
-  try {
-    const cache = await caches.open(DEBUG_CACHE);
-    await cache.put(
-      '/push-debug-last',
-      new Response(JSON.stringify({
-        message,
-        time: new Date().toISOString()
-      }), {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-    );
-  } catch (error) {
-    console.error('Push debug:', error);
-  }
-}
 
 self.addEventListener('push', event => {
   if (!event.data) return;
@@ -48,11 +25,11 @@ self.addEventListener('push', event => {
         ? data.body.slice(0, 240)
         : 'Нов видеоклип в ANGEL SMART';
 
-    let target = APP_URL;
+    let target = '/Smart-v1.html';
 
     try {
       const url = new URL(
-        data.url || APP_URL,
+        data.url || target,
         self.location.origin
       );
 
@@ -61,8 +38,6 @@ self.addEventListener('push', event => {
       }
     } catch (_) {}
 
-    await debugLog('Push received');
-
     await self.registration.showNotification(title, {
       body,
       icon: '/AU_favicon.png',
@@ -70,76 +45,62 @@ self.addEventListener('push', event => {
       tag: typeof data.tag === 'string'
         ? data.tag.slice(0, 100)
         : 'angel-smart-new-video',
-      data: { url: target }
+      data: {
+        url: target
+      }
     });
   })());
 });
+
+
+/* Open ANGEL SMART when notification is clicked */
 
 self.addEventListener('notificationclick', event => {
   event.notification.close();
 
   event.waitUntil((async () => {
-    await debugLog('Notification clicked');
-
     let target;
 
     try {
       const requested = new URL(
-        event.notification.data?.url || APP_URL,
+        event.notification.data?.url || '/Smart-v1.html',
         self.location.origin
       );
 
       target = requested.origin === self.location.origin
         ? requested.href
-        : new URL(APP_URL, self.location.origin).href;
+        : new URL('/Smart-v1.html', self.location.origin).href;
     } catch (_) {
-      target = new URL(APP_URL, self.location.origin).href;
+      target = new URL(
+        '/Smart-v1.html',
+        self.location.origin
+      ).href;
     }
 
-    try {
-      const opened = await clients.openWindow(target);
+    const windowClients = await clients.matchAll({
+      type: 'window',
+      includeUncontrolled: true
+    });
 
-      if (opened) {
-        await debugLog('Window opened successfully');
-        return;
-      }
-
-      await debugLog('openWindow returned null');
-    } catch (error) {
-      await debugLog(
-        'openWindow error: ' + String(error)
-      );
-    }
-
-    try {
-      const windows = await clients.matchAll({
-        type: 'window',
-        includeUncontrolled: true
-      });
-
-      for (const client of windows) {
+    for (const client of windowClients) {
+      try {
         if (new URL(client.url).origin !== self.location.origin) {
           continue;
         }
 
-        try {
-          if (client.url !== target) {
-            await client.navigate(target);
-          }
-
-          await client.focus();
-          await debugLog('Existing window focused');
-          return;
-        } catch (_) {
-          // Try another client.
+        if (new URL(client.url).href !== target) {
+          await client.navigate(target);
         }
-      }
 
-      await debugLog('No window could be opened');
-    } catch (error) {
-      await debugLog(
-        'Client handling error: ' + String(error)
-      );
+        await client.focus();
+        return;
+      } catch (error) {
+        // Try another window or open a new one.
+      }
+    }
+
+    if (clients.openWindow) {
+      await clients.openWindow(target);
     }
   })());
 });
