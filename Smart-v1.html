@@ -1301,4 +1301,49 @@ renderPersonal();
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh()});
 })();
 </script>
+
+<!-- ANGEL SMART: temporary local notification diagnostic; no server requests. -->
+<style id="angel-push-diagnostic-style">
+#angelPushDiagnostic{display:none;position:fixed;right:14px;bottom:calc(88px + env(safe-area-inset-bottom,0px));z-index:95;max-width:min(260px,calc(100vw - 28px));border:1px solid #d8b66a;background:#15161f;color:#f3d993;border-radius:13px;padding:12px 16px;font-size:13px;font-weight:700;box-shadow:0 8px 26px #000a}
+#angelPushDiagnostic:disabled{opacity:.65}
+@media(min-width:761px){#angelPushDiagnostic{bottom:24px}}
+</style>
+<button id="angelPushDiagnostic" type="button" aria-label="Провери локалните известия">🔔 Тест на известие</button>
+<script id="angel-push-diagnostic-script">
+(()=>{'use strict';
+ const btn=document.getElementById('angelPushDiagnostic');
+ if(!btn)return;
+ const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+ const mobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+ if(!standalone||!mobile||!('serviceWorker' in navigator)||!('Notification' in window))return;
+ btn.style.display='block';
+ btn.addEventListener('click',async()=>{
+   if(btn.disabled)return;
+   btn.disabled=true;
+   const old=btn.textContent;
+   try{
+     if(Notification.permission!=='granted')throw new Error('Известията не са разрешени за приложението.');
+     const registrations=await navigator.serviceWorker.getRegistrations();
+     const registration=registrations.find(r=>r.active&&new URL(r.active.scriptURL).pathname==='/angel-smart-push-sw.js');
+     if(!registration)throw new Error('Няма активен ANGEL SMART Service Worker.');
+     const subscription=await registration.pushManager.getSubscription();
+     if(!subscription)throw new Error('Няма активен Push абонамент на това устройство.');
+     await registration.showNotification('ANGEL SMART · Локален тест',{
+       body:'Това известие е създадено директно на телефона, без Supabase.',
+       icon:'/AU_favicon.png',badge:'/AU_favicon.png',
+       tag:'angel-smart-local-diagnostic-'+Date.now(),
+       data:{url:'/Smart-v1.html'}
+     });
+     btn.textContent='✓ Тестът е изпълнен';
+     alert('Локалното известие е заявено. Провери центъра за известия на телефона.');
+   }catch(error){
+     console.warn('ANGEL SMART local push diagnostic:',error);
+     btn.textContent='⚠ Тестът е неуспешен';
+     alert('Проверка на известията: '+(error?.message||'Неизвестна грешка'));
+   }finally{
+     btn.disabled=false;
+   }
+ });
+})();
+</script>
 </body></html>
