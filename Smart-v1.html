@@ -1324,6 +1324,58 @@ html.angel-app-tab-social #angelAppTabSocialFooter{display:flex!important;flex-d
 #angelAppTabSocialFooter .angel-social-icon svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 #angelAppTabSocialFooter .angel-social-icon.is-pending{opacity:.55;cursor:default}
 @media(prefers-reduced-motion:reduce){#angelAppTabSocialFooter .angel-social-icon{transition:none}}
+
+/* ANGEL APP — final footer polish: APP/TAB only, SMART untouched */
+html.angel-app-tab-social #angelAppTabSocialFooter {
+  gap:clamp(15px,3.6vw,21px);
+  min-height:0;
+  padding:clamp(25px,5vw,34px) 16px clamp(24px,5vw,32px);
+  background:radial-gradient(ellipse 65% 60% at 50% 12%,rgba(216,182,106,.055),transparent 78%),#08090d;
+}
+html.angel-app-tab-social #angelAppTabSocialFooter .angel-social-heading {
+  max-width:100%;
+  font-size:clamp(10px,2.5vw,13px);
+  letter-spacing:clamp(1px,.27vw,1.5px);
+  line-height:1.55;
+  text-wrap:balance;
+}
+html.angel-app-tab-social #angelAppTabSocialFooter .angel-social-icons {
+  width:100%;
+  gap:clamp(13px,4.2vw,30px);
+}
+html.angel-app-tab-social #angelAppTabSocialFooter .angel-social-icon {
+  width:clamp(46px,12vw,54px);
+  height:clamp(46px,12vw,54px);
+  min-width:44px;
+  min-height:44px;
+  border-color:rgba(216,182,106,.72);
+  background:linear-gradient(150deg,#15151b,#0d0e13);
+  box-shadow:inset 0 1px rgba(255,255,255,.035);
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+  transition:transform .2s ease,background .2s ease,border-color .2s ease,box-shadow .2s ease;
+}
+html.angel-app-tab-social #angelAppTabSocialFooter .angel-social-icon:hover,
+html.angel-app-tab-social #angelAppTabSocialFooter .angel-social-icon:focus-visible {
+  transform:translateY(-2px);
+  border-color:#f3d993;
+  background:#262018;
+  box-shadow:0 0 0 3px rgba(216,182,106,.10),0 6px 20px rgba(0,0,0,.25);
+}
+html.angel-app-tab-social #angelAppTabSocialFooter .angel-social-icon:active {
+  transform:scale(.94);
+  background:#3b2e1d;
+}
+@media(max-width:360px){
+  html.angel-app-tab-social #angelAppTabSocialFooter .angel-social-icons{gap:clamp(9px,3.5vw,13px)}
+  html.angel-app-tab-social #angelAppTabSocialFooter .angel-social-heading{font-size:10px;letter-spacing:.8px}
+}
+@media(prefers-reduced-motion:reduce){
+  html.angel-app-tab-social #angelAppTabSocialFooter .angel-social-icon{transition:none!important}
+  html.angel-app-tab-social #angelAppTabSocialFooter .angel-social-icon:hover,
+  html.angel-app-tab-social #angelAppTabSocialFooter .angel-social-icon:focus-visible,
+  html.angel-app-tab-social #angelAppTabSocialFooter .angel-social-icon:active{transform:none!important}
+}
 </style>
 <script id="angel-app-tab-social-footer-device">
 (function(){
