@@ -574,7 +574,17 @@ html.angel-ios-mobile #overlay.open #angelMobileBackEdge::after{
  <div class="music-mobile-section-title"><h3>Слушай сега</h3><span>Подбрано за теб</span></div>
  <div class="music-mobile-picks" id="musicMobilePicks"></div>
  </section><section class="v2-section" id="featured"><div class="flow-stage" id="flowStage" aria-label="Избрани видеоклипове"></div><div class="flow-actions"><button id="flowPrev" aria-label="Предишен клип">❮</button><div id="flowCaption" class="flow-caption"></div><button id="flowNext" aria-label="Следващ клип">❯</button></div></section><section class="v2-section" id="categories"><div class="v2-head"><div><h2>Музикални категории</h2><div class="v2-sub">Избери категория, за да разгледаш видеоклиповете</div></div></div><div class="category-grid" id="categoryGrid"></div></section></div><div id="categoryView" class="category-view"><div class="category-backbar"><button class="back-categories" id="backCategories">← Всички категории</button><h2 id="categoryTitle"></h2><p id="categorySubtitle"></p></div><div id="rails"></div></div></main>
-<footer><span>© 2026 Ангел Узунов · ANGEL SMART</span><span>Официални видеоклипове чрез YouTube · Управление: ← ↑ ↓ → / Enter / Esc</span><a href="https://www.youtube.com/@angeluzunovuzi" target="_blank" rel="noopener">YouTube канал ↗</a></footer>
+<footer id="angelOriginalFooter"><span>© 2026 Ангел Узунов · ANGEL SMART</span><span>Официални видеоклипове чрез YouTube · Управление: ← ↑ ↓ → / Enter / Esc</span><a href="https://www.youtube.com/@angeluzunovuzi" target="_blank" rel="noopener">YouTube канал ↗</a></footer>
+<!-- APP + TAB ONLY: social footer. Original SMART footer is preserved. -->
+<footer id="angelAppTabSocialFooter" aria-label="Социални мрежи на Ангел Узунов" hidden>
+  <p class="angel-social-heading">ПОСЛЕДВАЙ ЗА ОЩЕ ХУБАВА МУЗИКА</p>
+  <nav class="angel-social-icons" aria-label="Музикални платформи">
+    <a href="https://www.patreon.com/cw/AngelUzunov" target="_blank" rel="noopener noreferrer" class="angel-social-icon" title="Patreon" aria-label="Patreon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="15.5" cy="8.5" r="5.5" fill="currentColor" stroke="none"/><path d="M5 3v18"/></svg></a>
+    <a class="angel-social-icon" href="https://open.spotify.com/artist/4FCa372vao8z6ffzV2CRlE" target="_blank" rel="noopener noreferrer" aria-label="Spotify"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M5.5 9c4.8-1.4 9.3-.7 13.1 1.3M6.5 12.4c4-1 8.1-.4 11.1 1.3M7.5 15.6c3.3-.7 6.6-.3 9.2 1"/></svg></a>
+    <a href="https://www.deezer.com/bg/artist/407023832" target="_blank" rel="noopener noreferrer" class="angel-social-icon" title="Deezer" aria-label="Deezer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18h4v3H3zM3 14h4v3H3zM8 14h4v3H8zM8 10h4v3H8zM13 10h4v3h-4zM13 6h4v3h-4zM18 6h3v3h-3zM18 10h3v3h-3zM18 14h3v3h-3zM13 14h4v3h-4zM8 18h4v3H8zM13 18h4v3h-4zM18 18h3v3h-3z" fill="currentColor" stroke="none"/></svg></a>
+    <a class="angel-social-icon" href="https://www.youtube.com/@angeluzunovuzi" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="5"/><path d="m10 9 5 3-5 3z"/></svg></a>
+  </nav>
+</footer>
 <aside id="previewDock" class="preview-dock" aria-label="Автоматичен преглед без звук"><div class="preview-screen" id="previewScreen"><img id="previewPoster" alt="Преглед на клипа"></div><div class="preview-meta"><strong id="previewTitle"></strong><span>Без звук · OK за гледане</span></div></aside>
 <div id="overlay" class="player-overlay" tabindex="-1" role="dialog" aria-modal="true" aria-label="Видео плейър"><div class="player-top"><strong id="nowTitle"></strong><button id="closePlayer" aria-label="Затвори плейъра">✕ Затвори</button></div><div id="player"></div><button type="button" id="angelMobileBackEdge" aria-label="Върни се към каталога"></button><div class="player-bottom"><button id="prev">⏮ Предишен</button><button id="toggle">⏯ Пауза / Пусни</button><button id="next">Следващ ⏭</button><button id="mode">TV канал: ИЗКЛ.</button><button id="fullscreen" aria-label="Цял екран">⛶ Цял екран</button><a id="youtubeLink" class="btn" href="#" target="_blank" rel="noopener">YouTube ↗</a></div><div class="hint">Esc / Back: назад · ← →: избор на бутон · Space: пауза · OK: потвърди</div></div>
 <script>
@@ -1299,6 +1309,30 @@ renderPersonal();
  });
  refresh();
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh()});
+})();
+</script>
+
+<style id="angel-app-tab-social-footer-style">
+#angelAppTabSocialFooter{display:none!important}
+html.angel-app-tab-social #angelOriginalFooter{display:none!important}
+html.angel-app-tab-social #angelAppTabSocialFooter{display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:20px;min-height:155px;padding:28px 16px 34px;margin:0;border:0;background:radial-gradient(ellipse at 50% 20%,rgba(216,182,106,.06),transparent 70%),#08090d;color:#d8b66a;box-sizing:border-box}
+#angelAppTabSocialFooter .angel-social-heading{margin:0;text-align:center;color:#cbbda4;font-size:clamp(10px,2.5vw,13px);font-weight:600;letter-spacing:1.3px;line-height:1.5}
+#angelAppTabSocialFooter .angel-social-icons{display:flex;justify-content:center;align-items:center;flex-wrap:nowrap;gap:clamp(12px,4vw,30px)}
+#angelAppTabSocialFooter .angel-social-icon{width:clamp(45px,8vw,54px);height:clamp(45px,8vw,54px);display:grid;place-items:center;flex-shrink:0;border:1px solid #a88a56;border-radius:50%;background:#111217;color:#e5c47d;text-decoration:none;transition:transform .2s ease,background .2s ease}
+#angelAppTabSocialFooter a.angel-social-icon:hover{transform:translateY(-3px);background:#272119}
+#angelAppTabSocialFooter a.angel-social-icon:focus-visible{outline:2px solid #f3d993;outline-offset:4px}
+#angelAppTabSocialFooter .angel-social-icon svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+#angelAppTabSocialFooter .angel-social-icon.is-pending{opacity:.55;cursor:default}
+@media(prefers-reduced-motion:reduce){#angelAppTabSocialFooter .angel-social-icon{transition:none}}
+</style>
+<script id="angel-app-tab-social-footer-device">
+(function(){
+  var ua=navigator.userAgent||'';
+  var ipad=/iPad/i.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  var tablet=ipad||(/Android/i.test(ua)&&!/Mobile/i.test(ua))||/Tablet|PlayBook|Silk/i.test(ua);
+  var phone=!tablet&&/iPhone|iPod|Android.*Mobile|Windows Phone|Mobile/i.test(ua);
+  if(tablet||phone)document.documentElement.classList.add('angel-app-tab-social');
+  document.getElementById('angelAppTabSocialFooter')?.removeAttribute('hidden');
 })();
 </script>
 </body></html>
