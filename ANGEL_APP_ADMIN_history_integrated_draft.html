@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="bg"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow,noarchive"><meta name="theme-color" content="#08090d"><title>ANGEL APP · Личен административен панел</title>
+<style>
+:root{color-scheme:dark;--bg:#08090d;--panel:#111218;--gold:#d8b66a;--text:#f6f0e5;--muted:#a6a4a0;--line:#3d3323}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -10%,#382b17 0%,#121116 35%,var(--bg) 75%);color:var(--text);font:15px/1.55 system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}main{max-width:960px;margin:0 auto;padding:42px 20px 80px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:40px}.brand{display:flex;align-items:center;gap:13px}.logo{border:2px solid var(--gold);border-radius:50%;height:54px;width:54px;display:grid;place-items:center;color:var(--gold);font:700 23px Georgia,serif;letter-spacing:-2px}.eyebrow{color:var(--gold);letter-spacing:3px;font-size:10px;font-weight:800}.brand h1{font-size:20px;letter-spacing:1px;margin:0}.tag{font-size:11px;letter-spacing:1px;border:1px solid #67502d;color:#d8b66a;border-radius:20px;padding:7px 12px}.intro{margin:0 0 28px}.intro h2{font:500 clamp(26px,4vw,38px) Georgia,serif;margin:0 0 8px}.intro p{color:var(--muted);margin:0}.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:20px}.card{border:1px solid var(--line);border-radius:20px;background:linear-gradient(150deg,#181820,#0d0e13);padding:26px;box-shadow:0 15px 45px #0005}.card h3{font-size:15px;margin:0 0 18px;letter-spacing:.5px}.hint{font-size:12px;color:var(--muted)}label{display:block;margin:16px 0 7px;font-size:12px;font-weight:700;color:#d5c8af}input,textarea{width:100%;border:1px solid #4b412e;border-radius:10px;padding:13px 14px;background:#090a0e;color:#fff;font:inherit;outline:none}input:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 2px #d8b66a25}textarea{min-height:142px;resize:vertical}.count{text-align:right;color:var(--muted);font-size:11px;margin-top:4px}.button{border:1px solid #8c703d;border-radius:12px;padding:14px 16px;font:700 13px system-ui;cursor:pointer}.gold{background:linear-gradient(110deg,#f2d18c,#bd8e3e);color:#21190c}.ghost{background:#19181c;color:#eed5a2}.button:disabled{opacity:.45;cursor:not-allowed}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.preview{border:1px solid #51432a;border-radius:16px;background:#19191e;padding:18px;margin-top:14px}.preview .source{font-size:11px;color:var(--gold);margin-bottom:12px;letter-spacing:1px}.preview strong{display:block;font-size:17px;margin-bottom:6px;overflow-wrap:anywhere}.preview p{margin:0;color:#d9d7d2;overflow-wrap:anywhere;white-space:pre-wrap}.notice{margin-top:20px;border:1px solid #594525;border-radius:12px;background:#2c2417;padding:13px 15px;font-size:12px;color:#e9d4a8}.status{display:flex;align-items:center;gap:9px;color:#b9b1a3;font-size:12px;margin-top:18px}.dot{width:8px;height:8px;border-radius:50%;background:#bb8e46}.secure{margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}.secure p{color:var(--muted);font-size:12px}.result{min-height:22px;color:#ead2a4;font-size:12px;margin-top:12px}footer{text-align:center;color:#746c5e;font-size:11px;margin-top:34px}@media(max-width:720px){main{padding:25px 14px 55px}.grid{grid-template-columns:1fr}.top{margin-bottom:30px}.card{padding:20px}.tag{font-size:9px}.brand h1{font-size:17px}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+.history-card{margin-top:22px}.history-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.history-top h3{margin:0}.history-table{width:100%;border-collapse:collapse;margin-top:20px;text-align:left}.history-table th{font-size:11px;letter-spacing:.7px;color:#d8b66a;font-weight:700;padding:12px 10px;border-bottom:1px solid var(--line)}.history-table td{padding:15px 10px;border-bottom:1px solid #342c23;font-size:13px;vertical-align:top;overflow-wrap:anywhere}.history-empty{margin-top:17px;border:1px dashed #5c4c30;border-radius:14px;padding:28px 16px;text-align:center;color:#b8ad98}.history-empty strong{display:block;color:#e6d5b4;font-size:14px;margin-bottom:6px}.history-empty p{font-size:12px;margin:0}.history-detail{white-space:pre-wrap}.history-meta{font-size:11px;color:var(--muted)}.history-note{margin-top:12px;color:var(--muted);font-size:12px}.history-table-wrap{overflow-x:auto}@media(max-width:560px){.history-table{min-width:600px}.history-card{padding:20px}}
+/* Scrollable history with invisible scrollbar */
+.history-table-wrap{max-height:390px;overflow-y:auto;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;overscroll-behavior:contain}
+.history-table-wrap::-webkit-scrollbar{display:none;width:0;height:0}
+.history-table thead th{position:sticky;top:0;background:#14141b;z-index:1}
+.history-toolbar{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-top:15px}
+.history-toolbar .button{padding:10px 13px;font-size:12px}
+.history-table .history-check{width:17px;height:17px;accent-color:#d8b66a;cursor:pointer}
+.history-table th:first-child,.history-table td:first-child{width:35px;padding-left:6px}
+.history-table .row-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.history-table .row-actions button{font-size:11px;padding:7px 10px}
+.history-table tr:hover td{background:#ffffff06}
+.history-selection{color:#b8ad98;font-size:12px;margin-left:auto}
+.history-table .history-detail{max-width:390px}
+@media(max-width:560px){.history-table{min-width:720px}.history-toolbar .button{flex:1}}
+</style></head><body><main><header class="top"><div class="brand"><div class="logo" aria-label="AU">AU</div><div><div class="eyebrow">PRIVATE CONTROL</div><h1>ANGEL APP ADMIN</h1></div></div><div class="tag">ЛИЧЕН ПАНЕЛ</div></header><section class="intro"><h2>Системни известия</h2><p>Еднопосочни съобщения от администратора към абонираните устройства.</p></section><div class="grid"><section class="card"><h3>✦ Ново системно известие</h3><label for="title">ЗАГЛАВИЕ</label><input id="title" maxlength="120" value="Съобщение от ANGEL APP" autocomplete="off"><div class="count"><span id="tc">0</span> / 120</div><label for="message">ТЕКСТ НА СЪОБЩЕНИЕТО</label><textarea id="message" maxlength="240" placeholder="Напиши съобщението, което абонатите ще получат…"></textarea><div class="count"><span id="mc">0</span> / 240</div><label for="link">ВРЪЗКА ПРИ НАТИСКАНЕ (ПО ЖЕЛАНИЕ)</label><input id="link" value="https://angeluzunov.site/Smart-v1.html" autocomplete="off"><div class="hint">Допускат се само адреси от angeluzunov.site.</div><div class="actions"><button class="button ghost" type="button" id="previewBtn">Обнови прегледа</button><button class="button gold" type="button" id="sendBtn" disabled>Изпрати до всички</button></div><div class="result" id="result" role="status" aria-live="polite"></div><div class="notice">Демонстрационна версия. Изпращането е заключено, докато не бъде настроен и проверен защитеният сървърен достъп.</div></section><aside class="card"><h3>◉ Предварителен преглед</h3><div class="hint">Така приблизително ще изглежда Push известието:</div><div class="preview"><div class="source">◉ ANGEL APP · СИСТЕМНО</div><strong id="pTitle">Съобщение от ANGEL APP</strong><p id="pMessage">Твоето съобщение ще се появи тук.</p></div><div class="secure"><h3>Защитен достъп</h3><p>Планиран вход с Windows Hello (ПИН) чрез WebAuthn. ПИН кодът остава в Windows и не се изпраща към сайта.</p><button class="button ghost" type="button" id="helloBtn" disabled>🔒 Вход с Windows Hello</button><div class="status"><span class="dot"></span><span>Сървърното удостоверяване още не е свързано</span></div></div><div class="secure"><h3>Изпращане</h3><p>След удостоверяване: потвърждение, изпращане и отчет за успешни/неуспешни доставки. Без чат и отговори.</p></div></aside></div><section class="card history-card" id="notificationHistory" aria-labelledby="historyTitle"><div class="history-top"><div><div class="eyebrow">ARCHIVE</div><h3 id="historyTitle">◷ История на системните известия</h3></div><span class="tag">САМО ЗА АДМИНИСТРАТОРА</span></div><p class="hint">Един запис за всяко уникално съобщение. При препращане се обновяват броят изпращания и последната дата, без нов дубликат.</p><div class="history-toolbar"><button type="button" class="button ghost" id="selectAllHistory" disabled>Избери всички</button><button type="button" class="button ghost" id="deleteSelectedHistory" disabled>Изтрий избраните</button><button type="button" class="button ghost" id="deleteAllHistory" disabled>Изтрий цялата история</button><span class="history-selection" id="historySelection">0 избрани</span></div><div class="history-table-wrap" tabindex="0" aria-label="Превъртаща се история на известията"><table class="history-table" aria-label="История на изпратените известия"><thead><tr><th>Избор</th><th>ПОСЛЕДНО ИЗПРАЩАНЕ</th><th>ЗАГЛАВИЕ И СЪОБЩЕНИЕ</th><th>РЕЗУЛТАТ / ДЕЙСТВИЯ</th></tr></thead><tbody id="historyRows"></tbody></table></div><div class="history-empty" id="historyEmpty"><strong>Все още няма заредена история</strong><p>Тук ще виждаш изпратените съобщения, ще можеш да ги препращаш и да изтриваш избрани записи.</p></div><div class="history-note" id="historyNote" role="status">Подготвена структура за архив без дубликати. Реалното зареждане, изтриване и изпращане изискват защитен сървърен API. Изтриването премахва само записа от историята, не полученото известие от устройствата.</div></section><footer>© 2026 ANGEL APP · Частен административен интерфейс · Подготовка за интеграция</footer></main>
+<script>
+'use strict';
+const title=document.getElementById('title'),message=document.getElementById('message'),link=document.getElementById('link');
+const pTitle=document.getElementById('pTitle'),pMessage=document.getElementById('pMessage');
+function refresh(){document.getElementById('tc').textContent=title.value.length;document.getElementById('mc').textContent=message.value.length;pTitle.textContent=title.value.trim()||'Без заглавие';pMessage.textContent=message.value.trim()||'Твоето съобщение ще се появи тук.'}
+[title,message].forEach(el=>el.addEventListener('input',refresh));document.getElementById('previewBtn').addEventListener('click',()=>{refresh();document.getElementById('result').textContent='Прегледът е обновен. Не е изпратено известие.'});refresh();
+
+// Preview-only archive controls. Real history must be loaded via an authenticated server API.
+// Never store the PUSH_ADMIN_SECRET in this public HTML.
+const historyRows=document.getElementById('historyRows');
+const historyEmpty=document.getElementById('historyEmpty');
+const historySelection=document.getElementById('historySelection');
+const selectAllHistory=document.getElementById('selectAllHistory');
+const deleteSelectedHistory=document.getElementById('deleteSelectedHistory');
+const deleteAllHistory=document.getElementById('deleteAllHistory');
+const selectedIds=new Set();
+let archiveRecords=[];
+function updateHistoryButtons(){
+ const hasRecords=archiveRecords.length>0;
+ selectAllHistory.disabled=!hasRecords;
+ deleteSelectedHistory.disabled=selectedIds.size===0;
+ deleteAllHistory.disabled=!hasRecords;
+ historySelection.textContent=selectedIds.size+' избрани';
+}
+function renderHistory(){
+ historyRows.replaceChildren();
+ historyEmpty.hidden=archiveRecords.length>0;
+ for(const item of archiveRecords){
+   const tr=document.createElement('tr');
+   const checkTd=document.createElement('td');
+   const check=document.createElement('input');check.type='checkbox';check.className='history-check';check.setAttribute('aria-label','Избери известие '+item.title);check.checked=selectedIds.has(item.id);
+   check.addEventListener('change',()=>{if(check.checked)selectedIds.add(item.id);else selectedIds.delete(item.id);updateHistoryButtons()});checkTd.append(check);
+   const dateTd=document.createElement('td');dateTd.textContent=item.last_sent_at?new Date(item.last_sent_at).toLocaleString('bg-BG'):'Не е изпращано';
+   const contentTd=document.createElement('td');const heading=document.createElement('strong');heading.textContent=item.title;
+   const detail=document.createElement('div');detail.className='history-detail';detail.textContent=item.body;
+   contentTd.append(heading,detail);
+   const resultTd=document.createElement('td');resultTd.textContent='Изпращания: '+(item.send_count??0)+' · Последно успешно: '+(item.last_sent??0)+' · Неуспешни: '+(item.last_failed??0);
+   const actions=document.createElement('div');actions.className='row-actions';
+   const forward=document.createElement('button');forward.className='button ghost';forward.type='button';forward.textContent='↗ Препрати до всички';
+   forward.addEventListener('click',()=>{
+     title.value=item.title;message.value=item.body;link.value=item.url||'https://angeluzunov.site/Smart-v1.html';refresh();
+     window.scrollTo({top:0,behavior:'smooth'});
+     document.getElementById('result').textContent='Съобщението е заредено за повторно изпращане. Изпращането остава заключено до настройване на Windows Hello и защитената сървърна връзка.';
+     // Sending is intentionally locked until WebAuthn + server authorization are connected.
+   });
+   const remove=document.createElement('button');remove.className='button ghost';remove.type='button';remove.textContent='Изтрий';
+   remove.addEventListener('click',()=>requestHistoryDelete([item.id]));
+   actions.append(forward,remove);resultTd.append(actions);
+   tr.append(checkTd,dateTd,contentTd,resultTd);historyRows.append(tr);
+ }
+ updateHistoryButtons();
+}
+function requestHistoryDelete(ids){
+ if(!ids.length)return;
+ if(!confirm('Да се изтрият ли '+ids.length+' записа от историята?'))return;
+ document.getElementById('historyNote').textContent='Изтриването ще бъде активно след защитеното свързване със Supabase. Нищо не е изтрито.';
+}
+selectAllHistory.addEventListener('click',()=>{archiveRecords.forEach(x=>selectedIds.add(x.id));renderHistory()});
+deleteSelectedHistory.addEventListener('click',()=>requestHistoryDelete([...selectedIds]));
+deleteAllHistory.addEventListener('click',()=>requestHistoryDelete(archiveRecords.map(x=>x.id)));
+renderHistory();
+</script></body></html>
