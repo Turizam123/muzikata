@@ -562,6 +562,13 @@ html.angel-ios-mobile #overlay.open #angelMobileBackEdge::after{
 @media(max-width:760px){header:has(#angelPushControl[style*="flex"]) .brand{padding-right:62px}header:has(#angelPushControl[style*="flex"]) .brand small{max-width:210px}}
 @media(prefers-reduced-motion:reduce){#angelPushControl.is-on svg{animation:none}}
 </style>
+<style id="angel-category-rotation">
+.category-card:before{background:linear-gradient(0deg,#08090df7 2%,#08090d33 65%,#08090d55),var(--cat-img) center/cover no-repeat}
+.category-art-next{position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:0;background:linear-gradient(0deg,#08090df7 2%,#08090d33 65%,#08090d55),var(--cat-next) center/cover no-repeat;filter:saturate(.85);transition:opacity .7s ease,transform .5s,filter .4s}
+.category-art-next.visible{opacity:1}
+.category-card:hover .category-art-next,.category-card:focus .category-art-next{transform:scale(1.07);filter:saturate(1.1)}
+@media(prefers-reduced-motion:reduce){.category-art-next{transition:none!important}}
+</style>
 </head><body>
 <header><a class="brand" href="https://angeluzunov.site/" aria-label="Основен сайт"><img src="https://angeluzunov.site/AU_favicon.png" alt="AU"><div><strong>ANGEL <span id="angelDeviceWord">SMART</span></strong><small>ОФИЦИАЛНА МУЗИКАЛНА ПЛАТФОРМА</small></div></a><nav class="nav" aria-label="Главно меню"><button id="homeNav" class="active">Начало</button><button id="liveNav">▶ TV канал</button><button id="searchNav">⌕ Търсене</button><a href="https://angeluzunov.site/angel-uzunov-songs-v4.html">Каталог</a><a href="https://angeluzunov.site/fan-zone.html">Фен зона</a></nav><span id="clock" class="clock"></span><button id="angelPushControl" type="button" aria-label="Включи известия" aria-pressed="false" title="Известия ANGEL SMART"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg><span id="angelPushCount" aria-label="Брой абонати">0</span></button></header>
 <div id="searchPanel" class="search-panel"><label for="search">Търси песен</label><div><input id="search" type="search" autocomplete="off" placeholder="Въведи заглавие..."></div></div>
@@ -710,12 +717,50 @@ function shiftFlow(delta){
 }
 function pauseFlow(){clearInterval(flowTimer);flowTimer=null}
 function startFlow(){pauseFlow();if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;flowTimer=setInterval(()=>{if(!document.hidden&&!$('overlay').classList.contains('open')&&!activeCategory&&!$('flowStage').contains(document.activeElement))shiftFlow(1)},5000)}
-function buildCategories(){const grid=$('categoryGrid');grid.replaceChildren();for(const [cat,label] of Object.entries(labels)){
+// Dynamic category artwork; only the background changes, never the button.
+const categoryCoverState=new Map();
+function categoryLast(cat,id){try{const key='angel-category-cover-'+cat;if(id!==undefined)localStorage.setItem(key,id);else return localStorage.getItem(key)}catch(e){}return null}
+function categoryPick(cat,state){
+ const pool=songs.filter(s=>s.category===cat);
+ const premieres=pool.filter(s=>{const age=smartAge(s);return age!==null&&age<SMART_PREMIERE_MS}).sort((a,b)=>Date.parse(b.addedAt)-Date.parse(a.addedAt));
+ if(premieres.length)return premieres[0].id;
+ if(!pool.length)return categoryVisuals[cat];
+ if(pool.length===1)return pool[0].id;
+ const ids=pool.map(s=>s.id);
+ state.remaining=state.remaining.filter(id=>ids.includes(id)&&id!==state.id);
+ if(!state.remaining.length)state.remaining=ids.filter(id=>id!==state.id);
+ return state.remaining.splice(Math.floor(Math.random()*state.remaining.length),1)[0];
+}
+function categoryPaint(card,state,id){
+ if(!id||state.busy||state.shown===id)return;
+ state.busy=true;
+ const image=new Image();
+ image.onload=()=>{
+  if(!card.isConnected){state.busy=false;return}
+  const url='url("'+thumb(id)+'")';
+  const finish=()=>{card.style.setProperty('--cat-img',url);state.layer.classList.remove('visible');state.shown=id;state.id=id;categoryLast(card.dataset.category,id);state.busy=false};
+  if(!state.shown||window.matchMedia('(prefers-reduced-motion: reduce)').matches){finish();return}
+  state.layer.style.setProperty('--cat-next',url);
+  state.layer.classList.add('visible');setTimeout(finish,750);
+ };
+ image.onerror=()=>{state.busy=false};
+ image.src=thumb(id);
+}
+function rotateCategoryCovers(){
+ if(document.hidden||activeCategory||$('overlay').classList.contains('open')||$('homeContent').classList.contains('hidden'))return;
+ categoryCoverState.forEach((state,cat)=>{if(!state.busy)categoryPaint(state.card,state,categoryPick(cat,state))});
+}
+function buildCategories(){const grid=$('categoryGrid');grid.replaceChildren();categoryCoverState.clear();for(const [cat,label] of Object.entries(labels)){
  const count=songs.filter(s=>s.category===cat).length,b=element('button','category-card');b.type='button';b.dataset.category=cat;
- b.style.setProperty('--cat-img',`url("${thumb(categoryVisuals[cat])}")`);
+ const layer=element('span','category-art-next');layer.setAttribute('aria-hidden','true');b.append(layer);
+ const state={card:b,layer,id:categoryLast(cat),shown:null,remaining:[],busy:false};
+ categoryCoverState.set(cat,state);
  const inner=element('div','cat-inner');inner.append(element('strong','',label),element('small','',count+' '+(count===1?'видеозапис':'видеозаписа')+'  →'));
  b.append(inner);b.onclick=()=>openCategory(cat);grid.append(b);
+ categoryPaint(b,state,categoryPick(cat,state));
  }smartUpdateBadges();}
+setInterval(rotateCategoryCovers,15000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)rotateCategoryCovers()});
 let categoryReturnScrollY=0;
 function openCategory(cat){categoryReturnScrollY=window.scrollY;activeCategory=cat;pauseFlow();$('homeContent').classList.add('hidden');$('hero').style.display='none';$('categoryView').classList.add('open');$('categoryTitle').textContent=labels[cat];$('categorySubtitle').textContent=songs.filter(s=>s.category===cat).length+' видеозаписа · Избери клип за гледане';draw('',cat);focusTV($('backCategories'));requestAnimationFrame(()=>{const first=$('rails').querySelector('.tile');if(first&&activeCategory===cat){const top=Math.max(0,first.getBoundingClientRect().top+window.scrollY-20);window.scrollTo({top,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'})}})}
 function closeCategory(){if(!activeCategory)return;const cat=activeCategory;activeCategory=null;$('categoryView').classList.remove('open');$('homeContent').classList.remove('hidden');$('hero').style.display='';focusTV(document.querySelector(`[data-category="${cat}"]`));window.scrollTo({top:categoryReturnScrollY,behavior:'instant'});startFlow()}
