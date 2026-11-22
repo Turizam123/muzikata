@@ -569,6 +569,40 @@ html.angel-ios-mobile #overlay.open #angelMobileBackEdge::after{
 .category-card:hover .category-art-next,.category-card:focus .category-art-next{transform:scale(1.07);filter:saturate(1.1)}
 @media(prefers-reduced-motion:reduce){.category-art-next{transition:none!important}}
 </style>
+
+<style id="angel-golden-surprise-style">
+/* APP / TAB only. Original video tile markup and styling are reused unchanged. */
+#angelGoldenSurprise[hidden]{display:none!important}
+#angelGoldenSurprise{padding:0 var(--side);margin:20px 0 35px}
+#angelGoldenSurprise .ags-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+#angelGoldenSurprise h2{font-size:clamp(22px,2vw,36px);margin:0;color:var(--white)}
+#angelGoldenSurprise .ags-subtitle{font-size:13px;color:#bdb1a0;margin-top:7px;line-height:1.5}
+#angelGoldenSurprise .ags-date{font-size:12px;color:#e8ca8a;white-space:nowrap}
+#angelGoldenSurprise .ags-layout{display:flex;align-items:center;gap:clamp(14px,3vw,36px);flex-wrap:wrap}
+#angelGoldenSurprise .ags-slot{width:min(100%,clamp(260px,30vw,475px));position:relative;flex:none}
+#angelGoldenSurprise .ags-slot>.tile{width:100%;max-width:100%;display:block;cursor:pointer}
+#angelGoldenSurprise .ags-slot:not(.ags-revealed)>.tile{pointer-events:none}
+#angelGoldenSurprise .ags-surface{position:absolute;inset:0;z-index:8;overflow:hidden;border-radius:17px;border:1px solid rgba(238,206,139,.65);touch-action:none;cursor:crosshair;background:#ac8647}
+#angelGoldenSurprise .ags-surface canvas{display:block;width:100%;height:100%;touch-action:none}
+#angelGoldenSurprise .ags-surface.ags-fading{opacity:0;transition:opacity .55s ease;pointer-events:none}
+#angelGoldenSurprise .ags-help{flex:1;min-width:180px;max-width:440px;color:#d8cbb8;font-size:clamp(13px,1.1vw,17px);line-height:1.65}
+#angelGoldenSurprise .ags-help strong{display:block;color:#f3d993;font-size:clamp(16px,1.3vw,21px);margin-bottom:7px}
+#angelGoldenSurprise .ags-help p{margin:0 0 12px}
+#angelGoldenSurprise .ags-reveal-btn{background:#1b1a20;border:1px solid #d8b66a77;color:#f3d993;border-radius:999px;padding:10px 19px;font-weight:700;min-height:44px}
+#angelGoldenSurprise .ags-reveal-btn[hidden]{display:none!important}
+#angelGoldenSurprise .ags-message{color:#c5b9aa;font-size:12px;margin-top:10px;min-height:20px}
+@media(max-width:760px) and (pointer:coarse), (max-width:600px){
+ #homeContent #angelGoldenSurprise{order:3!important;margin:12px 0 15px;padding:0 17px}
+ #homeContent #smartContinue{order:4!important}
+ #homeContent #smartFavorites{order:5!important}
+ #homeContent #categories{order:6!important}
+ #angelGoldenSurprise h2{font-size:21px}
+ #angelGoldenSurprise .ags-slot{width:min(100%,370px)}
+ #angelGoldenSurprise .ags-layout{gap:12px}
+ #angelGoldenSurprise .ags-help{font-size:13px}
+}
+@media(prefers-reduced-motion:reduce){#angelGoldenSurprise .ags-surface.ags-fading{transition:none}}
+</style>
 </head><body>
 <header><a class="brand" href="https://angeluzunov.site/" aria-label="Основен сайт"><img src="https://angeluzunov.site/AU_favicon.png" alt="AU"><div><strong>ANGEL <span id="angelDeviceWord">SMART</span></strong><small>ОФИЦИАЛНА МУЗИКАЛНА ПЛАТФОРМА</small></div></a><nav class="nav" aria-label="Главно меню"><button id="homeNav" class="active">Начало</button><button id="liveNav">▶ TV канал</button><button id="searchNav">⌕ Търсене</button><a href="https://angeluzunov.site/angel-uzunov-songs-v4.html">Каталог</a><a href="https://angeluzunov.site/fan-zone.html">Фен зона</a></nav><span id="clock" class="clock"></span><button id="angelPushControl" type="button" aria-label="Включи известия" aria-pressed="false" title="Известия ANGEL SMART"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg><span id="angelPushCount" aria-label="Брой абонати">0</span></button></header>
 <div id="searchPanel" class="search-panel"><label for="search">Търси песен</label><div><input id="search" type="search" autocomplete="off" placeholder="Въведи заглавие..."></div></div>
@@ -1430,6 +1464,98 @@ html.angel-app-tab-social #angelAppTabSocialFooter .angel-social-icon:active {
   var phone=!tablet&&/iPhone|iPod|Android.*Mobile|Windows Phone|Mobile/i.test(ua);
   if(tablet||phone)document.documentElement.classList.add('angel-app-tab-social');
   document.getElementById('angelAppTabSocialFooter')?.removeAttribute('hidden');
+})();
+</script>
+
+<script id="angel-golden-surprise-script">
+(()=>{'use strict';
+ const ua=navigator.userAgent||'';
+ const ipad=/iPad/i.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+ const tablet=ipad||(/Android/i.test(ua)&&!/Mobile/i.test(ua))||/Tablet|PlayBook|Silk/i.test(ua);
+ const phone=!tablet&&/iPhone|iPod|Android.*Mobile|Windows Phone|Mobile/i.test(ua);
+ if(!tablet&&!phone)return; // Never modify the SMART TV / desktop experience.
+ const home=document.getElementById('homeContent');if(!home)return;
+ const section=document.createElement('section');section.id='angelGoldenSurprise';section.hidden=true;
+ section.setAttribute('aria-label','Златна музикална изненада');
+ section.innerHTML='<div class="ags-heading"><div><h2>✦ Златна музикална изненада</h2><div class="ags-subtitle">Една песен за теб всеки ден. Изтрий златното покритие и я открий.</div></div><span class="ags-date" id="agsDate"></span></div><div class="ags-layout"><div class="ags-slot" id="agsSlot"></div><div class="ags-help"><strong id="agsTitle">Твоята музикална изненада</strong><p id="agsInstructions">Плъзни пръст по златната карта. Под нея те очаква песен от музикалния каталог.</p><button type="button" class="ags-reveal-btn" id="agsReveal">Разкрий без изтриване</button><div class="ags-message" id="agsMessage" role="status" aria-live="polite"></div></div></div>';
+ home.insertBefore(section,home.querySelector('#categories'));
+ const $=id=>document.getElementById(id);
+ const slot=$('agsSlot'),btn=$('agsReveal'),message=$('agsMessage');
+ const prefix='angel_golden_surprise_v1_';
+ const read=k=>{try{return localStorage.getItem(prefix+k)}catch{return null}};
+ const write=(k,v)=>{try{localStorage.setItem(prefix+k,v)}catch{}};
+ const dateKey=()=>{
+  const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Sofia',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
+  const f=t=>parts.find(p=>p.type===t)?.value||'';
+  return f('year')+'-'+f('month')+'-'+f('day');
+ };
+ const dayNumber=key=>Math.floor(Date.parse(key+'T12:00:00Z')/86400000);
+ function hash(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+ function seed(){let v=read('device_seed');if(v)return v;try{const a=new Uint32Array(2);crypto.getRandomValues(a);v=a[0].toString(36)+a[1].toString(36)}catch{v=String(Date.now())+String(Math.random())}write('device_seed',v);return v}
+ const deviceSeed=seed();
+ function shuffled(ids,cycle){let list=ids.slice(),state=hash(deviceSeed+'|'+cycle);for(let i=list.length-1;i>0;i--){state=(Math.imul(state,1664525)+1013904223)>>>0;const j=state%(i+1);[list[i],list[j]]=[list[j],list[i]]}return list}
+ function select(key){
+  const available=(typeof songs!=='undefined'?songs:[]).filter(s=>s&&typeof s.id==='string'&&s.id&&s.title);
+  if(!available.length)return null;
+  const ids=[...new Set(available.map(s=>s.id))].sort();
+  const saved=read('song_'+key);
+  if(saved&&ids.includes(saved))return saved;
+  // A device-specific permutation gives a stable daily choice, rotating through all catalogue entries.
+  const n=ids.length,day=dayNumber(key),cycle=Math.floor(day/n),pos=((day%n)+n)%n;
+  let list=shuffled(ids,cycle),id=list[pos];
+  if(pos===0&&n>1){const prev=read('song_'+new Date((day-1)*86400000).toISOString().slice(0,10));if(prev&&id===prev)id=list.find(x=>x!==prev)||id}
+  write('song_'+key,id);
+  return id;
+ }
+ let currentKey='',currentId='',surface=null,canvas=null,ctx=null,down=false,last=null,completed=false,moveCount=0;
+ function reveal(){if(completed)return;completed=true;write('revealed_'+currentKey,'1');slot.classList.add('ags-revealed');const revealedCard=slot.querySelector('.tile');if(revealedCard)revealedCard.tabIndex=0;
+  btn.hidden=true;$('agsTitle').textContent='Твоята изненада е разкрита!';$('agsInstructions').textContent='Докосни видеокартата, за да пуснеш песента. Утре те очаква нова изненада.';
+  message.textContent='Приятно слушане!';
+  if(surface){surface.classList.add('ags-fading');surface.setAttribute('aria-hidden','true');setTimeout(()=>{if(surface){surface.remove();surface=null;canvas=null;ctx=null}},650)}
+ }
+ function paint(){if(!canvas||!surface)return;
+  const rect=surface.getBoundingClientRect(),w=Math.max(1,rect.width),h=Math.max(1,rect.height),d=Math.min(window.devicePixelRatio||1,2);
+  canvas.width=Math.round(w*d);canvas.height=Math.round(h*d);ctx=canvas.getContext('2d',{willReadFrequently:true});if(!ctx){btn.hidden=false;return}
+  ctx.setTransform(d,0,0,d,0,0);
+  const gradient=ctx.createLinearGradient(0,0,w,h);gradient.addColorStop(0,'#78552a');gradient.addColorStop(.19,'#e4c585');gradient.addColorStop(.38,'#b58b47');gradient.addColorStop(.65,'#f3dca1');gradient.addColorStop(1,'#93672f');ctx.fillStyle=gradient;ctx.fillRect(0,0,w,h);
+  ctx.save();ctx.globalAlpha=.16;ctx.strokeStyle='#fff8d7';for(let x=-h;x<w+h;x+=12){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+h,h);ctx.stroke()}ctx.restore();
+  const logo=new Image();logo.onload=()=>{if(!canvas||completed||moveCount>0)return;const sz=Math.min(w*.25,h*.32,105);ctx.save();ctx.beginPath();ctx.arc(w/2,h*.39,sz*.55,0,Math.PI*2);ctx.fillStyle='#161319';ctx.fill();ctx.drawImage(logo,w/2-sz/2,h*.39-sz/2,sz,sz);ctx.restore()};logo.src='https://angeluzunov.site/AU_favicon.png';
+  ctx.fillStyle='#382617';ctx.textAlign='center';ctx.font='700 '+Math.min(18,w*.048)+'px Arial';ctx.fillText('ЗЛАТНА МУЗИКАЛНА ИЗНЕНАДА',w/2,h*.69);
+  ctx.font='600 '+Math.min(15,w*.041)+'px Arial';ctx.fillText('ИЗТРИЙ И ОТКРИЙ',w/2,h*.79);
+  ctx.globalCompositeOperation='destination-out';
+ }
+ function point(e){const r=canvas.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}
+ function rub(p){if(!ctx)return;const width=canvas.getBoundingClientRect().width;ctx.lineCap='round';ctx.lineJoin='round';ctx.lineWidth=Math.max(28,width*.105);ctx.beginPath();ctx.moveTo(last?last.x:p.x,last?last.y:p.y);ctx.lineTo(p.x,p.y);ctx.stroke();last=p;moveCount++}
+ function check(){if(!ctx||completed||moveCount<3)return;const w=canvas.width,h=canvas.height;const data=ctx.getImageData(0,0,w,h).data;let total=0,cleared=0;for(let y=3;y<h;y+=7)for(let x=3;x<w;x+=7){total++;if(data[(y*w+x)*4+3]<65)cleared++}if(total&&cleared/total>=.48)reveal()}
+ function render(){
+  const key=dateKey();if(key===currentKey&&currentId&&songs.some(s=>s.id===currentId))return;
+  const id=select(key);if(!id){section.hidden=true;return}
+  const i=songs.findIndex(s=>s.id===id);if(i<0){section.hidden=true;return}
+  currentKey=key;currentId=id;completed=false;down=false;last=null;moveCount=0;
+  section.hidden=false;slot.replaceChildren();slot.classList.remove('ags-revealed');
+  $('agsDate').textContent=key.split('-').reverse().join('.');
+  const card=tile(i);card.dataset.videoId=id;card.tabIndex=-1;
+  // Reuse the actual original tile, not a lookalike or an altered card design.
+  card.onclick=()=>{const live=songs.findIndex(s=>s.id===id);if(live>=0)openPlayer(live,false)};
+  slot.append(card);
+  const done=read('revealed_'+key)==='1';
+  btn.hidden=done;$('agsTitle').textContent=done?'Твоята изненада е разкрита!':'Твоята музикална изненада';
+  $('agsInstructions').textContent=done?'Докосни видеокартата, за да пуснеш песента. Утре те очаква нова изненада.':'Плъзни пръст по златната карта. Под нея те очаква песен от музикалния каталог.';
+  message.textContent=done?'Приятно слушане!':'';
+  if(done){completed=true;slot.classList.add('ags-revealed');card.tabIndex=0;return}
+  surface=document.createElement('div');surface.className='ags-surface';surface.setAttribute('aria-label','Изтрий златната скреч карта, за да разкриеш песента');
+  canvas=document.createElement('canvas');canvas.setAttribute('aria-hidden','true');surface.append(canvas);slot.append(surface);
+  paint();
+  surface.addEventListener('pointerdown',e=>{if(completed)return;down=true;last=null;surface.setPointerCapture(e.pointerId);rub(point(e));e.preventDefault()});
+  surface.addEventListener('pointermove',e=>{if(!down||completed)return;rub(point(e));if(moveCount%7===0)check();e.preventDefault()});
+  const stop=()=>{if(!down)return;down=false;last=null;check()};surface.addEventListener('pointerup',stop);surface.addEventListener('pointercancel',stop);
+ }
+ btn.addEventListener('click',()=>{reveal();const card=slot.querySelector('.tile');if(card)card.tabIndex=0});
+ window.addEventListener('angelSmartCatalogueUpdated',()=>{currentKey='';render()});
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()});
+ window.addEventListener('resize',()=>{if(surface&&!completed&&moveCount===0)paint()},{passive:true});
+ setInterval(render,45000);
+ render();
 })();
 </script>
 </body></html>
