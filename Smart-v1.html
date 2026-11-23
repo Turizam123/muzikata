@@ -327,6 +327,33 @@ header::before,header::after{content:none!important;display:none!important}
 @media(min-width:600px) and (max-width:900px) and (pointer:coarse){.category-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}.category-view .tile{flex-basis:calc((100% - 24px)/3)!important}}
 </style>
 
+
+<style id="angel-app-tab-golden-underglow-v1">
+/* APP/TAB mobile navigation: a single soft lamp beneath the selected item. */
+@media (max-width:900px) and (pointer:coarse), (max-width:760px){
+ .smart-mobile-bar button{position:relative;isolation:isolate;overflow:visible;transition:color .25s ease!important}
+ .smart-mobile-bar button.is-active,
+ .smart-mobile-bar button[aria-expanded="true"]{background:transparent!important;outline:none!important;color:#f3d993!important}
+ .smart-mobile-bar button.is-active::before,
+ .smart-mobile-bar button[aria-expanded="true"]::before{
+   content:"";position:absolute;z-index:-1;pointer-events:none;
+   left:9%;right:9%;bottom:-4px;height:42px;border-radius:50%;
+   background:radial-gradient(ellipse at 50% 100%,rgba(249,211,129,.34) 0%,rgba(216,170,76,.17) 35%,rgba(216,170,76,0) 76%);
+   filter:blur(7px);opacity:1;
+ }
+ .smart-mobile-bar button.is-active svg,
+ .smart-mobile-bar button[aria-expanded="true"] svg{filter:drop-shadow(0 3px 7px rgba(240,194,104,.32))}
+ .smart-mobile-bar button:focus-visible{outline:2px solid #d8b66a!important;outline-offset:-2px}
+}
+@media(prefers-reduced-motion:reduce){.smart-mobile-bar button{transition:none!important}}
+</style>
+
+<style id="angel-underglow-single-selection">
+@media (max-width:900px) and (pointer:coarse), (max-width:760px){
+ .smart-mobile-bar:has(button[aria-expanded="true"]) button.is-active:not([aria-expanded="true"])::before{content:none!important}
+ .smart-mobile-bar:has(button[aria-expanded="true"]) button.is-active:not([aria-expanded="true"]) svg{filter:none}
+}
+</style>
 <style id="smart-personal-css">
 .smart-personal{padding:0 var(--side);margin:26px 0 45px}
 .smart-personal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
@@ -818,14 +845,66 @@ function requestCinemaFullscreen(){
 }
 document.addEventListener('fullscreenchange',()=>{syncFullscreenButton();revealControls()});
 document.addEventListener('webkitfullscreenchange',()=>{syncFullscreenButton();revealControls()});
-function openPlayer(i,asLive){stopPreview();returnFocus=document.activeElement;current=i;setMode(asLive);queue=songs.map((_,j)=>j);queuePos=queue.indexOf(i);$('overlay').classList.add('open');document.body.style.overflow='hidden';loadSong(i);$('overlay').focus({preventScroll:true});syncFullscreenButton();revealControls()}
+/* TV channel: independent category-only rotation per viewer/session. */
+const SMART_TV_CATEGORIES=['folk','popfolk','estrada'];
+function smartTVShuffle(items){
+ const result=items.slice();
+ for(let i=result.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[result[i],result[j]]=[result[j],result[i]]}
+ return result;
+}
+function smartTVBuildRotation(firstIndex=null){
+ const pools=new Map(SMART_TV_CATEGORIES.map(cat=>[cat,smartTVShuffle(songs.map((song,i)=>song.category===cat?i:-1).filter(i=>i>=0))]));
+ let cats=smartTVShuffle(SMART_TV_CATEGORIES.filter(cat=>pools.get(cat).length));
+ const order=[];
+ // Rotate categories; within each category every clip appears once per cycle.
+ while(cats.length){
+  for(const cat of cats){const pool=pools.get(cat);if(pool.length)order.push(pool.pop())}
+  cats=cats.filter(cat=>pools.get(cat).length);
+ }
+ if(Number.isInteger(firstIndex)){
+  const pos=order.indexOf(firstIndex);
+  if(pos>0){order.splice(pos,1);order.unshift(firstIndex)}
+ }
+ return order;
+}
+let smartCatalogueRefreshPromise=null;
+let smartTVStarting=false;
+async function smartTVStart(){
+ if(smartTVStarting)return;
+ smartTVStarting=true;
+ try{
+  // Always check the current approved catalogue before starting a new TV session.
+  await loadApprovedMusicCategories();
+  const order=smartTVBuildRotation();
+  if(!order.length)return;
+  openPlayer(order[0],true);
+  queue=order;queuePos=0;
+ }finally{smartTVStarting=false}
+}
+function openPlayer(i,asLive){stopPreview();returnFocus=document.activeElement;current=i;setMode(asLive);queue=asLive?smartTVBuildRotation(i):songs.map((_,j)=>j);queuePos=queue.indexOf(i);$('overlay').classList.add('open');document.body.style.overflow='hidden';loadSong(i);$('overlay').focus({preventScroll:true});syncFullscreenButton();revealControls()}
 function loadSong(i){smartArmPlayback(songs[i].id);current=i;queuePos=queue.indexOf(i);const s=songs[i];$('nowTitle').textContent=s.title;$('youtubeLink').href='https://www.youtube.com/watch?v='+s.id;if(apiReady&&window.YT&&YT.Player){if(!player){player=new YT.Player('player',{width:'100%',height:'100%',videoId:s.id,playerVars:{playsinline:1,rel:0,origin:location.protocol.startsWith('http')?location.origin:undefined},events:{onStateChange:onStateChange,onError:onPlayerError}})}else{player.loadVideoById(s.id)}}else{const holder=$('player');holder.replaceChildren();const f=element('iframe');f.src='https://www.youtube-nocookie.com/embed/'+s.id+'?autoplay=1&rel=0';f.title=s.title;f.allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen';f.allowFullscreen=true;f.style.cssText='width:100%;height:100%;border:0';holder.append(f)}}
 function onStateChange(e){if(e.data===YT.PlayerState.PLAYING&&smartPlaybackPending&&smartPlaybackVideoId===songs[current]?.id){smartPlaybackPending=false;smartRecordPlayback(smartPlaybackVideoId)}if(e.data===YT.PlayerState.ENDED&&live)nextSong()}
 function onPlayerError(){/* Some videos may disable embedding. The YouTube link remains available. */}
-function nextSong(){loadSong(queue[(queuePos+1)%queue.length])}function prevSong(){loadSong(queue[(queuePos-1+queue.length)%queue.length])}
+function nextSong(){
+ if(live){
+  if(!queue.length)return;
+  if(queuePos>=queue.length-1){
+   const lastCat=songs[current]?.category;
+   queue=smartTVBuildRotation();
+   // Avoid repeating the same clip at the boundary; prefer a new category.
+   const next=queue.findIndex(i=>songs[i]?.category!==lastCat&&songs[i]?.id!==songs[current]?.id);
+   if(next>0){const [pick]=queue.splice(next,1);queue.unshift(pick)}
+   else if(queue[0]===current&&queue.length>1){queue.push(queue.shift())}
+   queuePos=-1;
+  }
+  loadSong(queue[queuePos+1]);return;
+ }
+ loadSong(queue[(queuePos+1)%queue.length]);
+}
+function prevSong(){if(!queue.length)return;loadSong(queue[(queuePos-1+queue.length)%queue.length])}
 function closePlayer(){if(player&&typeof player.stopVideo==='function')player.stopVideo();else $('player').replaceChildren();$('overlay').classList.remove('open','controls-hidden','controls-awake');clearTimeout(controlsTimer);if(isFullscreen()){const exit=document.exitFullscreen||document.webkitExitFullscreen;if(exit){try{const r=exit.call(document);if(r&&r.catch)r.catch(()=>{});}catch(e){}}}document.body.style.overflow='';setMode(false);if(returnFocus?.focus){returnFocus.focus();if(returnFocus.classList?.contains('tile')){const i=Number(returnFocus.dataset.songIndex);if(Number.isInteger(i))schedulePreview(i)}}}
-$('fullscreen').onclick=requestCinemaFullscreen;$('overlay').addEventListener('mousemove',revealControls);$('overlay').addEventListener('pointerdown',revealControls);$('overlay').addEventListener('focusin',revealControls);$('closePlayer').onclick=closePlayer;$('prev').onclick=prevSong;$('next').onclick=nextSong;$('mode').onclick=()=>setMode(!live);$('toggle').onclick=()=>{if(player&&YT?.PlayerState){let state=player.getPlayerState();state===YT.PlayerState.PLAYING?player.pauseVideo():player.playVideo()}else{$('toggle').textContent='Използвай контролите на YouTube'}};
-$('heroLive').onclick=()=>openPlayer(0,true);$('liveNav').onclick=()=>openPlayer(0,true);$('homeNav').onclick=()=>{window.scrollTo({top:0,behavior:'smooth'});stopPreview();$('heroPlay').focus()};$('searchNav').onclick=()=>{$('searchPanel').classList.toggle('show');if($('searchPanel').classList.contains('show'))$('search').focus();else{ $('search').value='';if(!activeCategory){$('categoryView').classList.remove('open');$('homeContent').classList.remove('hidden');$('hero').style.display='';}draw('',activeCategory) }};$('search').addEventListener('input',e=>{if(!activeCategory){$('homeContent').classList.add('hidden');$('hero').style.display='none';$('categoryView').classList.add('open');$('categoryTitle').textContent='Резултати от търсенето';$('categorySubtitle').textContent='Търсене в целия музикален каталог';}draw(e.target.value,activeCategory)});
+$('fullscreen').onclick=requestCinemaFullscreen;$('overlay').addEventListener('mousemove',revealControls);$('overlay').addEventListener('pointerdown',revealControls);$('overlay').addEventListener('focusin',revealControls);$('closePlayer').onclick=closePlayer;$('prev').onclick=prevSong;$('next').onclick=nextSong;$('mode').onclick=()=>{if(live){setMode(false);queue=songs.map((_,i)=>i);queuePos=queue.indexOf(current)}else{setMode(true);queue=smartTVBuildRotation(songs[current]?.category==='other'?null:current);if(!queue.length){setMode(false);return}if(songs[current]?.category==='other')loadSong(queue[0]);else queuePos=queue.indexOf(current)}};$('toggle').onclick=()=>{if(player&&YT?.PlayerState){let state=player.getPlayerState();state===YT.PlayerState.PLAYING?player.pauseVideo():player.playVideo()}else{$('toggle').textContent='Използвай контролите на YouTube'}};
+$('heroLive').onclick=smartTVStart;$('liveNav').onclick=smartTVStart;$('homeNav').onclick=()=>{window.scrollTo({top:0,behavior:'smooth'});stopPreview();$('heroPlay').focus()};$('searchNav').onclick=()=>{$('searchPanel').classList.toggle('show');if($('searchPanel').classList.contains('show'))$('search').focus();else{ $('search').value='';if(!activeCategory){$('categoryView').classList.remove('open');$('homeContent').classList.remove('hidden');$('hero').style.display='';}draw('',activeCategory) }};$('search').addEventListener('input',e=>{if(!activeCategory){$('homeContent').classList.add('hidden');$('hero').style.display='none';$('categoryView').classList.add('open');$('categoryTitle').textContent='Резултати от търсенето';$('categorySubtitle').textContent='Търсене в целия музикален каталог';}draw(e.target.value,activeCategory)});
 // TV remote: browser-level keys are handled where the TV browser exposes them.
 const BACK_KEYS=new Set(['Escape','Backspace','BrowserBack','GoBack','XF86Back']);
 const ARROWS=new Set(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown']);
@@ -930,6 +1009,8 @@ document.addEventListener('focusin',e=>{if(e.target.closest?.('header,.hero-acti
 function clock(){const d=new Date();$('clock').textContent=d.toLocaleTimeString('bg-BG',{hour:'2-digit',minute:'2-digit'})}clock();setInterval(clock,30000);setInterval(()=>{smartReorderVisible();smartUpdateBadges()},60000);buildCategories();renderFlow();startFlow();draw();showHero(0);$('heroPlay').onclick=()=>{document.getElementById('featured').scrollIntoView({behavior:'smooth',block:'start'});};
 // Only the music catalogue is refreshed; the interface and playback logic stay unchanged.
 async function loadApprovedMusicCategories(){
+ if(smartCatalogueRefreshPromise)return smartCatalogueRefreshPromise;
+ smartCatalogueRefreshPromise=(async()=>{
  try{
   const response=await fetch('music-catalog.json',{cache:'no-store'});
   if(!response.ok)throw new Error('HTTP '+response.status);
@@ -960,6 +1041,11 @@ async function loadApprovedMusicCategories(){
   for(let i=0;i<updated.length&&indices.length<originalFeaturedIds.length;i++){
    if(updated[i].category!=='other'&&!indices.includes(i))indices.push(i);
   }
+  // Never replace song indexes under an active player; the next TV start
+  // loads the new catalogue before constructing its independent rotation.
+  if($('overlay').classList.contains('open'))return;
+  const unchanged=updated.length===songs.length&&updated.every((item,i)=>item.id===songs[i].id&&item.category===songs[i].category&&item.title===songs[i].title&&item.addedAt===songs[i].addedAt);
+  if(unchanged)return;
   songs=updated;
   window.dispatchEvent(new Event('angelSmartCatalogueUpdated'));
   featuredIndices=indices;
@@ -969,8 +1055,14 @@ async function loadApprovedMusicCategories(){
  }catch(error){
   console.warn('ANGEL SMART: catalogue unavailable; original catalogue retained.',error);
  }
+ })();
+ try{return await smartCatalogueRefreshPromise}
+ finally{smartCatalogueRefreshPromise=null}
 }
 loadApprovedMusicCategories();
+// Periodically refresh the approved catalogue without interrupting playback.
+setInterval(()=>{if(!$('overlay').classList.contains('open'))loadApprovedMusicCategories()},10*60*1000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!$('overlay').classList.contains('open'))loadApprovedMusicCategories()});
 smartFetchCounts();setInterval(smartFetchCounts,20000);
 // YouTube IFrame API enables reliable end-of-video playback for TV mode.
 window.onYouTubeIframeAPIReady=function(){apiReady=true};const api=document.createElement('script');api.src='https://www.youtube.com/iframe_api';document.head.append(api);
